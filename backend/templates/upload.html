@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <Meta name="viewport" content="width=device-width, inital-scale=1.0">
+    <title>CPA</title>
+    <link rel="stylesheet" href="/static/menuStyle.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="#Intro">Intro</a></li>
+                <li><a href="#Upload">Upload</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section id="Intro">
+            <div>
+                <h2>CPA</h2>
+               <p>Tutorial: Insira o CSV na parte de arquivo e o ano do CSV<p>
+            </div>
+        </section>
+        <section id="Upload">
+            <div>
+                <h2>Upload CSV</h2>
+                <form action="/upload" method="post" enctype="multipart/form-data">
+                    <label for="file">Escolha o arquivo CSV: </label>
+                    <input for="file" type="file" id="file" name="file" accept=".csv" required/>
+                    <br><br>
+                    <label for="info">Insira o Ano do arquivo CSV: </label>
+                    <input type="text" id="info" name="info" required/>
+                    <br>
+                    <input type="text" id="modal" name="modal" required/>
+                    <br><br>
+                    <button type="submit">Enviar</button>
+
+                </form>
+            </div>
+        </section>
+        <!-- <section id="generate">
+            <div>
+                <h3> Gerar relatorios</h3>
+                <form action="/gerar_relatorio">
+                    <input type="text" id='dbname' name='dbname' required/>
+                    <button type="submit">Gerar Dados</button>
+                </form>
+            </div>
+        </section> -->
+    </main>
+</body>
+</html>

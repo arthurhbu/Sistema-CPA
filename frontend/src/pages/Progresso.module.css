@@ -1,0 +1,73 @@
+.containerProgresso { 
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.containerIntroducao { 
+    max-width: 70%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.containerIntroducao_tituloPagina { 
+    font-size: 3rem;
+    font-family: 'Inter';
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.containerIntroducao_textoIntro { 
+    font-size: 1.5em;
+    font-weight: 400;
+    text-align: justify;
+}
+
+.containerProcessando { 
+    margin-top: 80px;
+    margin-bottom: 80px;
+    width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: rgb(231, 228, 228);
+}
+
+.containerProcessando_titulo { 
+    font-size: 3rem;
+    margin-bottom: 0;
+}
+
+.containerProcessando_nomeInstrumento { 
+    font-size: 2rem;
+    font-weight: 600;
+    margin-top: 0;
+    margin-bottom: 2em;
+}
+
+.containerAnimation { 
+    margin: 5rem;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.circleAnimation { 
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.waveAnimation { 
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

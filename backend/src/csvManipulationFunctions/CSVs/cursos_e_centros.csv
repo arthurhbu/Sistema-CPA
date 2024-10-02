@@ -1,0 +1,289 @@
+﻿Codigo_Curso,Codigo_MEC,Centro_de_Ensino,Nome_Do_Curso,Matriculados,Ano_Referencia
+8,3393,CSA,Administração,736,2020
+8,3393,CSA,Administração,723,2021
+8,3393,CSA,Administração,692,2022
+8,3393,CSA,Administração,671,2023
+77,,EAD,Administração Pública,256,2020
+77,,EAD,Administração Pública,314,2021
+77,,EAD,Administração Pública,147,2022
+77,,EAD,Administração Pública,75,2023
+19,3413,CCA,Agronomia,453,2020
+19,3413,CCA,Agronomia,438,2021
+19,3413,CCA,Agronomia,436,2022
+19,3413,CCA,Agronomia,453,2023
+46,58188,CCA,Agronomia (CAU),198,2020
+46,58188,CCA,Agronomia (CAU),182,2021
+46,58188,CCA,Agronomia (CAU),179,2022
+46,58188,CCA,Agronomia (CAU),177,2023
+38,21627,CTC,Arquitetura e Urbanismo,212,2020
+38,21627,CTC,Arquitetura e Urbanismo,214,2021
+38,21627,CTC,Arquitetura e Urbanismo,215,2022
+38,21627,CTC,Arquitetura e Urbanismo,218,2023
+72,5000538,CCH,Artes Cênicas,154,2020
+72,5000538,CCH,Artes Cênicas,141,2021
+72,5000538,CCH,Artes Cênicas,133,2022
+72,5000538,CCH,Artes Cênicas,130,2023
+73,5000539,CCH,Artes Visuais,161,2020
+73,5000539,CCH,Artes Visuais,159,2021
+73,5000539,CCH,Artes Visuais,154,2022
+73,5000539,CCH,Artes Visuais,158,2023
+62,5000540,CCS,Biomedicina,163,2020
+62,5000540,CCS,Biomedicina,161,2021
+62,5000540,CCS,Biomedicina,158,2022
+62,5000540,CCS,Biomedicina,160,2023
+68,1148343,CCB,Bioquímica,125,2020
+68,1148343,CCB,Bioquímica,134,2021
+68,1148343,CCB,Bioquímica,133,2022
+68,1148343,CCB,Bioquímica,127,2023
+93,5000545,CCB,Biotecnologia,125,2020
+93,5000545,CCB,Biotecnologia,110,2021
+93,5000545,CCB,Biotecnologia,110,2022
+93,5000545,CCB,Biotecnologia,105,2023
+26,3419,CTC,Ciência da Computação,219,2020
+26,3419,CTC,Ciência da Computação,220,2021
+26,3419,CTC,Ciência da Computação,216,2022
+26,3419,CTC,Ciência da Computação,208,2023
+14,303408,CCB,Ciências Biologicas,389,2020
+14,303408,CCB,Ciências Biologicas,378,2021
+14,303408,CCB,Ciências Biologicas,356,2022
+14,303408,CCB,Ciências Biologicas,352,2023
+58,,EAD,Ciências Biológicas,144,2020
+58,,EAD,Ciências Biológicas,209,2021
+58,,EAD,Ciências Biológicas,91,2022
+58,,EAD,Ciências Biológicas,186,2023
+12,3394,CSA,Ciências Contábeis,567,2020
+12,3394,CSA,Ciências Contábeis,551,2021
+12,3394,CSA,Ciências Contábeis,562,2022
+12,3394,CSA,Ciências Contábeis,568,2023
+23,3415,CSA,Ciências Contábeis (CRC),171,2020
+23,3415,CSA,Ciências Contábeis (CRC),168,2021
+23,3415,CSA,Ciências Contábeis (CRC),154,2022
+23,3415,CSA,Ciências Contábeis (CRC),150,2023
+1,1153285,CSA,Ciências Econômicas,538,2020
+1,1153285,CSA,Ciências Econômicas,520,2021
+1,1153285,CSA,Ciências Econômicas,514,2022
+1,1153285,CSA,Ciências Econômicas,512,2023
+33,321624,CCH,Ciências Sociais,175,2020
+33,321624,CCH,Ciências Sociais,170,2021
+33,321624,CCH,Ciências Sociais,157,2022
+33,321624,CCH,Ciências Sociais,168,2023
+66,5000542,CCH,Comunicação e Multimeios,180,2020
+66,5000542,CCH,Comunicação e Multimeios,165,2021
+66,5000542,CCH,Comunicação e Multimeios,165,2022
+66,5000542,CCH,Comunicação e Multimeios,172,2023
+43,58187,CTC,Design,120,2020
+43,58187,CTC,Design,134,2021
+43,58187,CTC,Design,125,2022
+43,58187,CTC,Design,121,2023
+2,3395,CSA,Direito,830,2020
+2,3395,CSA,Direito,816,2021
+2,3395,CSA,Direito,815,2022
+2,3395,CSA,Direito,801,2023
+11,399397,CCS,Educação Física,531,2020
+11,399397,CCS,Educação Física,487,2021
+11,399397,CCS,Educação Física,483,2022
+11,399397,CCS,Educação Física,490,2023
+64,5000546,CCS,Educação Física (CRV),70,2020
+64,5000546,CCS,Educação Física (CRV),50,2021
+64,5000546,CCS,Educação Física (CRV),30,2022
+64,5000546,CCS,Educação Física (CRV),65,2023
+30,46742,CCS,Enfermagem,187,2020
+30,46742,CCS,Enfermagem,174,2021
+30,46742,CCS,Enfermagem,176,2022
+30,46742,CCS,Enfermagem,136,2023
+45,58200,CCA,Engenharia Agrícola (CAR),71,2020
+45,58200,CCA,Engenharia Agrícola (CAR),60,2021
+45,58200,CCA,Engenharia Agrícola (CAR),38,2022
+45,58200,CCA,Engenharia Agrícola (CAR),44,2023
+70,1148389,CTC,Engenharia Ambiental (CAU),102,2020
+70,1148389,CTC,Engenharia Ambiental (CAU),67,2021
+70,1148389,CTC,Engenharia Ambiental (CAU),60,2022
+70,1148389,CTC,Engenharia Ambiental (CAU),63,2023
+9,3402,CTC,Engenharia Civil,450,2020
+9,3402,CTC,Engenharia Civil,448,2021
+9,3402,CTC,Engenharia Civil,448,2022
+9,3402,CTC,Engenharia Civil,409,2023
+74,150159,CTC,Engenharia Civil (CAU),189,2020
+74,150159,CTC,Engenharia Civil (CAU),182,2021
+74,150159,CTC,Engenharia Civil (CAU),151,2022
+74,150159,CTC,Engenharia Civil (CAU),126,2023
+36,21628,CTC,Engenharia de Alimentos,175,2020
+36,21628,CTC,Engenharia de Alimentos,154,2021
+36,21628,CTC,Engenharia de Alimentos,143,2022
+36,21628,CTC,Engenharia de Alimentos,134,2023
+71,1147332,CTC,Engenharia de Alimentos (CAU),91,2020
+71,1147332,CTC,Engenharia de Alimentos (CAU),80,2021
+71,1147332,CTC,Engenharia de Alimentos (CAU),71,2022
+71,1147332,CTC,Engenharia de Alimentos (CAU),71,2023
+37,21629,CTC,Engenharia de Produção,612,2020
+37,21629,CTC,Engenharia de Produção,586,2021
+37,21629,CTC,Engenharia de Produção,539,2022
+37,21629,CTC,Engenharia de Produção,524,2023
+76,150157,CTC,Engenharia de Produção (CRG),136,2020
+76,150157,CTC,Engenharia de Produção (CRG),108,2021
+76,150157,CTC,Engenharia de Produção (CRG),84,2022
+76,150157,CTC,Engenharia de Produção (CRG),84,2023
+75,150158,CTC,Engenharia Elétrica,224,2020
+75,150158,CTC,Engenharia Elétrica,211,2021
+75,150158,CTC,Engenharia Elétrica,202,2022
+75,150158,CTC,Engenharia Elétrica,196,2023
+35,21630,CTC,Engenharia Mecânica,195,2020
+35,21630,CTC,Engenharia Mecânica,201,2021
+35,21630,CTC,Engenharia Mecânica,196,2022
+35,21630,CTC,Engenharia Mecânica,182,2023
+10,3403,CTC,Engenharia Química,473,2020
+10,3403,CTC,Engenharia Química,464,2021
+10,3403,CTC,Engenharia Química,441,2022
+10,3403,CTC,Engenharia Química,421,2023
+27,3421,CTC,Engenharia Têxtil,55,2020
+27,3421,CTC,Engenharia Têxtil,45,2021
+27,3421,CTC,Engenharia Têxtil,41,2022
+27,3421,CTC,Engenharia Têxtil,47,2023
+39,21623,CCE,Estatística,126,2020
+39,21623,CCE,Estatística,130,2021
+39,21623,CCE,Estatística,130,2022
+39,21623,CCE,Estatística,138,2023
+16,3411,CCS,Farmácia,310,2020
+16,3411,CCS,Farmácia,322,2021
+16,3411,CCS,Farmácia,311,2022
+16,3411,CCS,Farmácia,291,2023
+34,21625,CCH,Filosofia,122,2020
+34,21625,CCH,Filosofia,130,2021
+34,21625,CCH,Filosofia,122,2022
+34,21625,CCH,Filosofia,105,2023
+15,303405,CCE,Física,251,2020
+15,303405,CCE,Física,235,2021
+15,303405,CCE,Física,207,2022
+15,303405,CCE,Física,197,2023
+57,,EAD,Física ,50,2020
+57,,EAD,Física ,95,2021
+57,,EAD,Física ,37,2022
+57,,EAD,Física ,100,2023
+67,5000544,CCE,Física (CRG),26,2020
+67,5000544,CCE,Física (CRG),45,2021
+67,5000544,CCE,Física (CRG),45,2022
+67,5000544,CCE,Física (CRG),52,2023
+4,303400,CCH,Geografia,324,2020
+4,303400,CCH,Geografia,301,2021
+4,303400,CCH,Geografia,268,2022
+4,303400,CCH,Geografia,286,2023
+5,3399,CCH,História,265,2020
+5,3399,CCH,História,278,2021
+5,3399,CCH,História,281,2022
+5,3399,CCH,História,265,2023
+87,,PARFOR,História,0,2020
+87,,PARFOR,História,0,2021
+87,,PARFOR,História,0,2022
+87,,PARFOR,História,20,2023
+60,,EAD,História  ,117,2020
+60,,EAD,História  ,19,2021
+60,,EAD,História  ,12,2022
+60,,EAD,História  ,144,2023
+63,5000547,CCH,História (CRV),40,2020
+63,5000547,CCH,História (CRV),21,2021
+63,5000547,CCH,História (CRV),16,2022
+63,5000547,CCH,História (CRV),36,2023
+31,19392,CTC,Informática,206,2020
+31,19392,CTC,Informática,218,2021
+31,19392,CTC,Informática,216,2022
+31,19392,CTC,Informática,228,2023
+3,34677,CCH,Letras,575,2020
+3,34677,CCH,Letras,564,2021
+3,34677,CCH,Letras,494,2022
+3,34677,CCH,Letras,487,2023
+59,,EAD,Letras,224,2020
+59,,EAD,Letras,322,2021
+59,,EAD,Letras,154,2022
+59,,EAD,Letras,226,2023
+92,3422,CCE,Licenciatura em Ciências Naturais (CRG),2,2021
+92,3422,CCE,Licenciatura em Ciências Naturais (CRG),1,2022
+92,3422,CCE,Licenciatura em Ciências Naturais (CRG),0,2023
+28,3422,CCE,Licenciatura Plena em Ciências,13,2020
+28,3422,CCE,Licenciatura Plena em Ciências,6,2021
+28,3422,CCE,Licenciatura Plena em Ciências,5,2022
+28,3422,CCE,Licenciatura Plena em Ciências,0,2023
+7,303407,CCE,Matemática,324,2020
+7,303407,CCE,Matemática,287,2021
+7,303407,CCE,Matemática,232,2022
+7,303407,CCE,Matemática,265,2023
+24,3418,CCS,Medicina,247,2020
+24,3418,CCS,Medicina,248,2021
+24,3418,CCS,Medicina,253,2022
+24,3418,CCS,Medicina,218,2023
+47,58202,CCA,Medicina Veterinária (CAU),196,2020
+47,58202,CCA,Medicina Veterinária (CAU),202,2021
+47,58202,CCA,Medicina Veterinária (CAU),195,2022
+47,58202,CCA,Medicina Veterinária (CAU),188,2023
+44,58242,CTC,Moda,120,2020
+44,58242,CTC,Moda,115,2021
+44,58242,CTC,Moda,114,2022
+44,58242,CTC,Moda,125,2023
+42,92105,CCH,Música,117,2020
+42,92105,CCH,Música,107,2021
+42,92105,CCH,Música,115,2022
+42,92105,CCH,Música,130,2023
+85,,PARFOR,Música,0,2021
+85,,PARFOR,Música,0,2022
+85,,PARFOR,Música,16,2023
+85,,PARFOR,Música ,0,2020
+25,3417,CCS,Odontologia,199,2020
+25,3417,CCS,Odontologia,205,2021
+25,3417,CCS,Odontologia,202,2022
+25,3417,CCS,Odontologia,197,2023
+13,3416,CCH,Pedagogia,467,2020
+13,3416,CCH,Pedagogia,450,2021
+13,3416,CCH,Pedagogia,429,2022
+13,3416,CCH,Pedagogia,418,2023
+56,,EAD,Pedagogia,579,2020
+56,,EAD,Pedagogia,393,2021
+56,,EAD,Pedagogia,248,2022
+56,,EAD,Pedagogia,378,2023
+22,3397,CCH,Pedagogia (CRC),152,2020
+22,3397,CCH,Pedagogia (CRC),152,2021
+22,3397,CCH,Pedagogia (CRC),144,2022
+22,3397,CCH,Pedagogia (CRC),141,2023
+79,1165576,CCH,Pedagogia (PARFOR),54,2020
+79,1165576,CCH,Pedagogia (PARFOR),47,2021
+79,1165576,CCH,Pedagogia (PARFOR),47,2022
+79,1165576,CCH,Pedagogia (PARFOR),47,2023
+21,3401,CCH,Psicologia,375,2020
+21,3401,CCH,Psicologia,402,2021
+21,3401,CCH,Psicologia,402,2022
+21,3401,CCH,Psicologia,404,2023
+6,3406,CCE,Química,314,2020
+6,3406,CCE,Química,277,2021
+6,3406,CCE,Química,238,2022
+6,3406,CCE,Química,236,2023
+40,21626,CCH,Secretariado Executivo Trilíngue,136,2020
+40,21626,CCH,Secretariado Executivo Trilíngue,141,2021
+40,21626,CCH,Secretariado Executivo Trilíngue,137,2022
+40,21626,CCH,Secretariado Executivo Trilíngue,136,2023
+65,5000548,CCH,Serviço Social (CRV),47,2020
+65,5000548,CCH,Serviço Social (CRV),43,2021
+65,5000548,CCH,Serviço Social (CRV),41,2022
+65,5000548,CCH,Serviço Social (CRV),52,2023
+49,58232,CTC,Tecnologia em Alimentos (CAU),65,2020
+49,58232,CTC,Tecnologia em Alimentos (CAU),46,2021
+49,58232,CTC,Tecnologia em Alimentos (CAU),39,2022
+49,58232,CTC,Tecnologia em Alimentos (CAU),42,2023
+69,5000545,CCB,Tecnologia em Biotecnologia,125,2020
+69,5000545,CCB,Tecnologia em Biotecnologia,110,2021
+69,5000545,CCB,Tecnologia em Biotecnologia,0,2022
+69,5000545,CCB,Tecnologia em Biotecnologia,0,2023
+48,58207,CTC,Tecnologia em Construção Civil (CAU),104,2020
+48,58207,CTC,Tecnologia em Construção Civil (CAU),65,2021
+48,58207,CTC,Tecnologia em Construção Civil (CAU),38,2022
+48,58207,CTC,Tecnologia em Construção Civil (CAU),36,2023
+91,,EAD,Tecnologia em Gestão Pública,23,2020
+91,,EAD,Tecnologia em Gestão Pública,0,2021
+91,,EAD,Tecnologia em Gestão Pública,0,2022
+91,,EAD,Tecnologia em Gestão Pública,129,2023
+50,58238,CTC,Tecnologia em Meio Ambiente (CAU),28,2020
+50,58238,CTC,Tecnologia em Meio Ambiente (CAU),25,2021
+50,58238,CTC,Tecnologia em Meio Ambiente (CAU),20,2022
+50,58238,CTC,Tecnologia em Meio Ambiente (CAU),41,2023
+17,3412,CCA,Zootecnia,349,2020
+17,3412,CCA,Zootecnia,327,2021
+17,3412,CCA,Zootecnia,323,2022
+17,3412,CCA,Zootecnia,302,2023
+

@@ -1,0 +1,79 @@
+services:
+
+  servidor-ai:
+    image: docker.io/ollama/ollama
+    volumes:
+      - volume-ollama:/root/.ollama
+    networks:
+      - backend-network
+
+  flask-backend:
+    build: ./cpaEnv
+    container_name: flask-backend
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mongo
+    environment:
+      FLASK_ENV: development
+    volumes:
+      - ./cpaEnv:/app
+    networks:
+      - backend-network
+
+  react-frontend:
+      build: ./cpa-frontend
+      ports:
+        - "3000:3000"
+      volumes:
+        - ./cpa-frontend:/app
+      depends_on:
+        - flask-backend
+      environment: 
+        - WATCHPACK_POLLING=true
+      networks:
+        - backend-network
+
+
+  mongo:
+    image: docker.io/mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD}
+    ports:
+      - "27017:27017"
+    volumes:
+      - vol-mongo:/data/db  
+    networks:
+      - backend-network
+
+  mongo-express:
+    image: docker.io/mongo-express:latest
+    environment:
+      ME_CONFIG_MONGODB_SERVER: mongo
+      ME_CONFIG_MONGODB_PORT: 27017
+      ME_CONFIG_MONGODB_ENABLE_ADMIN: "true"
+      ME_CONFIG_MONGODB_AUTH_DATABASE: admin
+      ###############################
+      ##
+      ## Quando implantar no servidor
+      ## Habilitar a autenticação
+      ## 
+      ###############################
+      ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_ROOT_USER}
+      ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_ROOT_PASSWORD} 
+      ME_CONFIG_BASICAUTH: false     
+    depends_on:
+      - mongo
+    ports:
+      - "8081:8081"
+    networks:
+      - backend-network
+
+volumes:
+  vol-mongo:
+  volume-ollama:
+
+networks:
+  backend-network:
+    driver: bridge
