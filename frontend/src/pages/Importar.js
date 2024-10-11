@@ -182,7 +182,7 @@ function Importar(){
                     <div className={styles.session_inputInfos}>
                         <div style={{width:'100%'}}>
                             <p style={{fontFamily:'Inter', fontSize:'1.5vw', fontWeight:'500'}}>Insira o ano do relatório que será gerado: </p>
-                            <StyledInput value={ano} onChange={handleAnoChange}></StyledInput>  
+                            <StyledInput type='number' value={ano} onChange={handleAnoChange}></StyledInput>  
                         </div>
                     </div>
                     <button onClick={handleSubmit} className={styles.importarButton}>Importar</button>

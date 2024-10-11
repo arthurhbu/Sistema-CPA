@@ -1,11 +1,9 @@
 import {Link} from 'react-router-dom';
 import styles from './NavBar.module.css';
-import Container from './Container';
 
 import CPA_logo_full from '../../img/CPA_logo_full.png';
 import UEM_logo from '../../img/uem_logo.png';
 import GRE_logo from '../../img/gre_logo.png';
-import Header_full from '../../img/Header_full.png'
 
 function NavBar() {
     return(

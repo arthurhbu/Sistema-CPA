@@ -100,12 +100,11 @@ def geraçãoDeRelatorio(collectionCurso: Collection, collectionCentroPorAno: Co
             return print('O modal escolhido não existe, por favor, escolha entre EAD ou DISC por enquanto...')
         gerarTodosRelatorios(collectionCurso, collectionCentroPorAno, collectionCursosPorCentro, arquivo_intro_esc, arquivo_conclusao_esc, ano, dbName)
 
-def runAplication(ano: int, csvFileName: str, modal: str, modo: str) -> None:
+def runAplication(ano: int, csvFileName: str, modal: str, modo: str, client: MongoClient) -> None:
     """
     Junta todos os passos das funções acima e os realiza em ordem.
     """
-    db_config = readDBConfig()
-    client = connection(db_config)
+    
     dbName, database = connectToDatabase(csvFileName, client)
     curso = database['curso']
     cursos_e_centros = database['cursos_e_centros']
@@ -135,3 +134,7 @@ def runAplication(ano: int, csvFileName: str, modal: str, modo: str) -> None:
     # else:
     # geraçãoDeRelatorio(curso, centro_por_ano, cursos_por_centro, ano, dbName, modal)
 
+def listDatabases(client): 
+    dbs = client.list_database_names()
+    usersDatabases = [db for db in dbs if db not in ['admin', 'config', 'local']]
+    return usersDatabases

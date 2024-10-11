@@ -1,0 +1,168 @@
+.containerGerarRelatorio { 
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 1000px;
+    flex-direction: column;
+    padding-top: 25px;
+}
+
+.containerIntro{ 
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    width: 60%;
+    justify-content: center;
+    text-align: justify;
+}
+
+.containerIntro_tituloPagina { 
+    font-size: 2.5rem;
+    font-family: 'Inter';
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.containerIntro_infos { 
+    font-size: 1.2rem;
+    font-family: 'Inter';
+}
+
+.containerInstrumento { 
+    display: flex;
+    align-items: center;   
+    flex-direction: column; 
+}
+
+.containerRelatorioEsp { 
+    margin-top: 100px;
+    display: flex;
+    width: 80%;
+    justify-content: space-between;
+}
+
+.containerRelatorioEsp_escolhaComponentesRelatorio_IntroConcl { 
+    width: 40%;
+    background-color: #D9D9D9;
+    padding: 30px;
+    border-radius: 10px;
+}
+
+.containerRelatorioEsp_escolhaComponentesRelatorio_Ano { 
+    width: 40%;
+    background-color: #D9D9D9;
+    padding: 30px;
+    border-radius: 10px;
+}
+
+.containerButton { 
+    width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin-bottom: 130px;
+}
+
+.buttonGerarRelatorio { 
+    margin-top: 10vh;
+    list-style: none;
+    width: 30%;
+    height: 3.5em;
+    background-color: #00ff77;
+    color: rgb(0, 0, 0);
+    border: 2px solid currentColor;
+    border-radius: 7px;
+    font-family: 'Inter';
+    font-weight: 700;
+    font-size: 1em;
+    overflow: hidden;
+    position: relative;
+    text-decoration: none;
+    will-change: transform;
+    z-index: 0;
+    transition: 0.2s ease-in-out;
+}
+
+.buttonGerarRelatorio::after { 
+    background-color: #54ff8a;
+    border-radius: 7px;
+    content: '';
+    display: block;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    transform: translate(-100%, 0) rotate(10deg);
+    transform-origin: top left;
+    transition: .2s transform ease-out;
+    will-change: transform;
+    z-index: -1;
+}
+
+.buttonGerarRelatorio:hover::after{
+    transform: translate(0, 0);
+}
+
+.buttonGerarRelatorio:hover{
+    border: 2px solid #000;
+    color: #000000;
+    transform: scale(1.05);
+    will-change: transform;
+    cursor:pointer;
+}
+
+.errorMessage { 
+    color: #c75c5c;
+}
+
+.overlay { 
+    position:fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+
+.popup { 
+    position: fixed;
+    height: 10%;
+    width: 20%;
+    top: 40%;
+    right: 30%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    border: 1px solic #ccc;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    z-index: 1000;
+    border-radius: 10px;
+    text-align: right;
+}
+
+.popup_message { 
+    font-size: 1.10vw;
+    font-weight: 500;
+    font-family: 'Inter';
+    text-align: center;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.popup_buttonExit { 
+    border-radius: 50%;
+    border: 0;
+    background-color: #aaaaaa;
+    font-family: 'Inter';
+    font-size: 17px;
+    font-weight: 530;
+    text-align: right;
+    margin-bottom: 10px;
+}
+
+.popup_buttonExit:hover { 
+    background-color: #f84a4a;
+}

@@ -4,17 +4,25 @@ from general_controller import geraçãoDeRelatorio
 import os   
 from flask_cors import CORS
 from flask_socketio import SocketIO
+from pymongo import MongoClient
+from general_controller import listDatabases
+from database.pythonMongoConfig import readDBConfig
+from database.connectionDB import connection
+
 
 app = Flask(__name__)
 CORS(app)
 socketio = SocketIO(app)
 
+dbConfig: dict  = readDBConfig()
+client: MongoClient = connection(dbConfig)
+
 UPLOAD_FOLDER = 'src/csvManipulationFunctions/CSVs'
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
     
-filename = ''
-processing = False
+filename: str = ''
+processing: bool = False
 
 @app.route('/api/importar', methods=["POST"])
 def importar():
@@ -31,7 +39,7 @@ def importar():
         file_path = os.path.join(UPLOAD_FOLDER, file.filename)
         file.save(file_path)
         
-        # main(ano, file.filename, '', 'inserir')
+        # main(ano, file.filename, '', 'inserir', client)
         processing = True
         
         socketio.start_background_task(target=processa_csv, filename=filename, ano=ano)
@@ -42,7 +50,7 @@ def importar():
 def processa_csv(filename, ano):
     global processing
     try:
-        main(ano, filename, '', 'inserir')
+        main(ano, filename, '', 'inserir', client)
     finally: 
         processing = False
 
@@ -52,8 +60,28 @@ def get_status():
     global processing
     return {'processing': False, 'file': filename}
 
+@app.route('/api/instrumentos', methods=['GET'])
+def list_instrumentos():
+    dbs = listDatabases(client)
+    return jsonify(dbs)
 
+@app.route('/api/gerarRelatorios', methods=['POST'])
+def gerarRelatorios(): 
+    ano = request.form.get('ano')
+    introConcl = request.form.get('introConcl')
+    instrumento = request.form.get('instrumento')
+    print(ano)
+    print(introConcl)
+    print(instrumento)
+    
+    if ano and introConcl and instrumento:
+        print('oi') 
+        # Funcao para gerar relatorios
+        # Criar um await e async para esperar confirmar que os relatorios foram gerados com sucesso
+        return jsonify({'message': 'Relatórios gerados com sucesso!'}), 200
 
+    return jsonify({'message': 'Não foi possível gerar os relatórios'}), 400
+    
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
     

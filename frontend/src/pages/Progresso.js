@@ -1,7 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
-import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import Styles from './Progresso.module.css';
-
 import { ring2, waveform, hatch } from 'ldrs'
 
 ring2.register()
