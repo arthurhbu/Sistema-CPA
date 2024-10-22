@@ -1,0 +1,8 @@
+O que precisa ser feito ainda:
+    - Melhorar a tela Home
+    - Criar a tela Gerar PDFs e o backend (Talvez não precise)
+    - Terminar o backend Gerar Relatórios, com a parte de enviar no email os relatórios gerados
+    - Melhorar o footer
+    - Tentar aprimorar o cabeçalho futuramente
+    - Tela de progresso, adicionar logs
+    - Tela home adicionar o passo a passo do que fazer

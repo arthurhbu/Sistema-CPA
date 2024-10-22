@@ -9,7 +9,6 @@ from general_controller import listDatabases
 from database.pythonMongoConfig import readDBConfig
 from database.connectionDB import connection
 
-
 app = Flask(__name__)
 CORS(app)
 socketio = SocketIO(app)
@@ -58,7 +57,7 @@ def processa_csv(filename, ano):
 def get_status():
     global filename
     global processing
-    return {'processing': False, 'file': filename}
+    return {'processing': processing, 'file': filename}
 
 @app.route('/api/instrumentos', methods=['GET'])
 def list_instrumentos():

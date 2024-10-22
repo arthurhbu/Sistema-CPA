@@ -128,7 +128,7 @@ function Importar(){
             const data = await res.json();
             setResponse(data.message)
 
-            setPopupMessage('Arquivo importado com Sucesso!')
+            setPopupMessage('Arquivo enviado para importação')
             setPopupVisible(true)
             
         } catch(error) {

@@ -79,7 +79,7 @@ def gerarRelatorioPorCurso(curso_escolhido, collectionCurso, collectionCursosPor
             if document['nm_disciplina'] == '-':
                 arquivo.write(f"![{document['nm_pergunta']}]({document['path']}.png '{document['nm_pergunta']}')")
                 print('\n', file=arquivo)
-                print(f"Tabela index_ - Resultado do item: {document['nm_pergunta']} \n", file=arquivo)
+                print(f"Tabela index_ \n", file=arquivo)
                 arquivo.write(document['tabela'])
                 arquivo.write('\n')
                 print(' ', file=arquivo)

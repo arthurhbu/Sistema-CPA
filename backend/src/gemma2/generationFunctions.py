@@ -21,6 +21,9 @@ def createReport(pergunta, dictOptPct):
     :rtype: String
     """
     inicio_textual = rand.choice([f"Considerando a Tabela index_, ", f"De acordo com a Tabela index_, ", f"Pela Tabela index_, ", f"Constatou-se pela Tabela index_ que ", f"Percebe-se pela Tabela index_ que "])
+
+    referencia_figura = rand.choice(['A figura index_ demonstra a prevalência das respostas.', 'A figura index_ mostra a tendência dominante das respostas.', 'A figura index_ representa a maior frequência das respostas.', 'A figura index_ exibe o padrão predominante nas respostas.','A figura index_ destaca a maior concentração de respostas.', 'A figura index_ evidencia a principal tendência nas respostas.', 'A figura index_ revela o comportamento predominante das respostas.', 'A figura index_ exibe a distribuição dos respondentes.', 'A figura index_ demonstra o padrão de distribuição dos respondentes.', 'A figura index_ representa a distribuição dos respondentes.'])
+
     temp_message = tableInterpretationTextGenerator(pergunta, dictOptPct)
 
     data = {
@@ -31,19 +34,17 @@ def createReport(pergunta, dictOptPct):
 
     for attempt in range(10):
         # try:
-        response = requests.post(url, headers=headers, data=json.dumps(data))
+        response: dict = requests.post(url, headers=headers, data=json.dumps(data))
         if response.status_code == 200:
-            response_text = response.text
-            data = json.loads(response_text)
-            actual_response = data['response']
+            response_text: str = response.text
+            data: str = json.loads(response_text)
+            actual_response: str = data['response']
+            clean_actual_response = actual_response.replace("\n", "")
+            clean_actual_response = f'{clean_actual_response} {referencia_figura}'
             return actual_response
         else:
             return print('ERROR: ', response.status_code, response.text)
-        # except: 
-        #     print('Aconteceu um erro com o Ollama!!!')
-        #     continue
-        # else: 
-        #     break
+
 
 
 

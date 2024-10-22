@@ -36,9 +36,9 @@ def composeTable(pergunta: str, optAndPercentage: dict, respondentes: int) -> st
     :rtype: String
     """
     pergunta_formatada = re.sub("^\d+\.\d+\s*-\s*",'',pergunta)
-    s = "| indicador |"
+    s = "| Indicador |"
     for tuple in optAndPercentage.items():
-        s = f'{s} {tuple[0]} |'
+        s = f'{s} {tuple[0].capitalize()} |'
 
     s = f"{s} Respondentes |"
     s = f'{s} \n|---|'

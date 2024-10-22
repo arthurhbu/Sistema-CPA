@@ -59,6 +59,8 @@ def preprocessing(database: Database, collectionCursoseCentros: Collection, ano:
 
     dfCentroPorAno(collectionCurso, database, ano, modal)
 
+
+
 def geraçãoDeRelatorio(collectionCurso: Collection, collectionCentroPorAno: Collection, collectionCursosPorCentro: Collection, ano: int, dbName: str, modal: str) -> None:
     """
     Realiza a criação de relatórios, podendo ser possível escolher se será gerado um único relatório,
@@ -75,30 +77,32 @@ def geraçãoDeRelatorio(collectionCurso: Collection, collectionCentroPorAno: Co
     :param dbName: Nome do banco de dados que está sendo manipulado
     :type dbName: str
     """
-    opcoes = [1,2,3]
+    # opcoes = [1,2,3]
 
-    # escolha = int(input('Escolha quantos relatorios você quer gerar com base nas opções: \n 1- Gerar relatórios por centro \n 2- Gerar relatório único \n 3- Gerar todos relatórios\n Escolha: '))
-    escolha = 3
-    if escolha not in opcoes:
-        print('Digite uma opção válida!')
+    # # escolha = int(input('Escolha quantos relatorios você quer gerar com base nas opções: \n 1- Gerar relatórios por centro \n 2- Gerar relatório único \n 3- Gerar todos relatórios\n Escolha: '))
+    # escolha = 3
+    # if escolha not in opcoes:
+    #     print('Digite uma opção válida!')
 
-    if escolha == 1:
-        centro = str(input('Digite o nome do centro que gostaria de criar os relatórios: '))    
-        gerarRelatoriosPorCentro(collectionCurso, collectionCentroPorAno, collectionCursosPorCentro, 'introducao.md', 'conclusao.md', ano, centro, dbName)
-    if escolha == 2:
-        # curso = str(input('Digite o nome do curso que gostaria de gerar relatório: '))
-        curso = 'Administração'
-        gerarUmRelatorio(collectionCurso, collectionCentroPorAno, collectionCursosPorCentro, 'introducao.md', 'conclusao.md', ano, curso, dbName)
-    if escolha == 3:
-        if modal == 'EAD':
-            arquivo_intro_esc = 'introducao_ead.md'
-            arquivo_conclusao_esc = 'conclusao_ead.md'
-        elif modal == 'DISC':
-            arquivo_intro_esc = 'introducao.md'
-            arquivo_conclusao_esc = 'conclusao.md'
-        else: 
-            return print('O modal escolhido não existe, por favor, escolha entre EAD ou DISC por enquanto...')
-        gerarTodosRelatorios(collectionCurso, collectionCentroPorAno, collectionCursosPorCentro, arquivo_intro_esc, arquivo_conclusao_esc, ano, dbName)
+    # if escolha == 1:
+    #     centro = str(input('Digite o nome do centro que gostaria de criar os relatórios: '))    
+    #     gerarRelatoriosPorCentro(collectionCurso, collectionCentroPorAno, collectionCursosPorCentro, 'introducao.md', 'conclusao.md', ano, centro, dbName)
+    # if escolha == 2:
+    #     # curso = str(input('Digite o nome do curso que gostaria de gerar relatório: '))
+    #     curso = 'Administração'
+    #     gerarUmRelatorio(collectionCurso, collectionCentroPorAno, collectionCursosPorCentro, 'introducao.md', 'conclusao.md', ano, curso, dbName)
+    # if escolha == 3:
+    if modal == 'EAD':
+        arquivo_intro_esc = 'introducao_ead.md'
+        arquivo_conclusao_esc = 'conclusao_ead.md'
+    elif modal == 'DISC':
+        arquivo_intro_esc = 'introducao.md'
+        arquivo_conclusao_esc = 'conclusao.md'
+    else: 
+        return print('O modal escolhido não existe, por favor, escolha entre EAD ou DISC por enquanto...')
+    gerarTodosRelatorios(collectionCurso, collectionCentroPorAno, collectionCursosPorCentro, arquivo_intro_esc, arquivo_conclusao_esc, ano, dbName)
+
+
 
 def runAplication(ano: int, csvFileName: str, modal: str, modo: str, client: MongoClient) -> None:
     """

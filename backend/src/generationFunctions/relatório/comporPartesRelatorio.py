@@ -101,21 +101,21 @@ def substituirIdentificadores(filename: str, dbName: str):
         
         if iden == 'index_':
             # Se estiver no estado index_
-            if (contador % 2) == 0:
+            if (contador % 3) == 0:
                 index += 1
-            replacement = f'Tabela {index}'
+            replacement = f'{index}'
             contador += 1
 
         elif iden == 'indexDisciplina':
             # Incrementa index_disciplina de 1 em 1
             index += 1
-            replacement = f'Tabela {index}'
+            replacement = f'{index}'
             
         return replacement
 
     # Substitui todas as ocorrências de 'Tabela index_' e 'Tabela indexDisciplina' usando a função de substituição personalizada
     defaultContent = re.sub(r'Index_', 'index_', content)
-    new_content = re.sub(r'Tabela (index_|indexDisciplina)', replace_custom, defaultContent)
+    new_content = re.sub(r'(index_|indexDisciplina)', replace_custom, defaultContent)
     
     # Salva o novo conteúdo no mesmo arquivo ou em um novo arquivo
     with open(f'./relatorio/markdowns/{dbName}/{filename}', 'w', encoding='utf-8') as file:

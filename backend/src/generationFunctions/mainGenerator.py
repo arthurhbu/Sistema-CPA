@@ -4,11 +4,13 @@ from src.generationFunctions.text.textFunctions import composeTable
 from src.gemma2.generationFunctions import createReport
 from src.generationFunctions.relatório.comporPartesRelatorio import *
 from src.generationFunctions.relatório.gerarRelatorio import gerarRelatorioPorCurso
+from src.supportFunctions.ordenarOpcoes import ordenarOpcoesDict
 from datetime import datetime, timedelta
 from pymongo.collection import Collection
 from pymongo.database import Database
 from pymongo.mongo_client import MongoClient
 from database.connectionDB import connection
+import random as rand
 import sys
 sys.stdout.reconfigure(encoding="utf-8")
 
@@ -21,72 +23,76 @@ def gerarGrafTabRelatorioGPT(client: MongoClient, databaseName: Database, collec
     :param CollectionName: Paramêtro que chama a collection na qual estamos trabalhando
     :type CollectionName: Collection
     """
-    with client.start_session() as session:
-        session_id = session.session_id
+    # with client.start_session() as session:
+    #     session_id = session.session_id
 
-        cursor = collectionName.find({'tabela': {'$exists': False}}, no_cursor_timeout = True, session=session).batch_size(10)
+    #     cursor = collectionName.find({'tabela': {'$exists': False}}, no_cursor_timeout = True, session=session).batch_size(10)
         
-        refresh_timeStamp = datetime.now()
-        try:
-            for document in cursor:
-                if (datetime.now() - refresh_timeStamp).total_seconds() > 300:
-                    client.admin.command({'refreshSessions': [session_id]})
-                    refresh_timeStamp = datetime.now()
+    #     refresh_timeStamp = datetime.now()
+    #     try:
+    #         for document in cursor:
+    #             if (datetime.now() - refresh_timeStamp).total_seconds() > 300:
+    #                 client.admin.command({'refreshSessions': [session_id]})
+    #                 refresh_timeStamp = datetime.now()
 
-                pergunta_formatada = re.sub(r"^\d+\.\d+-\s*",'',document["nm_pergunta"])
-                sorted_pctOptDict = dict(sorted(document["pct_por_opcao"].items(), key=lambda x: x[1], reverse=True))
-                opcoes, pct = dictToList(sorted_pctOptDict)
-                table = composeTable(pergunta_formatada, sorted_pctOptDict, document['total_do_curso'])
-                path = '-'
-                captionGraph = '-'
-                reportGraph = '-'
+    #             pergunta_formatada = re.sub(r"^\d+\.\d+-\s*",'',document["nm_pergunta"])
+    #             sorted_pctOptDict = dict(sorted(document["pct_por_opcao"].items(), key=lambda x: x[1], reverse=True))
+    #             opcoes, pct = dictToList(sorted_pctOptDict)
+    #             table = composeTable(pergunta_formatada, sorted_pctOptDict, document['total_do_curso'])
+    #             path = '-'
+    #             captionGraph = '-'
+    #             reportGraph = '-'
 
-                if document['nm_disciplina'] == '-':
-                    path = controllerGraphGenerator(databaseName, collectionName, opcoes, pct, document["cd_curso"], document["cd_subgrupo"], document["cd_pergunta"], pergunta_formatada)
-                    reportGraph = createReport(pergunta_formatada, sorted_pctOptDict) 
+    #             if document['nm_disciplina'] == '-':
+    #                 path = controllerGraphGenerator(databaseName, collectionName, opcoes, pct, document["cd_curso"], document["cd_subgrupo"], document["cd_pergunta"], pergunta_formatada)
+    #                 reportGraph = createReport(pergunta_formatada, sorted_pctOptDict) 
                     
-                    collectionName.update_one(
-                        {
-                            "cd_curso": document["cd_curso"],
-                            "cd_subgrupo": document['cd_subgrupo'],
-                            "cd_pergunta": document["cd_pergunta"]
-                        },
-                        {
-                            '$set': {
-                                'path': path,
-                                'tabela': table,
-                                'relatorioGraficoAI': reportGraph,
-                                'tituloGraficoAI': captionGraph
-                            }
-                        }   
-                    )
-                    continue
+    #                 collectionName.update_one(
+    #                     {
+    #                         "cd_curso": document["cd_curso"],
+    #                         "cd_subgrupo": document['cd_subgrupo'],
+    #                         "cd_pergunta": document["cd_pergunta"]
+    #                     },
+    #                     {
+    #                         '$set': {
+    #                             'path': path,
+    #                             'tabela': table,
+    #                             'relatorioGraficoAI': reportGraph,
+    #                             'tituloGraficoAI': captionGraph
+    #                         }
+    #                     }   
+    #                 )
+    #                 continue
                 
-                collectionName.update_one(
-                    {
-                        'cd_curso': document['cd_curso'],
-                        'cd_pergunta': document['cd_pergunta'],
-                        'cd_disciplina': document['cd_disciplina']
-                    },
-                    {
-                        '$set': {
-                            'path': path,
-                            'tabela': table,
-                            'relatorioGraficoAI': reportGraph,
-                            'tituloGraficoAI': captionGraph
-                        }
-                    }
-                )
-        finally:
-            cursor.close()
+    #             collectionName.update_one(
+    #                 {
+    #                     'cd_curso': document['cd_curso'],
+    #                     'cd_pergunta': document['cd_pergunta'],
+    #                     'cd_disciplina': document['cd_disciplina']
+    #                 },
+    #                 {
+    #                     '$set': {
+    #                         'path': path,
+    #                         'tabela': table,
+    #                         'relatorioGraficoAI': reportGraph,
+    #                         'tituloGraficoAI': captionGraph
+    #                     }
+    #                 }
+    #             )
+    #     finally:
+    #         cursor.close()
 
 
-
-    #PARA APENAS SUBSTITUIR TABELAS
+    #PARA MEXER NA TABELA E RELATORIOAI(ALTERAR O FINAL DO RELATORIO ADICIONANDO NOVA FRASE)
     # for document in collectionName.find({}):
     #     pergunta_formatada = re.sub(r"^\d+\.\d+-\s*",'',document["nm_pergunta"])
     #     sorted_pctOptDict = dict(sorted(document["pct_por_opcao"].items(), key=lambda x: x[1], reverse=True))
-    #     table = composeTable(pergunta_formatada, sorted_pctOptDict, document['total_do_curso'])
+    #     table = composeTable(pergunta_formatada, document['pct_por_opcao'], document['total_do_curso'])
+    #     if document['nm_disciplina'] == '-':
+    #         referencia_figura = rand.choice(['A figura index_ demonstra a prevalência das respostas.', 'A figura index_ mostra a tendência dominante das respostas.', 'A figura index_ representa a maior frequência das respostas.', 'A figura index_ exibe o padrão predominante nas respostas.','A figura index_ destaca a maior concentração de respostas.', 'A figura index_ evidencia a principal tendência nas respostas.', 'A figura index_ revela o comportamento predominante das respostas.', 'A figura index_ exibe a distribuição dos respondentes.', 'A figura index_ demonstra o padrão de distribuição dos respondentes.', 'A figura index_ representa a distribuição dos respondentes.'])
+
+    #         relatorio_mudanca = document['relatorioGraficoAI']
+    #         relatorio_mudanca = f'{relatorio_mudanca}{referencia_figura}'
     #     collectionName.update_one(
     #         {
     #             "cd_curso": document["cd_curso"],
@@ -95,10 +101,31 @@ def gerarGrafTabRelatorioGPT(client: MongoClient, databaseName: Database, collec
     #         },
     #         {
     #             '$set': {
-    #                 'tabela': table
+    #                 'tabela': table,
+    #                 'relatorioGraficoAI': relatorio_mudanca
     #             }
     #         }   
     #     )
+
+
+
+    #PARA APENAS SUBSTITUIR TABELAS
+    for document in collectionName.find({}):
+        pergunta_formatada = re.sub(r"^\d+\.\d+-\s*",'',document["nm_pergunta"])
+        sorted_pctOptDict = dict(sorted(document["pct_por_opcao"].items(), key=lambda x: x[1], reverse=True))
+        table = composeTable(pergunta_formatada, document['pct_por_opcao'], document['total_do_curso'])
+        collectionName.update_one(
+            {
+                "cd_curso": document["cd_curso"],
+                "cd_subgrupo": document['cd_subgrupo'],
+                "cd_pergunta": document["cd_pergunta"]
+            },
+            {
+                '$set': {
+                    'tabela': table
+                }
+            }   
+        )
 
 
 
@@ -127,6 +154,23 @@ def gerarGrafTabRelatorioGPT(client: MongoClient, databaseName: Database, collec
     #             }   
     #         )
     #         continue
+
+    # ATUALIZAR DICTS FORA DE ORDEM
+    # for document in collectionName.find({}):
+    #     lista = ['Excelente','Ótimo', 'Bom', 'Regular', 'Ruim', 'Péssimo','Não sei informar']
+    #     dictOrd = ordenarOpcoesDict(document['pct_por_opcao'], lista)
+    #     collectionName.update_one(
+    #         {
+    #             "cd_curso": document["cd_curso"],
+    #             "cd_subgrupo": document['cd_subgrupo'],
+    #             "cd_pergunta": document["cd_pergunta"]
+    #         },
+    #         {
+    #             '$set': {
+    #                 'pct_por_opcao': dictOrd
+    #             }
+    #         }  
+    #     )        
 
 
 
