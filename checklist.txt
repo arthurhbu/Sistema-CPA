@@ -1,8 +1,15 @@
 O que precisa ser feito ainda:
-    - Melhorar a tela Home (EM PROGRESSO)
+    - Tela home adicionar o passo a passo do que fazer
+    - Tela de progresso, adicionar logs (Os logs já estão presentes, apenas precisa ser estilizado) ERRO: NÃO ESTÁ ATUALIZANDO O PROGRESSO, CONFERIR DEPOIS.
+    - Confirmação se o cabeçalho está correto com o padrão (ESTÁ PRATICAMENTE FINALIZADO, APENAS CRIAR A TELA PARA POPUP DE IMPORTADO COM SUCESSO, TIRANDO ISSO, FINALIZADO)
+
+    - Melhorar a tela Home
+    - Melhorar o footer
     - Criar a tela Gerar PDFs e o backend (Talvez não precise)
     - Terminar o backend Gerar Relatórios, com a parte de enviar no email os relatórios gerados
-    - Melhorar o footer
-    - Tentar aprimorar o cabeçalho futuramente (EM PROGRESSO)
-    - Tela de progresso, adicionar logs (EM PROGRESSO, OS STATUS DE CADA ETAPA ESTAO APARECENDO MAS PRECISA SER REFINADO COM TODA CERTEZA)
-    - Tela home adicionar o passo a passo do que fazer
+    - Tentar aprimorar o cabeçalho futuramente
+    - Autenticação para Login de funcionários da CPA 
+    
+    - Pagina para alterar arquivos de introdução e conclusao
+    - Página para correção de possíveis problemas envolvendo formatação e afins.
+    - Realizar um teste completo, onde faça cada etapa necessária.

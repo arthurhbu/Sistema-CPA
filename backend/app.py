@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify, render_template
-import os   
+import os, csv
 from flask_cors import CORS
 from flask_socketio import SocketIO
 from pymongo import MongoClient
@@ -23,56 +23,71 @@ if not os.path.exists(UPLOAD_FOLDER):
 filename: str = ''
 processing: bool = False
 
-def convert_objectid_to_str(document):
+def converteObjectIDToStr(document):
     if document is None:
         return None
-    # Percorre o dicionário e converte qualquer ObjectId em string
     return {key: (str(value) if isinstance(value, ObjectId) else value) for key, value in document.items()}
 
 @app.route('/api/importar', methods=["POST"])
 def importar():
     global filename
-    global processing
-    print('receive request')
+    
     file = request.files['file']
-    print(f'filename: {file.filename}')
     ano = request.form.get('ano')
-    print(f'ano: {ano}')
+    
     if file and ano:
         filename = file.filename
-        print(filename)
         file_path = os.path.join(UPLOAD_FOLDER, file.filename)
         file.save(file_path)
+        with open(f'{file_path}', newline='', encoding='utf-8') as csvFile:
+            reader = csv.reader(csvFile)
+            header = next(reader)
         
-        processing = True
-        socketio.start_background_task(target=processa_csv, filename=filename, ano=ano)
-        return jsonify({'message': 'File successfully uploaded'}), 200
+        return jsonify({'header': header}), 200 
         
-    return jsonify({'error': 'Missing file or ano'}), 400
+    return jsonify({'error': 'Erro ao tentar importar arquivo CSV'}), 400
 
-def processa_csv(filename, ano):
+
+def processaCsv(filename, ano):
     global processing
     try:
         applicationController(int(ano), filename, '', 'inserir', client)
     finally: 
         processing = False
 
+
+@app.route('/api/confirmarImportacao', methods=['POST'])
+def confirmarImportacao():
+    global processing, filename
+    ano = request.json.get('ano')
+    print(filename)
+    print(ano)
+    if filename and ano:
+        processing = True
+        socketio.start_background_task(target=processaCsv, filename=filename, ano=ano)
+        return jsonify({'message': 'Análise confirmada e importação iniciada'}), 200
+    
+    return jsonify({'message':'Erro ao confirmar a analise'}), 400
+
+
 @app.route('/progresso', methods=['GET'])
-def get_status():
+def getStatus():
     global filename
     global processing
     processing = True
     progresso = {}
     if processing == True:
         progresso = getProgressoInsercao(filename, client)
-        progresso = convert_objectid_to_str(progresso)  # Converte todos os ObjectId para strings
+        progresso = converteObjectIDToStr(progresso)  
         print(progresso)
-    return {'processing': True, 'file': filename, 'progresso': progresso}
+    return {'processing': processing, 'file': filename, 'progresso': progresso}
+
 
 @app.route('/api/instrumentos', methods=['GET'])
-def list_instrumentos():
+def listInstrumentos():
     dbs = listDatabases(client)
     return jsonify(dbs)
+
 
 @app.route('/api/gerarRelatorios', methods=['POST'])
 def gerarRelatorios(): 
@@ -88,8 +103,9 @@ def gerarRelatorios():
         # Criar um await e async para esperar confirmar que os relatorios foram gerados com sucesso
         return jsonify({'message': 'Relatórios gerados com sucesso!'}), 200
             
-
     return jsonify({'message': 'Não foi possível gerar os relatórios'}), 400
+
+
 
 
     
