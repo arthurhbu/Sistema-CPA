@@ -5,6 +5,7 @@ from pymongo import MongoClient
 from pymongo.database import Database
 from src.supportFunctions.percentageUpdateBD import *
 from pymongo.errors import PyMongoError
+from pandas.errors import EmptyDataError
 
 class CSVManagment:
 
@@ -115,94 +116,111 @@ class CSVManagment:
         :param collectionName: Coleção que será feito as insertions e updates
         :type: Collection 
         """
+        try:
+            CSVManagment.bruteCSVFilter(csvFileName)
+            filterCsv = 'csvFiltrado.csv'
+            dirArquivo = CSVManagment.findPath()
+            df = pd.read_csv(f'{dirArquivo}/CSVs/{filterCsv}', sep=',', header = 0)
 
-        CSVManagment.bruteCSVFilter(csvFileName)
-        filterCsv = 'csvFiltrado.csv'
-        dirArquivo = CSVManagment.findPath()
-        df = pd.read_csv(f'{dirArquivo}/CSVs/{filterCsv}', sep=',', header = 0)
+            print(df.columns.values)
+            #O cabeçalho terá um formato padrão para evitar erros e problemas futuros, apenas sendo necessário manter a ordem de cada coluna
+            cabecalho = [
+                'cd_curso', 
+                'nm_curso', 
+                'centro_de_ensino', 
+                'cd_grupo',
+                'nm_grupo',
+                'cd_subgrupo',
+                'nm_subgrupo',
+                'cd_disciplina',
+                'nm_disciplina',
+                'ordem_pergunta',
+                'cd_pergunta',
+                'nm_pergunta',
+                'ordem_opcoes',
+                'opcao',
+                'respostas',
+                'total_do_curso']
 
-        print(df.columns.values)
-        #O cabeçalho terá um formato padrão para evitar erros e problemas futuros, apenas sendo necessário manter a ordem de cada coluna
-        cabecalho = [
-            'cd_curso', 
-            'nm_curso', 
-            'centro_de_ensino', 
-            'cd_grupo',
-            'nm_grupo',
-            'cd_subgrupo',
-            'nm_subgrupo',
-            'cd_disciplina',
-            'nm_disciplina',
-            'ordem_pergunta',
-            'cd_pergunta',
-            'nm_pergunta',
-            'ordem_opcoes',
-            'opcao',
-            'respostas',
-            'total_do_curso']
+            # if CSVManagment.verifierMainCsv(df.iloc[0,0], collectionName) == True:
+            #     return print("Os dados já foram inseridos no banco!")
 
-        # if CSVManagment.verifierMainCsv(df.iloc[0,0], collectionName) == True:
-        #     return print("Os dados já foram inseridos no banco!")
+            print('Inserindo infos no banco: \n')
+            temp_pctdict = {}
+            for i in range(len(df)):
+                # print(f"        %{round(100*i/len(df), 0)}")
+            
+                disciplina_anterior = df.iloc[i-1, 7] if i > 0 else None
+                disciplina_atual = df.iloc[i, 7]
+                proxima_disciplina = df.iloc[i+1, 7] if i < len(df)-1 else None
 
-        print('Inserindo infos no banco: \n')
-        temp_pctdict = {}
-        for i in range(len(df)):
-            print(f"        %{round(100*i/len(df), 0)}")
-        
-            disciplina_anterior = df.iloc[i-1, 7] if i > 0 else None
-            disciplina_atual = df.iloc[i, 7]
-            proxima_disciplina = df.iloc[i+1, 7] if i < len(df)-1 else None
+                pergunta_anterior = df.iloc[i-1,11] if i > 0 else None
+                pergunta_atual = df.iloc[i,11]
+                proxima_pergunta = df.iloc[i+1,11] if i < len(df)-1 else None
 
-            pergunta_anterior = df.iloc[i-1,11] if i > 0 else None
-            pergunta_atual = df.iloc[i,11]
-            proxima_pergunta = df.iloc[i+1,11] if i < len(df)-1 else None
+                temp_pctdict.update({str(df.iloc[i,13]): int(df.iloc[i,14])})
 
-            temp_pctdict.update({str(df.iloc[i,13]): int(df.iloc[i,14])})
+                if pergunta_atual != proxima_pergunta or (i+1) == len(df):
+                    
+                    nm_disciplina = df.iloc[i,8]
+                    cd_disciplina = df.iloc[i,7]
+                    
+                    opcao_e_pct = percentageCalculator(temp_pctdict, int(df.iloc[i,15]))
 
-            if pergunta_atual != proxima_pergunta or (i+1) == len(df):
-                
-                nm_disciplina = df.iloc[i,8]
-                cd_disciplina = df.iloc[i,7]
-                
-                opcao_e_pct = percentageCalculator(temp_pctdict, int(df.iloc[i,15]))
-
-                collectionName.insert_one(
-                    {
-                    cabecalho[0]: int(df.iloc[i,0]),    #codigo_curso
-                    cabecalho[1]:f'{df.iloc[i,1]}',     #nome_do_curso
-                    cabecalho[2]: f'{df.iloc[i,2]}',    #centro_de_ensino
-                    cabecalho[3]: int(df.iloc[i,3]),    #codigo_grupo
-                    cabecalho[4]: str(df.iloc[i,4]),    #nome_grupo
-                    cabecalho[5]: int(df.iloc[i,5]),    #codigo_subgrupo
-                    cabecalho[6]: f'{df.iloc[i,6]}',    #nome_subgrupo
-                    cabecalho[7]: int(df.iloc[i,7]),    #codigo_disciplina
-                    cabecalho[8]: str(df.iloc[i,8]),    #nome_disciplina
-                    cabecalho[9]: int(df.iloc[i,9]),    #ordem_pergunta
-                    cabecalho[10]: int(df.iloc[i,10]),  #codigo_pergunta 
-                    cabecalho[11]: f"{df.iloc[i,11]}",  #nome_pergunta
-                    cabecalho[12]: int(df.iloc[i,12]),  #ordem_opcao
-                    cabecalho[15]: int(df.iloc[i,15])   #total_do_curso
-                    }
-                )
-
-                if nm_disciplina == '-' and cd_disciplina == 0.0:
-                    insertPercentageDictIntoDB(
-                        collectionName, 'pct_por_opcao', opcao_e_pct, 
-                        'cd_curso', int(df.iloc[i,0]), 
-                        'cd_pergunta', int(df.iloc[i,10])
-                    )
-                else:
-                    insertDictDisciplina(
-                        collectionName, 'pct_por_opcao', opcao_e_pct, 
-                        'cd_curso', int(df.iloc[i,0]), 
-                        'cd_pergunta', int(df.iloc[i,10]), 
-                        'cd_disciplina', int(df.iloc[i,7])
+                    collectionName.insert_one(
+                        {
+                        cabecalho[0]: int(df.iloc[i,0]),    #codigo_curso
+                        cabecalho[1]:f'{df.iloc[i,1]}',     #nome_do_curso
+                        cabecalho[2]: f'{df.iloc[i,2]}',    #centro_de_ensino
+                        cabecalho[3]: int(df.iloc[i,3]),    #codigo_grupo
+                        cabecalho[4]: str(df.iloc[i,4]),    #nome_grupo
+                        cabecalho[5]: int(df.iloc[i,5]),    #codigo_subgrupo
+                        cabecalho[6]: f'{df.iloc[i,6]}',    #nome_subgrupo
+                        cabecalho[7]: int(df.iloc[i,7]),    #codigo_disciplina
+                        cabecalho[8]: str(df.iloc[i,8]),    #nome_disciplina
+                        cabecalho[9]: int(df.iloc[i,9]),    #ordem_pergunta
+                        cabecalho[10]: int(df.iloc[i,10]),  #codigo_pergunta 
+                        cabecalho[11]: f"{df.iloc[i,11]}",  #nome_pergunta
+                        cabecalho[12]: int(df.iloc[i,12]),  #ordem_opcao
+                        cabecalho[15]: int(df.iloc[i,15])   #total_do_curso
+                        }
                     )
 
-                temp_pctdict = {}  # Reseta o dicionário para o próximo grupo
-                
-        return print("Inserção dos dados no banco de dados finalizada corretamente ✅")
-                       
+                    if nm_disciplina == '-' and cd_disciplina == 0.0:
+                        insertPercentageDictIntoDB(
+                            collectionName, 'pct_por_opcao', opcao_e_pct, 
+                            'cd_curso', int(df.iloc[i,0]), 
+                            'cd_pergunta', int(df.iloc[i,10])
+                        )
+                    else:
+                        insertDictDisciplina(
+                            collectionName, 'pct_por_opcao', opcao_e_pct, 
+                            'cd_curso', int(df.iloc[i,0]), 
+                            'cd_pergunta', int(df.iloc[i,10]), 
+                            'cd_disciplina', int(df.iloc[i,7])
+                        )
+
+                    temp_pctdict = {}  # Reseta o dicionário para o próximo grupo
+                    
+            return 'Finalizado'
+        except FileNotFoundError as e:
+            return f"Arquivo não encontrado: {e}"
+        except EmptyDataError as e:
+            return f"O arquivo CSV está vazio ou corrompido: {e}"
+        except KeyError as e:
+            return f"Coluna não encontrada: {e}"
+        except IndexError as e:
+            return f"Erro de índice: {e}"
+        except TypeError as e:
+            return f"Erro de tipo: {e}"
+        except ValueError as e:
+            return f"Erro de valor: {e}"
+        except PermissionError as e:
+            return f"Permissão negada para salvar o arquivo: {e}"
+        except PyMongoError as e:
+            return f"Erro no MongoDB: {e}"
+        except Exception as e:
+            return f"Erro inesperado: {e}"
 
 
     def insertCursoeCentroCSVtoDatabase(collectionName: Collection) -> print:
@@ -213,34 +231,53 @@ class CSVManagment:
         :type: Collection 
         '''
         # csvArchive = CSVManagment.CSVReader()
-        csvArchive = 'cursos_e_centros.csv'
-        dirArquivo = CSVManagment.findPath()
-        df = pd.read_csv(f'{dirArquivo}/CSVs/{csvArchive}', sep=',', header = 0)
+        try: 
+            csvArchive = 'cursos_e_centros.csv'
+            dirArquivo = CSVManagment.findPath()
+            df = pd.read_csv(f'{dirArquivo}/CSVs/{csvArchive}', sep=',', header = 0)
 
-        print(df)
+            print(df)
 
-        cabecalho = [
-            'cd_curso',
-            'codigo_mec',
-            'centro_de_ensino',
-            'nm_curso',
-            'matriculados',
-            'ano_referencia'
-        ]
+            cabecalho = [
+                'cd_curso',
+                'codigo_mec',
+                'centro_de_ensino',
+                'nm_curso',
+                'matriculados',
+                'ano_referencia'
+            ]
 
-        for i in range(len(df)):
-            print(f"Inserindo infos no banco: %{round(100*i/len(df), 0)}")
-            collectionName.insert_one(
-                {
-                    cabecalho[0]: int(df.iloc[i,0]),
-                    cabecalho[1]: float(df.iloc[i,1]),
-                    cabecalho[2]: str(df.iloc[i,2]),
-                    cabecalho[3]: str(df.iloc[i,3]),
-                    cabecalho[4]: int(df.iloc[i,4]),
-                    cabecalho[5]: int(df.iloc[i,5])
-                }
-            )
-        return print("Inserção dos dados no banco de dados finalizada corretamente ✅")
+            for i in range(len(df)):
+                # print(f"Inserindo infos no banco: %{round(100*i/len(df), 0)}")
+                collectionName.insert_one(
+                    {
+                        cabecalho[0]: int(df.iloc[i,0]),
+                        cabecalho[1]: float(df.iloc[i,1]),
+                        cabecalho[2]: str(df.iloc[i,2]),
+                        cabecalho[3]: str(df.iloc[i,3]),
+                        cabecalho[4]: int(df.iloc[i,4]),
+                        cabecalho[5]: int(df.iloc[i,5])
+                    }
+                )
+            return 'Finalizado'
+        except FileNotFoundError as e:
+            return f"Arquivo não encontrado: {e}"
+        except pd.errors.EmptyDataError as e:
+            return f"O arquivo CSV está vazio ou corrompido: {e}"
+        except KeyError as e:
+            return f"Coluna não encontrada: {e}"
+        except IndexError as e:
+            return f"Erro de índice: {e}"
+        except TypeError as e:
+            return f"Erro de tipo: {e}"
+        except ValueError as e:
+            return f"Erro de valor: {e}"
+        except PermissionError as e:
+            return f"Permissão negada para salvar o arquivo: {e}"
+        except PyMongoError as e:
+            return f"Erro no MongoDB: {e}"
+        except Exception as e:
+            return f"Erro inesperado: {e}"
 
     def insertCentroDiretorCSVDatabase(collectionName: Collection) -> print:
         '''
@@ -250,25 +287,44 @@ class CSVManagment:
         :type: Collection 
         '''
         # csvArchive = CSVManagment.CSVReader()
-        csvArchive = 'centros_e_diretores.csv'
-        dirArquivo = CSVManagment.findPath()
-        df = pd.read_csv(f'{dirArquivo}/CSVs/{csvArchive}', sep=',', header = 0)
-        print(df)
-        cabecalho = [
-            'centro_de_ensino',
-            'centro_descricao',
-            'diretor',
-            'diretor_adjunto',
-            'ano_da_direcao'
-        ]
-        for i in range(len(df)):
-            collectionName.insert_one(
-                {
-                    cabecalho[0]: str(df.iloc[i,0]),
-                    cabecalho[1]: str(df.iloc[i,1]),
-                    cabecalho[2]: str(df.iloc[i,2]),
-                    cabecalho[3]: str(df.iloc[i,3]),
-                    cabecalho[4]: str(df.iloc[i,4]),
-                }
-            )
-        return print("Inserção dos dados no banco de dados finalizada corretamente ✅")
+        try:
+            csvArchive = 'centros_e_diretores.csv'
+            dirArquivo = CSVManagment.findPath()
+            df = pd.read_csv(f'{dirArquivo}/CSVs/{csvArchive}', sep=',', header = 0)
+            print(df)
+            cabecalho = [
+                'centro_de_ensino',
+                'centro_descricao',
+                'diretor',
+                'diretor_adjunto',
+                'ano_da_direcao'
+            ]
+            for i in range(len(df)):
+                collectionName.insert_one(
+                    {
+                        cabecalho[0]: str(df.iloc[i,0]),
+                        cabecalho[1]: str(df.iloc[i,1]),
+                        cabecalho[2]: str(df.iloc[i,2]),
+                        cabecalho[3]: str(df.iloc[i,3]),
+                        cabecalho[4]: str(df.iloc[i,4]),
+                    }
+                )
+            return 'Finalizado'
+        except FileNotFoundError as e:
+            return f"Arquivo não encontrado: {e}"
+        except pd.errors.EmptyDataError as e:
+            return f"O arquivo CSV está vazio ou corrompido: {e}"
+        except KeyError as e:
+            return f"Coluna não encontrada: {e}"
+        except IndexError as e:
+            return f"Erro de índice: {e}"
+        except TypeError as e:
+            return f"Erro de tipo: {e}"
+        except ValueError as e:
+            return f"Erro de valor: {e}"
+        except PermissionError as e:
+            return f"Permissão negada para salvar o arquivo: {e}"
+        except PyMongoError as e:
+            return f"Erro no MongoDB: {e}"
+        except Exception as e:
+            return f"Erro inesperado: {e}"

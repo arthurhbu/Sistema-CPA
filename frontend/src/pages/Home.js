@@ -4,9 +4,11 @@ import {Link} from 'react-router-dom';
 function Home(){
     return(
         <div className={styles.home}>
-            <div style={{display:'flex', justifyContent:'center'}}>
+            <div style={{display:'flex', justifyContent:'center', backgroundColor:'#000b1f', width:'100%', paddingBottom:'150px', borderTop:'1px solid #292828'}}>
                 <div className={styles.inicio}>
-                    <p className={styles.tituloInicio}>Comissão Própria de Avaliação  CPA</p>
+                    {/* <p className={styles.tituloInicio}>Comissão Própria de Avaliação  CPA</p> */}
+                    <p>Bem vindo ao nosso sistema Letícia!</p>
+                    <p>Relatorios: </p>
                     <p className={styles.intro}>Bem-vindo ao Sistema de Geração de Relatórios da CPA-UEM. Este site foi desenvolvido pela Comissão Própria de Avaliação (CPA) da Universidade Estadual de Maringá (UEM) com o objetivo de facilitar a geração e o acesso a relatórios detalhados e precisos. Nossa plataforma permite a coleta, armazenamento e análise de dados de forma eficiente, oferecendo ferramentas intuitivas e robustas para apoiar decisões estratégicas e melhorar continuamente a qualidade acadêmica e administrativa da UEM.</p>
                 </div>
             </div>

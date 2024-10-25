@@ -1,10 +1,8 @@
 import {Link} from 'react-router-dom';
 import styles from './NavBar.module.css';
 
-import CPA_logo_full from '../../img/CPA_logo_full.png';
-import UEM_logo from '../../img/uem_logo.png';
-import GRE_logo from '../../img/gre_logo.png';
-import CPA_logo from '../../img/CPA LOGO.png';
+import CPA_logo from '../../img/cpa_logo_white.png';
+import UEM_logo from '../../img/uem_logo_white.png';
 
 function NavBar() {
     return(
@@ -12,8 +10,8 @@ function NavBar() {
             <nav className={styles.navbar}>
                 
                     {/* <img src={logo} alt='cpa'/> */}
-                    <p className={styles.p}>Comissão Própria de Avaliação</p>
-                    {/* <img src={CPA_logo} style={{maxWidth}}></img> */}
+                    {/* <p className={styles.p}>Comissão Própria de Avaliação</p> */}
+                    <img src={CPA_logo} style={{maxWidth:'10vw'}}></img>
                     <ul className={styles.list}>
                         <li className={styles.item}>
                             <Link to="/">Home</Link>
@@ -31,12 +29,13 @@ function NavBar() {
                             <Link to='/gerar_pdfs'>Gerar PDFs</Link>
                         </li>
                     </ul>
+                    <img src={UEM_logo} style={{maxWidth:'10vw'}}></img>
             </nav>
-            <div className={styles.header}>
+            {/* <div className={styles.header}>
                 <img src={GRE_logo} alt='header' className={styles.responsive}></img> 
                 <img src={CPA_logo_full} alt='header' className={styles.responsiveCpaLogo}></img>
                 <img src={UEM_logo} alt='header' className={styles.responsive}></img>
-            </div>
+            </div> */}
         </div>
     );
 }

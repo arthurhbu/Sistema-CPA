@@ -10,6 +10,7 @@ from pymongo.collection import Collection
 from pymongo.database import Database
 from pymongo.mongo_client import MongoClient
 from database.connectionDB import connection
+from pymongo.errors import OperationFailure, CursorNotFound, ConnectionFailure, InvalidOperation, DuplicateKeyError
 import random as rand
 import sys
 sys.stdout.reconfigure(encoding="utf-8")
@@ -23,64 +24,83 @@ def gerarGrafTabRelatorioGPT(client: MongoClient, databaseName: Database, collec
     :param CollectionName: Paramêtro que chama a collection na qual estamos trabalhando
     :type CollectionName: Collection
     """
-    # with client.start_session() as session:
-    #     session_id = session.session_id
+    try:
+        with client.start_session() as session:
+            session_id = session.session_id
 
-    #     cursor = collectionName.find({'tabela': {'$exists': False}}, no_cursor_timeout = True, session=session).batch_size(10)
-        
-    #     refresh_timeStamp = datetime.now()
-    #     try:
-    #         for document in cursor:
-    #             if (datetime.now() - refresh_timeStamp).total_seconds() > 300:
-    #                 client.admin.command({'refreshSessions': [session_id]})
-    #                 refresh_timeStamp = datetime.now()
-
-    #             pergunta_formatada = re.sub(r"^\d+\.\d+-\s*",'',document["nm_pergunta"])
-    #             sorted_pctOptDict = dict(sorted(document["pct_por_opcao"].items(), key=lambda x: x[1], reverse=True))
-    #             opcoes, pct = dictToList(sorted_pctOptDict)
-    #             table = composeTable(pergunta_formatada, sorted_pctOptDict, document['total_do_curso'])
-    #             path = '-'
-    #             captionGraph = '-'
-    #             reportGraph = '-'
-
-    #             if document['nm_disciplina'] == '-':
-    #                 path = controllerGraphGenerator(databaseName, collectionName, opcoes, pct, document["cd_curso"], document["cd_subgrupo"], document["cd_pergunta"], pergunta_formatada)
-    #                 reportGraph = createReport(pergunta_formatada, sorted_pctOptDict) 
+            cursor = collectionName.find({'tabela': {'$exists': False}}, no_cursor_timeout = True, session=session).batch_size(10)
+            
+            refresh_timeStamp = datetime.now()
+            
+            try:
+                for document in cursor:
+                    if (datetime.now() - refresh_timeStamp).total_seconds() > 300:
+                        client.admin.command({'refreshSessions': [session_id]})
+                        refresh_timeStamp = datetime.now()
+                    pergunta_formatada = re.sub(r"^\d+\.\d+-\s*",'',document["nm_pergunta"])
+                    try:
+                        sorted_pctOptDict = dict(sorted(document["pct_por_opcao"].items(), key=lambda x: x[1], reverse=True))
+                        opcoes, pct = dictToList(sorted_pctOptDict)
+                        table = composeTable(pergunta_formatada, sorted_pctOptDict, document['total_do_curso'])
+                    except KeyError as key_error:
+                        return f'Erro de chave: {key_error}'
                     
-    #                 collectionName.update_one(
-    #                     {
-    #                         "cd_curso": document["cd_curso"],
-    #                         "cd_subgrupo": document['cd_subgrupo'],
-    #                         "cd_pergunta": document["cd_pergunta"]
-    #                     },
-    #                     {
-    #                         '$set': {
-    #                             'path': path,
-    #                             'tabela': table,
-    #                             'relatorioGraficoAI': reportGraph,
-    #                             'tituloGraficoAI': captionGraph
-    #                         }
-    #                     }   
-    #                 )
-    #                 continue
+                    path = '-'
+                    captionGraph = '-'
+                    reportGraph = '-'
+
+                    if document['nm_disciplina'] == '-':
+                        try:
+                            path = controllerGraphGenerator(databaseName, collectionName, opcoes, pct, document["cd_curso"], document["cd_subgrupo"], document["cd_pergunta"], pergunta_formatada)
+                            reportGraph = createReport(pergunta_formatada, sorted_pctOptDict) 
+                        except (ValueError, RuntimeError, OSError) as graph_error:
+                            return f'Erro ao gerar ou gravar gráfico: {graph_error}'
+                        
+                        try: 
+                            collectionName.update_one(
+                                {
+                                    "cd_curso": document["cd_curso"],
+                                    "cd_subgrupo": document['cd_subgrupo'],
+                                    "cd_pergunta": document["cd_pergunta"]
+                                },
+                                {
+                                    '$set': {
+                                        'path': path,
+                                        'tabela': table,
+                                        'relatorioGraficoAI': reportGraph,
+                                        'tituloGraficoAI': captionGraph
+                                    }
+                                }   
+                            )
+                        except (DuplicateKeyError, OperationFailure) as db_error:
+                            return f'Erro no banco de dados: {db_error}'
+                        continue
+                    
+                    try:
+                        collectionName.update_one(
+                            {
+                                'cd_curso': document['cd_curso'],
+                                'cd_pergunta': document['cd_pergunta'],
+                                'cd_disciplina': document['cd_disciplina']
+                            },
+                            {
+                                '$set': {
+                                    'path': path,
+                                    'tabela': table,
+                                    'relatorioGraficoAI': reportGraph,
+                                    'tituloGraficoAI': captionGraph
+                                }
+                            }
+                        )
+                    except (DuplicateKeyError, OperationFailure) as db_error:
+                        return f'Erro no banco de dados: {db_error}'
+                    
+                return 'Finalizado'
+            finally:
+                cursor.close()
                 
-    #             collectionName.update_one(
-    #                 {
-    #                     'cd_curso': document['cd_curso'],
-    #                     'cd_pergunta': document['cd_pergunta'],
-    #                     'cd_disciplina': document['cd_disciplina']
-    #                 },
-    #                 {
-    #                     '$set': {
-    #                         'path': path,
-    #                         'tabela': table,
-    #                         'relatorioGraficoAI': reportGraph,
-    #                         'tituloGraficoAI': captionGraph
-    #                     }
-    #                 }
-    #             )
-    #     finally:
-    #         cursor.close()
+    except (ConnectionFailure, InvalidOperation, CursorNotFound) as mongo_error:
+        return f'Erro de conexão ou operação com MongoDB: {mongo_error}'
 
 
     #PARA MEXER NA TABELA E RELATORIOAI(ALTERAR O FINAL DO RELATORIO ADICIONANDO NOVA FRASE)
@@ -110,22 +130,22 @@ def gerarGrafTabRelatorioGPT(client: MongoClient, databaseName: Database, collec
 
 
     #PARA APENAS SUBSTITUIR TABELAS
-    for document in collectionName.find({}):
-        pergunta_formatada = re.sub(r"^\d+\.\d+-\s*",'',document["nm_pergunta"])
-        sorted_pctOptDict = dict(sorted(document["pct_por_opcao"].items(), key=lambda x: x[1], reverse=True))
-        table = composeTable(pergunta_formatada, document['pct_por_opcao'], document['total_do_curso'])
-        collectionName.update_one(
-            {
-                "cd_curso": document["cd_curso"],
-                "cd_subgrupo": document['cd_subgrupo'],
-                "cd_pergunta": document["cd_pergunta"]
-            },
-            {
-                '$set': {
-                    'tabela': table
-                }
-            }   
-        )
+    # for document in collectionName.find({}):
+    #     pergunta_formatada = re.sub(r"^\d+\.\d+-\s*",'',document["nm_pergunta"])
+    #     sorted_pctOptDict = dict(sorted(document["pct_por_opcao"].items(), key=lambda x: x[1], reverse=True))
+    #     table = composeTable(pergunta_formatada, document['pct_por_opcao'], document['total_do_curso'])
+    #     collectionName.update_one(
+    #         {
+    #             "cd_curso": document["cd_curso"],
+    #             "cd_subgrupo": document['cd_subgrupo'],
+    #             "cd_pergunta": document["cd_pergunta"]
+    #         },
+    #         {
+    #             '$set': {
+    #                 'tabela': table
+    #             }
+    #         }   
+    #     )
 
 
 

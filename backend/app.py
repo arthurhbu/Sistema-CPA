@@ -1,6 +1,4 @@
 from flask import Flask, request, jsonify, render_template
-from main import main
-from general_controller import geraçãoDeRelatorio
 import os   
 from flask_cors import CORS
 from flask_socketio import SocketIO
@@ -8,6 +6,8 @@ from pymongo import MongoClient
 from general_controller import listDatabases
 from database.pythonMongoConfig import readDBConfig
 from database.connectionDB import connection
+from general_controller import applicationController, getProgressoInsercao
+from bson import ObjectId
 
 app = Flask(__name__)
 CORS(app)
@@ -22,6 +22,12 @@ if not os.path.exists(UPLOAD_FOLDER):
     
 filename: str = ''
 processing: bool = False
+
+def convert_objectid_to_str(document):
+    if document is None:
+        return None
+    # Percorre o dicionário e converte qualquer ObjectId em string
+    return {key: (str(value) if isinstance(value, ObjectId) else value) for key, value in document.items()}
 
 @app.route('/api/importar', methods=["POST"])
 def importar():
@@ -38,9 +44,7 @@ def importar():
         file_path = os.path.join(UPLOAD_FOLDER, file.filename)
         file.save(file_path)
         
-        # main(ano, file.filename, '', 'inserir', client)
         processing = True
-        
         socketio.start_background_task(target=processa_csv, filename=filename, ano=ano)
         return jsonify({'message': 'File successfully uploaded'}), 200
         
@@ -49,7 +53,7 @@ def importar():
 def processa_csv(filename, ano):
     global processing
     try:
-        main(ano, filename, '', 'inserir', client)
+        applicationController(int(ano), filename, '', 'inserir', client)
     finally: 
         processing = False
 
@@ -57,7 +61,13 @@ def processa_csv(filename, ano):
 def get_status():
     global filename
     global processing
-    return {'processing': processing, 'file': filename}
+    processing = True
+    progresso = {}
+    if processing == True:
+        progresso = getProgressoInsercao(filename, client)
+        progresso = convert_objectid_to_str(progresso)  # Converte todos os ObjectId para strings
+        print(progresso)
+    return {'processing': True, 'file': filename, 'progresso': progresso}
 
 @app.route('/api/instrumentos', methods=['GET'])
 def list_instrumentos():
@@ -74,12 +84,14 @@ def gerarRelatorios():
     print(instrumento)
     
     if ano and introConcl and instrumento:
-        print('oi') 
-        # Funcao para gerar relatorios
+        applicationController(int(ano), instrumento, introConcl, 'gerarRelatorio', client)
         # Criar um await e async para esperar confirmar que os relatorios foram gerados com sucesso
         return jsonify({'message': 'Relatórios gerados com sucesso!'}), 200
+            
 
     return jsonify({'message': 'Não foi possível gerar os relatórios'}), 400
+
+
     
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)

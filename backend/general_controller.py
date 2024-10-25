@@ -8,6 +8,7 @@ from src.generationFunctions.mainGenerator import *
 from src.generationFunctions.relatório.gerarRelatorio import gerarRelatorioPorCurso
 from database.databaseQuerys import dfCursosPorCentro,dfCentroPorAno
 from database.pythonMongoConfig import readDBConfig
+from database.databaseQuerys import update_progresso
 
 
 # def initializeBD(databaseName):
@@ -17,19 +18,36 @@ from database.pythonMongoConfig import readDBConfig
 #     #Criando as collections que serão usadas (OBS: REALIZAR MUDANÇA BASEADA NO ANO, EX: centro_e_curso_{ano})
 
 
-def firstStepApplication(databaseName: Database, collectionCurso: Collection, collectionCentroeCurso: Collection, collectionDiretoreCentro: Collection, csvFileName: str, client: MongoClient) -> None:
+def firstStepApplication(databaseName: Database, collectionCurso: Collection, collectionCentroeCurso: Collection, collectionDiretoreCentro: Collection, csvFileName: str, client: MongoClient, progresso: Database) -> None:
     """
     Função que junta os primeiros passos da execução do programa que seria as inserções e os realiza de uma vez.
     """
 
     #Inserir CSVs no banco de dados
+    progresso.insert_one(
+        {
+            'instrumento': f'{databaseName}',
+            'Insercao_Main_CSV': 'Pendente',
+            'Insercao_Curso_Centro_Database': 'Pendente',
+            'Insercao_Centro_Diretor_Database': 'Pendente',
+            'Geracao_de_Dados': 'Pendente',
+            'Criacao_Cursos_por_Centro_Database': 'Pendente',
+            'Criacao_Centro_por_Ano_Database': 'Pendente'
+        }
+    )
     
-    CSVManagment.insertMainCSVtoDatabase(collectionCurso, csvFileName)
-    CSVManagment.insertCursoeCentroCSVtoDatabase(collectionCentroeCurso) 
-    CSVManagment.insertCentroDiretorCSVDatabase(collectionDiretoreCentro)  
+    progressoEtapa1 = CSVManagment.insertMainCSVtoDatabase(collectionCurso, csvFileName)
+    update_progresso(progresso, 'insercaoMainCSV', progressoEtapa1)
+    
+    progressoEtapa2 = CSVManagment.insertCursoeCentroCSVtoDatabase(collectionCentroeCurso) 
+    update_progresso(progresso, 'insercaoCursoCentroDatabase', progressoEtapa2)
+    
+    progressoEtapa3 = CSVManagment.insertCentroDiretorCSVDatabase(collectionDiretoreCentro)  
+    update_progresso(progresso, 'insercaoCentroDiretorDatabase', progressoEtapa3)
 
     #Gerar Gráfico, Tabela e Relatório
-    gerarGrafTabRelatorioGPT(client, databaseName, collectionCurso)
+    progressoEtapa4 = gerarGrafTabRelatorioGPT(client, databaseName, collectionCurso)
+    update_progresso(progresso, 'geracaoDeDados', progressoEtapa4)
     
 
 
@@ -59,8 +77,6 @@ def preprocessing(database: Database, collectionCursoseCentros: Collection, ano:
 
     dfCentroPorAno(collectionCurso, database, ano, modal)
 
-
-
 def geraçãoDeRelatorio(collectionCurso: Collection, collectionCentroPorAno: Collection, collectionCursosPorCentro: Collection, ano: int, dbName: str, modal: str) -> None:
     """
     Realiza a criação de relatórios, podendo ser possível escolher se será gerado um único relatório,
@@ -77,7 +93,7 @@ def geraçãoDeRelatorio(collectionCurso: Collection, collectionCentroPorAno: Co
     :param dbName: Nome do banco de dados que está sendo manipulado
     :type dbName: str
     """
-    # opcoes = [1,2,3]
+     # opcoes = [1,2,3]
 
     # # escolha = int(input('Escolha quantos relatorios você quer gerar com base nas opções: \n 1- Gerar relatórios por centro \n 2- Gerar relatório único \n 3- Gerar todos relatórios\n Escolha: '))
     # escolha = 3
@@ -102,9 +118,7 @@ def geraçãoDeRelatorio(collectionCurso: Collection, collectionCentroPorAno: Co
         return print('O modal escolhido não existe, por favor, escolha entre EAD ou DISC por enquanto...')
     gerarTodosRelatorios(collectionCurso, collectionCentroPorAno, collectionCursosPorCentro, arquivo_intro_esc, arquivo_conclusao_esc, ano, dbName)
 
-
-
-def runAplication(ano: int, csvFileName: str, modal: str, modo: str, client: MongoClient) -> None:
+def applicationController(ano: int, csvFileName: str, modal: str, modo: str, client: MongoClient) -> None:
     """
     Junta todos os passos das funções acima e os realiza em ordem.
     """
@@ -115,30 +129,25 @@ def runAplication(ano: int, csvFileName: str, modal: str, modo: str, client: Mon
     centros_e_diretores = database['centros_e_diretores']
     cursos_por_centro = database['cursos_por_centro']
     centro_por_ano = database['centro_por_ano'] 
-    
-    # count = 0
-    # count2  = 0
-    # count3 = 0
-    # for document in curso.find({'path': {'$regex': '^`'}}):
-    #     count += 1
-    # #2549
-    # print('Contagem para saber se o número de figuras geradas bate com o numero de paths',count)
-
-    # for document in curso.find({'relatorioGraficoAI': '-' }):
-    #     count2 += 1
-    # print('Contagem para saber quantos documentos não possuem relatorioGraficoAI', count2)
-    
-    # for document in curso.find({'nm_disciplina': '-' }):
-    #     count3 += 1
-    # print('Contagem para saber quantos documentos possuem nm_disciplina igual a -', count3)
+    progresso = database['progresso']
     
     if modo == 'inserir':
-        firstStepApplication(dbName, curso, cursos_e_centros, centros_e_diretores, csvFileName, client)
+        firstStepApplication(dbName, curso, cursos_e_centros, centros_e_diretores, csvFileName, client, progresso)
         preprocessing(database, cursos_e_centros, ano, curso, modal)
-    # else:
-    # geraçãoDeRelatorio(curso, centro_por_ano, cursos_por_centro, ano, dbName, modal)
+    if modo == 'gerarRelatorio':
+        geraçãoDeRelatorio(curso, centro_por_ano, cursos_por_centro, ano, dbName, modal)
 
 def listDatabases(client): 
     dbs = client.list_database_names()
     usersDatabases = [db for db in dbs if db not in ['admin', 'config', 'local']]
     return usersDatabases
+
+def getProgressoInsercao(instrumento, client):
+    print('oi')
+    dbName, database = connectToDatabase(instrumento, client)
+    progresso = database['progresso']
+    print(dbName)
+    progressoDocument = progresso.find_one()
+    print(progressoDocument)
+    return progressoDocument
+    

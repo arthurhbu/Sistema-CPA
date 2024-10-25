@@ -1,3 +1,5 @@
+from pymongo.database import Database
+
 def dfCursosPorCentro(collectionCursoseCentros,ano,centro_de_ensino):
 
     # Realizar a agregação de dados
@@ -172,3 +174,27 @@ def dfCentroPorAno(collectionCurso,database, ano, modal):
         ]
     )
     centro_por_ano_temp.drop()
+    
+def update_progresso(progresso: Database, etapa: str, resposta: str):
+    if resposta == 'Finalizado':
+        progresso.update_one(
+            {
+                f'{etapa}': 'Pendente'
+            },
+            {
+                '$set': {
+                    f'{etapa}': 'Finalizado'
+                }
+            }
+        )
+    else: 
+            progresso.update_one(
+            {
+                f'{etapa}': 'Pendente'
+            },
+            {
+                '$set': {
+                    f'{etapa}': resposta
+                }
+            }
+        )

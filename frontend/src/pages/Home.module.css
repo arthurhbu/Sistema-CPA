@@ -1,12 +1,13 @@
 .home { 
     min-height: 1000px;
-    width: 90%;
+    width: 100%;
 }
 
 
 .inicio { 
     padding-top: 4em;
     width: 60vw;
+    color: #fff;
 }
 
 .tituloInicio {
@@ -18,7 +19,7 @@
 }
 
 .intro { 
-    color:rgb(100, 96, 96);
+    color:rgb(188, 188, 188);
     text-align: justify;
     text-justify: inter-word;
     padding-left: 5vw;

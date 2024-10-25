@@ -9,6 +9,7 @@ hatch.register()
 const Processo = () => {
     const [processing, setProcessing] = useState(false);
     const [filename, setFilename] = useState('');
+    const [progresso, setProgresso] = useState({});
 
     const checkStatus = useCallback(async () => { 
         try {
@@ -18,13 +19,15 @@ const Processo = () => {
             }
             const status = await response.json();
             setProcessing(status.processing);
-            console.log(processing)
+            console.log(processing);
             setFilename(status.file);
-            console.log(filename)
+            console.log(filename);
+            setProgresso(status.progresso);
+            console.log(progresso)
         } catch (error) {
             console.error('Erro na requisição:', error);
         }
-    }, [processing, filename]);
+    }, [processing, filename, progresso]);
 
     useEffect(() => { 
         const interval = setInterval(checkStatus, 5000);
@@ -53,6 +56,7 @@ const Processo = () => {
                                     speed="3" 
                                     color="#3dff94" 
                                 ></l-ring-2>
+
                                 <div className={Styles.waveAnimation}>
                                     <l-waveform
                                         size="150"
@@ -63,7 +67,29 @@ const Processo = () => {
                                 </div>
                             </div>
                         </div>
+
                         <p className={Styles.containerProcessando_nomeInstrumento}>Instrumento: {filename}</p>
+
+                        <ul className={Styles.checkList}>
+                            {Object.keys(progresso).length > 0 ? ( // Verifica se progresso não está vazio
+                                Object.keys(progresso)
+                                .filter((_, index, array) => index !== 0 && index !== array.length - 1)
+                                .reverse() // Inverte a ordem dos elementos restantes
+                                .map((key) => (
+                                    progresso[key] === 'Finalizado' ? (
+                                    <li className={Styles.itemCheckList} key={key}>
+                                        {key}: {"Finalizado ✅"}
+                                    </li>
+                                    ) : (
+                                    <li className={Styles.itemCheckList} key={key}>
+                                        {key}: {progresso[key]}
+                                    </li>
+                                    )
+                                ))
+                            ) : (
+                                <li>Nenhum progresso encontrado.</li>
+                            )}
+                        </ul>
                     </div>
                 </>
             ) : (

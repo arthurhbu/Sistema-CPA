@@ -38,6 +38,6 @@ def connectToDatabase(databaseName, client):
     filterDBName = databaseName.replace(" ", "")
     filterDBName = filterDBName.replace(".csv", "")
     database = client[filterDBName]
-
+    print(filterDBName)
     return filterDBName, database
 
