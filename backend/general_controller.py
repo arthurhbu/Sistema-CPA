@@ -18,7 +18,7 @@ from database.databaseQuerys import update_progresso
 #     #Criando as collections que serão usadas (OBS: REALIZAR MUDANÇA BASEADA NO ANO, EX: centro_e_curso_{ano})
 
 
-def firstStepApplication(databaseName: Database, collectionCurso: Collection, collectionCentroeCurso: Collection, collectionDiretoreCentro: Collection, csvFileName: str, client: MongoClient, progresso: Database) -> None:
+def initalizeDatabaseInserts(databaseName: Database, collectionCurso: Collection, collectionCentroeCurso: Collection, collectionDiretoreCentro: Collection, csvFileName: str, client: MongoClient, progresso: Database) -> None:
     """
     Função que junta os primeiros passos da execução do programa que seria as inserções e os realiza de uma vez.
     """
@@ -51,7 +51,7 @@ def firstStepApplication(databaseName: Database, collectionCurso: Collection, co
     
 
 
-def preprocessing(database: Database, collectionCursoseCentros: Collection, ano: int, collectionCurso: Collection, modal: str) -> None:
+def prepareDataframesForReports(database: Database, collectionCursoseCentros: Collection, ano: int, collectionCurso: Collection, modal: str) -> None:
     """
     Realiza a criação dos dataframes intermediários que são utilizados para a criação de da introdução e 
     conclusão. E os insere em uma collection no banco de dados.
@@ -77,7 +77,7 @@ def preprocessing(database: Database, collectionCursoseCentros: Collection, ano:
 
     dfCentroPorAno(collectionCurso, database, ano, modal)
 
-def geraçãoDeRelatorio(collectionCurso: Collection, collectionCentroPorAno: Collection, collectionCursosPorCentro: Collection, ano: int, dbName: str, modal: str) -> None:
+def generateReports(collectionCurso: Collection, collectionCentroPorAno: Collection, collectionCursosPorCentro: Collection, ano: int, dbName: str, modal: str) -> None:
     """
     Realiza a criação de relatórios, podendo ser possível escolher se será gerado um único relatório,
     por centro ou todos os relatórios.
@@ -132,10 +132,10 @@ def applicationController(ano: int, csvFileName: str, modal: str, modo: str, cli
     progresso = database['progresso']
     
     if modo == 'inserir':
-        firstStepApplication(dbName, curso, cursos_e_centros, centros_e_diretores, csvFileName, client, progresso)
-        preprocessing(database, cursos_e_centros, ano, curso, modal)
+        initalizeDatabaseInserts(dbName, curso, cursos_e_centros, centros_e_diretores, csvFileName, client, progresso)
+        prepareDataframesForReports(database, cursos_e_centros, ano, curso, modal)
     if modo == 'gerarRelatorio':
-        geraçãoDeRelatorio(curso, centro_por_ano, cursos_por_centro, ano, dbName, modal)
+        generateReports(curso, centro_por_ano, cursos_por_centro, ano, dbName, modal)
 
 def listDatabases(client): 
     dbs = client.list_database_names()
@@ -143,11 +143,8 @@ def listDatabases(client):
     return usersDatabases
 
 def getProgressoInsercao(instrumento, client):
-    print('oi')
     dbName, database = connectToDatabase(instrumento, client)
     progresso = database['progresso']
-    print(dbName)
     progressoDocument = progresso.find_one()
-    print(progressoDocument)
     return progressoDocument
     

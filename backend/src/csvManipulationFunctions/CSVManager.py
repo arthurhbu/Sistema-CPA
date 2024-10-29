@@ -107,7 +107,7 @@ class CSVManagment:
         df_final.to_csv(f'{dirArquivo}/CSVs/csvFiltrado.csv', index=False) 
 
 
-    def insertMainCSVtoDatabase(collectionName: Collection, csvFileName: str) -> print:
+    def insertMainCSVtoDatabase(collectionName: Collection, csvFileName: str) -> str:
         """
         Realiza a leitura do arquivo csv transformando ele em um dataframe temporário (OBS: Futuramente talvez seja interessante dropar esse dataframe)
         
@@ -115,6 +115,8 @@ class CSVManagment:
         :type database: Database
         :param collectionName: Coleção que será feito as insertions e updates
         :type: Collection 
+        :return: Resultado da inserção do CSV
+        :type: str
         """
         try:
             CSVManagment.bruteCSVFilter(csvFileName)

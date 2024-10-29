@@ -29,7 +29,7 @@ def converteObjectIDToStr(document):
     return {key: (str(value) if isinstance(value, ObjectId) else value) for key, value in document.items()}
 
 @app.route('/api/importar', methods=["POST"])
-def importar():
+def importCsv():
     global filename
     
     file = request.files['file']
@@ -39,16 +39,20 @@ def importar():
         filename = file.filename
         file_path = os.path.join(UPLOAD_FOLDER, file.filename)
         file.save(file_path)
-        with open(f'{file_path}', newline='', encoding='utf-8') as csvFile:
-            reader = csv.reader(csvFile)
-            header = next(reader)
+        try:
+            with open(f'{file_path}', newline='', encoding='utf-8') as csvFile:
+                reader = csv.reader(csvFile)
+                header = next(reader)
+            
+            return jsonify({'header': header, 'error': ''}), 200 
+        except:
+            return jsonify({'header': '', 'error': 'Ocorreu um erro na hora de realizar a leitura do cabeçalho.'}), 400
+            
         
-        return jsonify({'header': header}), 200 
-        
-    return jsonify({'error': 'Erro ao tentar importar arquivo CSV'}), 400
+    return jsonify({'header': '', 'error': 'Não foi possível carregar o ano ou o arquivo CSV passado.'}), 400
 
 
-def processaCsv(filename, ano):
+def processCsv(filename, ano):
     global processing
     try:
         applicationController(int(ano), filename, '', 'inserir', client)
@@ -57,17 +61,17 @@ def processaCsv(filename, ano):
 
 
 @app.route('/api/confirmarImportacao', methods=['POST'])
-def confirmarImportacao():
+def confirmImportation():
     global processing, filename
     ano = request.json.get('ano')
     print(filename)
     print(ano)
     if filename and ano:
         processing = True
-        socketio.start_background_task(target=processaCsv, filename=filename, ano=ano)
-        return jsonify({'message': 'Análise confirmada e importação iniciada'}), 200
+        socketio.start_background_task(target=processCsv, filename=filename, ano=ano)
+        return jsonify({'response': 'Análise confirmada e importação iniciada!'}), 200
     
-    return jsonify({'message':'Erro ao confirmar a analise'}), 400
+    return jsonify({'response':'Erro ao confirmar a analise'}), 400
 
 
 @app.route('/progresso', methods=['GET'])
@@ -90,7 +94,7 @@ def listInstrumentos():
 
 
 @app.route('/api/gerarRelatorios', methods=['POST'])
-def gerarRelatorios(): 
+def generateReports(): 
     ano = request.form.get('ano')
     introConcl = request.form.get('introConcl')
     instrumento = request.form.get('instrumento')

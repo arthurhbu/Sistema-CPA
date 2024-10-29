@@ -1,7 +1,8 @@
 O que precisa ser feito ainda:
-    - Tela home adicionar o passo a passo do que fazer
-    - Tela de progresso, adicionar logs (Os logs já estão presentes, apenas precisa ser estilizado) ERRO: NÃO ESTÁ ATUALIZANDO O PROGRESSO, CONFERIR DEPOIS.
-    - Confirmação se o cabeçalho está correto com o padrão (ESTÁ PRATICAMENTE FINALIZADO, APENAS CRIAR A TELA PARA POPUP DE IMPORTADO COM SUCESSO, TIRANDO ISSO, FINALIZADO)
+
+    PRIORIDADE:
+        - Tela home adicionar o passo a passo do que fazer (PROXIMO A FAZER)
+        - Tela de progresso, adicionar logs (Os logs já estão presentes, apenas precisa ser estilizado) ERRO: NÃO ESTÁ ATUALIZANDO O PROGRESSO, CONFERIR DEPOIS.
 
     - Melhorar a tela Home
     - Melhorar o footer
@@ -13,3 +14,10 @@ O que precisa ser feito ainda:
     - Pagina para alterar arquivos de introdução e conclusao
     - Página para correção de possíveis problemas envolvendo formatação e afins.
     - Realizar um teste completo, onde faça cada etapa necessária.
+    - Talvez ter que criar uma slidebar para escolher qual csv estara sendo importado para que não haja problemas na hora da importação. Mas isso podemos esperar a próxima leva de CSVs
+
+FINALIZADOS
+
+    - Confirmação se o cabeçalho está correto com o padrão (POPUP DE IMPORTAÇAO FINALIZADO, ACREDITO QUE SEJA ISSO NO MOMENTO PARA A PAGINA)
+
+    
