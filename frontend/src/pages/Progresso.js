@@ -70,20 +70,25 @@ const Processo = () => {
 
                         <p className={Styles.containerProcessando_nomeInstrumento}>Instrumento: {filename}</p>
 
+                        <p style={{fontSize: '1.8rem', fontWeight: '500', marginBottom: '0', marginTop:'60px'}}>Etapas</p>
+
                         <ul className={Styles.checkList}>
-                            {Object.keys(progresso).length > 0 ? ( // Verifica se progresso não está vazio
+                            {Object.keys(progresso).length > 0 ? ( 
                                 Object.keys(progresso)
-                                .filter((_, index, array) => index !== 0 && index !== array.length - 1)
-                                .reverse() // Inverte a ordem dos elementos restantes
+                                .reverse() 
                                 .map((key) => (
                                     progresso[key] === 'Finalizado' ? (
-                                    <li className={Styles.itemCheckList} key={key}>
-                                        {key}: {"Finalizado ✅"}
-                                    </li>
+                                        <li className={Styles.itemCheckList_finalizado} key={key}>
+                                            {key}: {"Finalizada ✅"}
+                                        </li>
+                                    ) : progresso[key] === 'Pendente' ? (
+                                        <li className={Styles.itemCheckList_pendente} key={key}>
+                                            {key}: {"Pendente ⌛"}
+                                        </li>
                                     ) : (
-                                    <li className={Styles.itemCheckList} key={key}>
-                                        {key}: {progresso[key]}
-                                    </li>
+                                        <li className={Styles.itemCheckList_erro} key={key}>
+                                            {key}: {progresso[key]}
+                                        </li>
                                     )
                                 ))
                             ) : (

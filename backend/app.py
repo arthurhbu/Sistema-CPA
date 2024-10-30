@@ -28,6 +28,10 @@ def converteObjectIDToStr(document):
         return None
     return {key: (str(value) if isinstance(value, ObjectId) else value) for key, value in document.items()}
 
+def removeKeys(document, keysToRemove):
+    return {k: v for k,v in document.items() if k not in keysToRemove}
+    
+
 @app.route('/api/importar', methods=["POST"])
 def importCsv():
     global filename
@@ -83,6 +87,8 @@ def getStatus():
     if processing == True:
         progresso = getProgressoInsercao(filename, client)
         progresso = converteObjectIDToStr(progresso)  
+        
+        progresso = removeKeys(progresso, ['_id', 'instrumento'])
         print(progresso)
     return {'processing': processing, 'file': filename, 'progresso': progresso}
 

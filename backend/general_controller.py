@@ -37,17 +37,17 @@ def initalizeDatabaseInserts(databaseName: Database, collectionCurso: Collection
     )
     
     progressoEtapa1 = CSVManagment.insertMainCSVtoDatabase(collectionCurso, csvFileName)
-    update_progresso(progresso, 'insercaoMainCSV', progressoEtapa1)
+    update_progresso(progresso, 'Insercao_Main_CSV', progressoEtapa1)
     
     progressoEtapa2 = CSVManagment.insertCursoeCentroCSVtoDatabase(collectionCentroeCurso) 
-    update_progresso(progresso, 'insercaoCursoCentroDatabase', progressoEtapa2)
+    update_progresso(progresso, 'Insercao_Curso_Centro_Database', progressoEtapa2)
     
     progressoEtapa3 = CSVManagment.insertCentroDiretorCSVDatabase(collectionDiretoreCentro)  
-    update_progresso(progresso, 'insercaoCentroDiretorDatabase', progressoEtapa3)
+    update_progresso(progresso, 'Insercao_Centro_Diretor_Database', progressoEtapa3)
 
     #Gerar Gráfico, Tabela e Relatório
     progressoEtapa4 = gerarGrafTabRelatorioGPT(client, databaseName, collectionCurso)
-    update_progresso(progresso, 'geracaoDeDados', progressoEtapa4)
+    update_progresso(progresso, 'Geracao_de_Dados', progressoEtapa4)
     
 
 

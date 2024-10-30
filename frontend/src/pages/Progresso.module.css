@@ -48,6 +48,7 @@
     font-size: 2rem;
     font-weight: 600;
     margin-top: 0;
+    margin-bottom: 0;
 }
 
 .containerAnimation { 
@@ -78,10 +79,34 @@
     align-items: center;
     justify-content:center;
     text-justify: auto;
+    margin-bottom: 5vh;
+    margin-top: 0;
+    padding-top: 0;
 }
 
-.itemCheckList { 
-    font-family: 'Inter';
-    font-size: 25px;
+.itemCheckList_finalizado { 
+    width: 100%;
+    font-size: 1.5rem;
     margin: 15px;
+    background-color: #8BFFAD;
+    padding: 15px;
+    border-radius: 10px;
+}
+
+.itemCheckList_pendente { 
+    width: 100%;
+    font-size: 1.5rem;
+    margin: 15px;
+    background-color: #FFE87A;
+    padding: 15px;
+    border-radius: 10px;
+}
+
+.itemCheckList_erro { 
+    width: 100%;
+    font-size: 1.5rem;
+    margin: 15px;
+    background-color: #FF7272;
+    padding: 15px;
+    border-radius: 10px;
 }

@@ -2,7 +2,6 @@ O que precisa ser feito ainda:
 
     PRIORIDADE:
         - Tela home adicionar o passo a passo do que fazer (PROXIMO A FAZER)
-        - Tela de progresso, adicionar logs (Os logs já estão presentes, apenas precisa ser estilizado) ERRO: NÃO ESTÁ ATUALIZANDO O PROGRESSO, CONFERIR DEPOIS.
 
     - Melhorar a tela Home
     - Melhorar o footer
@@ -19,5 +18,6 @@ O que precisa ser feito ainda:
 FINALIZADOS
 
     - Confirmação se o cabeçalho está correto com o padrão (POPUP DE IMPORTAÇAO FINALIZADO, ACREDITO QUE SEJA ISSO NO MOMENTO PARA A PAGINA)
+    - Tela de progresso, adicionar logs (ACREDITO ESTAR FINALIZADO, CONFIRMAR PARA VER O QUE O PROFESSOR ACHA COMO FICOU)
 
     
