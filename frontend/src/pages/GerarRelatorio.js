@@ -8,7 +8,7 @@ function GerarRelatorio(){
     const [ano, setAno] = useState('');
     const [introConcl, setIntroConcl] = useState('');
     const [databases, setDatabases] = useState([]);
-    const [instrumento, setInstrumento] = useState('')
+    const [instrumento, setInstrumento] = useState('');
     const [response, setResponse] = useState('')
     const [popupVisible, setPopupVisible] = useState(false)
     const [errorMessage, setErrorMessage] = useState('');
@@ -119,7 +119,7 @@ function GerarRelatorio(){
                     <SelectAutoWidth 
                         onSelectChange={handleSelectIntroConlcChange} 
                         label='Tipo'
-                        options={tipoIntroConlc}    
+                        options={tipoIntroConlc}  
                     />
                 </div>
                 <div className={styles.containerRelatorioEsp_escolhaComponentesRelatorio_Ano}>

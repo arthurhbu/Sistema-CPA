@@ -6,7 +6,7 @@ from pymongo import MongoClient
 from general_controller import listDatabases
 from database.pythonMongoConfig import readDBConfig
 from database.connectionDB import connection
-from general_controller import applicationController, getProgressoInsercao
+from general_controller import applicationController, getProgressoInsercao, getEtapas, atualizaEtapa
 from bson import ObjectId
 
 app = Flask(__name__)
@@ -90,7 +90,7 @@ def getStatus():
         
         progresso = removeKeys(progresso, ['_id', 'instrumento'])
         print(progresso)
-    return {'processing': processing, 'file': filename, 'progresso': progresso}
+    return {'processing': processing, 'file': filename, 'progresso': progresso}, 200
 
 
 @app.route('/api/instrumentos', methods=['GET'])
@@ -116,8 +116,30 @@ def generateReports():
     return jsonify({'message': 'Não foi possível gerar os relatórios'}), 400
 
 
+@app.route('/api/etapasInstrumento', methods=['POST'])
+def getSteps():
+    data = request.json
+    database = data.get('instrumento')
+    etapas = getEtapas(database, client)
+    etapas = converteObjectIDToStr(etapas)
+    etapas = removeKeys(etapas, ['_id'])
+    print(etapas)
+    
+    return {'etapas': etapas}, 200
 
-
+@app.route('/api/atualizarEtapa', methods=['POST'])
+def updateStep():
+    data = request.get_json()
+    database = data.get('instrumento')
+    etapaId = data.get('etapa')
+    etapaValor = data.get('novoValor')
+    
+    resultado = atualizaEtapa(database, etapaId, etapaValor, client)
+    
+    if 'Sucesso':
+        return {'message': 'Etapa atualizada com sucesso'}, 200
+    
+    return {'error': resultado}, 400
     
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)

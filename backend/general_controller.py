@@ -18,7 +18,7 @@ from database.databaseQuerys import update_progresso
 #     #Criando as collections que serão usadas (OBS: REALIZAR MUDANÇA BASEADA NO ANO, EX: centro_e_curso_{ano})
 
 
-def initalizeDatabaseInserts(databaseName: Database, collectionCurso: Collection, collectionCentroeCurso: Collection, collectionDiretoreCentro: Collection, csvFileName: str, client: MongoClient, progresso: Database) -> None:
+def initalizeDatabaseInserts(databaseName: Database, collectionCurso: Collection, collectionCentroeCurso: Collection, collectionDiretoreCentro: Collection, csvFileName: str, client: MongoClient, progresso: Database, etapas: Database) -> None:
     """
     Função que junta os primeiros passos da execução do programa que seria as inserções e os realiza de uma vez.
     """
@@ -33,6 +33,18 @@ def initalizeDatabaseInserts(databaseName: Database, collectionCurso: Collection
             'Geracao_de_Dados': 'Pendente',
             'Criacao_Cursos_por_Centro_Database': 'Pendente',
             'Criacao_Centro_por_Ano_Database': 'Pendente'
+        }
+    )
+    
+    etapas.insert_one(
+        {
+            'Inserção/Análise do instrumento': False,
+            'Geração de Relatórios': False,
+            'Revisão de Relatórios': False,
+            'Correção de possíveis erros': False,
+            'Geração de PDFs': False,
+            'Entrega dos Relatórios': False,
+            'Finalizado': False
         }
     )
     
@@ -129,10 +141,11 @@ def applicationController(ano: int, csvFileName: str, modal: str, modo: str, cli
     centros_e_diretores = database['centros_e_diretores']
     cursos_por_centro = database['cursos_por_centro']
     centro_por_ano = database['centro_por_ano'] 
-    progresso = database['progresso']
+    progresso = database['progresso_da_insercao']
+    etapas = database['etapas']
     
     if modo == 'inserir':
-        initalizeDatabaseInserts(dbName, curso, cursos_e_centros, centros_e_diretores, csvFileName, client, progresso)
+        initalizeDatabaseInserts(dbName, curso, cursos_e_centros, centros_e_diretores, csvFileName, client, progresso, etapas)
         prepareDataframesForReports(database, cursos_e_centros, ano, curso, modal)
     if modo == 'gerarRelatorio':
         generateReports(curso, centro_por_ano, cursos_por_centro, ano, dbName, modal)
@@ -142,9 +155,28 @@ def listDatabases(client):
     usersDatabases = [db for db in dbs if db not in ['admin', 'config', 'local']]
     return usersDatabases
 
-def getProgressoInsercao(instrumento, client):
+def getProgressoInsercao(instrumento: str, client: MongoClient):
     dbName, database = connectToDatabase(instrumento, client)
     progresso = database['progresso']
     progressoDocument = progresso.find_one()
     return progressoDocument
     
+def getEtapas(instrumento: str, client: MongoClient):
+    dbName, database = connectToDatabase(instrumento, client)
+    etapas = database['etapas']
+    etapasDocument = etapas.find_one()
+    return etapasDocument
+
+def atualizaEtapa(instrumento: str, etapa: str, novoValor: bool, client: MongoClient):
+    dbName, database = connectToDatabase(instrumento, client)
+    etapas = database['etapas']
+    try:
+        etapas.update_one({}, 
+            {'$set':
+                {
+                    f'{etapa}': f'{novoValor}'        
+                }}
+        )
+        return 'Sucesso'
+    except (DuplicateKeyError, OperationFailure) as db_error:
+        return f'Erro no banco de dados: {db_error}'

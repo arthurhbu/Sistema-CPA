@@ -28,26 +28,41 @@
 }
 
 .sessions { 
-    padding-top: 6em;
+    /* padding-top: 6em; */
     height: auto;
     display: flex;
     justify-content: space-around;
-    flex-wrap:wrap;
+    flex-wrap: wrap;
+    margin-bottom: 5vh;
 }
 
-.sessionBox { 
-    background-color: #D9D9D9;
+.sessionBox_right { 
+    background-color: #e1e1e2;
     padding: 2em;
     width: 40%;
-    height: 250px;
+    height: 18em;
+    margin: 2%;
+    border-radius: 1em;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.sessionBox_left { 
+    background-color: #D9D9D9;
+    padding: 2em;
+    width: 50%;
+    height: 30vh;
     margin: 2%;
     border-radius: 2em;
+    transition: all 0.3s ease;
+    align-self: flex-start;
 }
 
 .tag { 
     text-align: start;
     font-family: 'Inter';
-    font-size: 40px;
+    font-size: 2rem;
     font-weight: 600;
     margin: 0px;
     padding-top: 10px;
@@ -80,6 +95,7 @@
     will-change: transform;
     z-index: 0;
     transition: 0.2s ease-in-out;
+    align-self: flex-start;
 }
 
 .homeButton::after { 
@@ -114,5 +130,45 @@
 Link { 
     text-decoration: None;
 }
+
+.session_infos{ 
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    /* height: 50vh; */
+    background-color: #000b1f;
+    color: #fff;
+}
+
+.session_infos_text { 
+    /* width: 50%; */
+    /* text-align: justify; */
+    flex: 1;
+    font-size: 1.4rem;
+    margin-left: 2vw;
+    line-height: 1.5em;
+    align-self: flex-start;
+    max-width: 50%;
+    margin-top: 0;
+}
+
+.session_infos_cpa {
+    width: 70%; 
+    align-items: center;
+    justify-content: flex-start;
+    display: flex;
+    padding: 20px;
+}
+
+.inicio_checklist { 
+    list-style-type: none;
+}
+
+
+.inicio_checklist_item { 
+    
+}
+
 
 
