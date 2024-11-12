@@ -1,13 +1,14 @@
 O que precisa ser feito ainda:
 
     PRIORIDADE:
-        - Tela home adicionar o passo a passo do que fazer (PROXIMO A FAZER)
+        - Tela home adicionar o passo a passo do que fazer (PROXIMO A FAZER). Parte das etapas foi adicionado, mas o Tutotrial pode ficar melhor eu acho.
+        - Melhorar a tela Home
+        - Tentar aprimorar o cabeçalho futuramente
 
-    - Melhorar a tela Home
+    PARA FAZER:
     - Melhorar o footer
     - Criar a tela Gerar PDFs e o backend (Talvez não precise)
     - Terminar o backend Gerar Relatórios, com a parte de enviar no email os relatórios gerados
-    - Tentar aprimorar o cabeçalho futuramente
     - Autenticação para Login de funcionários da CPA 
     
     - Pagina para alterar arquivos de introdução e conclusao

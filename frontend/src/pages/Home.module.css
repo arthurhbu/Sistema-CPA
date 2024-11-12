@@ -145,20 +145,26 @@ Link {
     /* width: 50%; */
     /* text-align: justify; */
     flex: 1;
-    font-size: 1.4rem;
-    margin-left: 2vw;
+    display: flex;
+    font-size: 1.3rem;
+    margin-left: 6%;
     line-height: 1.5em;
     align-self: flex-start;
     max-width: 50%;
     margin-top: 0;
+    flex-direction: column;
 }
 
 .session_infos_cpa {
-    width: 70%; 
+    width: 90%; 
     align-items: center;
     justify-content: flex-start;
     display: flex;
     padding: 20px;
+}
+
+.session_infos_text_item{
+    margin-bottom: 15px;
 }
 
 .inicio_checklist { 
@@ -166,9 +172,9 @@ Link {
 }
 
 
-.inicio_checklist_item { 
+/* .inicio_checklist_item { 
     
-}
+} */
 
 
 
