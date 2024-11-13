@@ -5,6 +5,7 @@ import Home from './pages/Home';
 import Progresso from './pages/Progresso.js';
 import Importar from './pages/Importar';
 import GerarRelatorio from './pages/GerarRelatorio';
+import GerarPdf from './pages/GerarPdf.js';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Container from './components/layout/Container';
 
@@ -18,6 +19,7 @@ function App() {
               <Route path="/progresso" element={<Progresso/>}/>
               <Route path="/importar" element={<Importar/>}/>
               <Route path="/gerar_relatorio" element={<GerarRelatorio/>}/>
+              <Route path="/gerar_pdfs" element={<GerarPdf/>}/>
         </Routes>
       </Container>
       <Footer/>

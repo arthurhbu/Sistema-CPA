@@ -4,12 +4,12 @@ O que precisa ser feito ainda:
         - Tela home adicionar o passo a passo do que fazer (PROXIMO A FAZER). Parte das etapas foi adicionado, mas o Tutotrial pode ficar melhor eu acho.
         - Melhorar a tela Home
         - Tentar aprimorar o cabeçalho futuramente
+        - Terminar o backend Gerar Relatórios, com a parte de enviar no email os relatórios gerados(Falta testar no servidor da uem para ver se realmente está enviando.)
 
     PARA FAZER:
     - Melhorar o footer
-    - Criar a tela Gerar PDFs e o backend (Talvez não precise)
-    - Terminar o backend Gerar Relatórios, com a parte de enviar no email os relatórios gerados
-    - Autenticação para Login de funcionários da CPA 
+    - Criar a tela Gerar PDFs e o backend 
+    - Autenticação para Login de funcionários da CPA    
     
     - Pagina para alterar arquivos de introdução e conclusao
     - Página para correção de possíveis problemas envolvendo formatação e afins.

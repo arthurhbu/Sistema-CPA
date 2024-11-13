@@ -11,6 +11,7 @@ from pymongo.database import Database
 from pymongo.mongo_client import MongoClient
 from database.connectionDB import connection
 from pymongo.errors import OperationFailure, CursorNotFound, ConnectionFailure, InvalidOperation, DuplicateKeyError
+from src.supportFunctions.compactAndSend import zip_markdown_files,enviar_email_com_anexo
 import random as rand
 import sys
 sys.stdout.reconfigure(encoding="utf-8")
@@ -249,6 +250,8 @@ def gerarRelatoriosPorCentro(collectionCurso: Collection, collectionCentroPorAno
         gerarRelatorioPorCurso(curso, collectionCurso, collectionCursosPorCentro, dbName)
         cursoArquivo = f'{curso}.md'
         substituirIdentificadores(cursoArquivo, dbName)
+    zip_markdown_files(f'./relatorio/markdowns/{dbName}/{dbName}.zip', f'./relatorio/markdowns/{dbName}')
+    enviar_email_com_anexo(f'./relatorio/markdowns/{dbName}/{dbName}.zip','arthurhbu@gmail.com','ra129406@uem.br','175839123zx')
 
 
 

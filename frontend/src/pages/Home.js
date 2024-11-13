@@ -151,8 +151,8 @@ function Home(){
                 <div className={styles.sessionBox_right}>
                     <p className={styles.tag}>4º Passo: Gerar PDFs</p>
                     <p className={styles.resume}>Após ter gerado os Markdowns e ter feito a revisão dos mesmos, gere os PDFs dos relatórios.</p>
-                    <Link to='/gerar_relatorio'>
-                        <button type='button' className={styles.homeButton}>Gerar Relatório</button>
+                    <Link to='/gerar_pdfs'>
+                        <button type='button' className={styles.homeButton}>Gerar PDFs</button>
                     </Link>
                 </div>
             </div>

@@ -6,13 +6,23 @@ from email.mime.base import MIMEBase
 from email import encoders
 from email.mime.text import MIMEText
 
-def zip_markdown_files(output_filename, folder_path):
-    with zipfile.ZipFile(output_filename, 'w') as zipf:
-        for root, dirs, files in os.walk(folder_path):
+def zip_markdown_files(outputFilename: str, folderPath: str) -> None:
+    '''
+    Transforma os arquivos zips em markdowns para que possam ser enviados via email.
+    
+    :param outputFilename: Nome do arquivo zip que será gerado
+    :type: str
+    :param folderPath: Nome do caminho para os arquivos markdowns
+    :type: str
+    
+    '''
+    
+    with zipfile.ZipFile(outputFilename, 'w') as zipf:
+        for root, dirs, files in os.walk(folderPath):
             for file in files:
                 if file.endswith('.md'):  # Filtrar apenas arquivos .md
                     filepath = os.path.join(root, file)
-                    zipf.write(filepath, os.path.relpath(filepath, folder_path))
+                    zipf.write(filepath, os.path.relpath(filepath, folderPath))
 
 # Exemplo de uso
 # zip_markdown_files('relatorios.zip', 'pasta_dos_markdowns')
@@ -40,9 +50,9 @@ def enviar_email_com_anexo(arquivo_zip, destinatario_email, remetente_email, sen
 
     # Envio do email
     try:
-        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server = smtplib.SMTP('smtp.uem.br', 25)
         server.starttls()
-        server.login(remetente_email, senha_remetente)
+        # server.login(remetente_email, senha_remetente)
         text = msg.as_string()
         server.sendmail(remetente_email, destinatario_email, text)
         server.quit()
