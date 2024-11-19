@@ -44,8 +44,29 @@ class CSVManagment:
         """
         path = Path(__file__).parent.resolve()
         return path
+    
+    
+    def CSVFilterDocentesAndTecnicos(csvFileName) -> None:
+        print('OLLASLDSALDLSALDSALSALSA')
+        indexColumnsToDrop = [0,1,2,3,4,14]
+        
+        dirArquivo = CSVManagment.findPath()
+        df_principal = pd.read_csv(f'{dirArquivo}/CSVs/{csvFileName}', sep=',', header = 0)
+        print(df_principal)
+        
+        columnsToDrop = df_principal.columns[indexColumnsToDrop]
+        df_principal = df_principal.drop(columns=columnsToDrop)
+        
+        df_principal = df_principal.groupby(['cd_curso', 'cd_grupo','nm_grupo','cd_subgrupo','nm_subgrupo','cd_disciplina','nm_disciplina','ordem_pergunta','cd_pergunta','nm_pergunta','ordem_opcoes','opcao']).sum().reset_index()
+        
+        print('OLAAAAAAA')
+        print(df_principal)
+        
+        df_principal.to_csv(f'{dirArquivo}/CSVs/csvFiltrado.csv', index=False) 
+        
+        
 
-    def bruteCSVFilter(csvFileName) -> None:
+    def bruteCSVFilterDiscentes(csvFileName) -> None:
         
         #USADO SOMENTE PARA OS CSV DE GRADUAÇÃO QUE POSSUEM SERIE, PARA OS OUTROS A FUNÇÃO ACABA NÃO SENDO NECESSÁRIA.
 
@@ -67,7 +88,8 @@ class CSVManagment:
             'ordem_opcoes',
             'opcao',
             'respostas',
-            'total_do_curso']
+            'total_do_curso'
+        ]
             
         dirArquivo = CSVManagment.findPath()
         
@@ -119,7 +141,7 @@ class CSVManagment:
         :type: str
         """
         try:
-            CSVManagment.bruteCSVFilter(csvFileName)
+            CSVManagment.CSVFilterDocentesAndTecnicos(csvFileName)
             filterCsv = 'csvFiltrado.csv'
             dirArquivo = CSVManagment.findPath()
             df = pd.read_csv(f'{dirArquivo}/CSVs/{filterCsv}', sep=',', header = 0)
@@ -160,7 +182,8 @@ class CSVManagment:
                 pergunta_atual = df.iloc[i,11]
                 proxima_pergunta = df.iloc[i+1,11] if i < len(df)-1 else None
 
-                temp_pctdict.update({str(df.iloc[i,13]): int(df.iloc[i,14])})
+                temp_pctdict.update({df.iloc[i,13]: int(df.iloc[i,14])})
+                print(temp_pctdict)
 
                 if pergunta_atual != proxima_pergunta or (i+1) == len(df):
                     
@@ -188,7 +211,7 @@ class CSVManagment:
                         }
                     )
 
-                    if nm_disciplina == '-' and cd_disciplina == 0.0:
+                    if nm_disciplina == '-' and (cd_disciplina == 0.0 or cd_disciplina == 0):
                         insertPercentageDictIntoDB(
                             collectionName, 'pct_por_opcao', opcao_e_pct, 
                             'cd_curso', int(df.iloc[i,0]), 

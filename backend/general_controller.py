@@ -146,7 +146,7 @@ def applicationController(ano: int, csvFileName: str, modal: str, modo: str, cli
     
     if modo == 'inserir':
         initalizeDatabaseInserts(dbName, curso, cursos_e_centros, centros_e_diretores, csvFileName, client, progresso, etapas)
-        prepareDataframesForReports(database, cursos_e_centros, ano, curso, modal)
+        # prepareDataframesForReports(database, cursos_e_centros, ano, curso, modal)
     if modo == 'gerarRelatorio':
         generateReports(curso, centro_por_ano, cursos_por_centro, ano, dbName, modal)
 
