@@ -47,21 +47,37 @@ class CSVManagment:
     
     
     def CSVFilterDocentesAndTecnicos(csvFileName) -> None:
-        print('OLLASLDSALDLSALDSALSALSA')
+        cabecalho = [   
+            'cd_grupo',
+            'nm_grupo',
+            'cd_subgrupo',
+            'nm_subgrupo',
+            'ordem_pergunta',
+            'cd_pergunta',
+            'nm_pergunta',
+            'ordem_opcoes',
+            'opcao',
+            'respostas',
+            'total_do_curso'
+        ]
+
         indexColumnsToDrop = [0,1,2,3,4,14]
         
         dirArquivo = CSVManagment.findPath()
         df_principal = pd.read_csv(f'{dirArquivo}/CSVs/{csvFileName}', sep=',', header = 0)
-        print(df_principal)
         
         columnsToDrop = df_principal.columns[indexColumnsToDrop]
         df_principal = df_principal.drop(columns=columnsToDrop)
+
+
+        index = 0
+        for coluna in cabecalho: 
+            print(coluna)
+            df_principal.rename(columns={df_principal.columns[index]: coluna}, inplace=True)
+            index+=1 
         
-        df_principal = df_principal.groupby(['cd_curso', 'cd_grupo','nm_grupo','cd_subgrupo','nm_subgrupo','cd_disciplina','nm_disciplina','ordem_pergunta','cd_pergunta','nm_pergunta','ordem_opcoes','opcao']).sum().reset_index()
-        
-        print('OLAAAAAAA')
-        print(df_principal)
-        
+        df_principal = df_principal.groupby(['cd_grupo','nm_grupo','cd_subgrupo','nm_subgrupo','ordem_pergunta','cd_pergunta','nm_pergunta','ordem_opcoes','opcao']).sum().reset_index()
+        print(df_principal)        
         df_principal.to_csv(f'{dirArquivo}/CSVs/csvFiltrado.csv', index=False) 
         
         
@@ -128,7 +144,7 @@ class CSVManagment:
         df_final.dropna(subset=['respostas'], inplace=True)
         df_final.to_csv(f'{dirArquivo}/CSVs/csvFiltrado.csv', index=False) 
 
-
+    #Criar outra rotina para CSVs de Docentes
     def insertMainCSVtoDatabase(collectionName: Collection, csvFileName: str) -> str:
         """
         Realiza a leitura do arquivo csv transformando ele em um dataframe temporário (OBS: Futuramente talvez seja interessante dropar esse dataframe)
@@ -172,7 +188,7 @@ class CSVManagment:
             print('Inserindo infos no banco: \n')
             temp_pctdict = {}
             for i in range(len(df)):
-                # print(f"        %{round(100*i/len(df), 0)}")
+                print(f"        %{round(100*i/len(df), 0)}")
             
                 disciplina_anterior = df.iloc[i-1, 7] if i > 0 else None
                 disciplina_atual = df.iloc[i, 7]
