@@ -77,6 +77,11 @@ class CSVManagment:
             index+=1 
         
         df_principal = df_principal.groupby(['cd_grupo','nm_grupo','cd_subgrupo','nm_subgrupo','ordem_pergunta','cd_pergunta','nm_pergunta','ordem_opcoes','opcao']).sum().reset_index()
+        df_principal.insert(0, 'cd_curso', 0)
+        df_principal.insert(1, 'nm_curso', '-')
+        df_principal.insert(2, 'centro_de_ensino', '-')
+        df_principal.insert(7,'cd_disciplina', 0 )
+        df_principal.insert(8, 'nm_disciplina', '-')
         print(df_principal)        
         df_principal.to_csv(f'{dirArquivo}/CSVs/csvFiltrado.csv', index=False) 
         
