@@ -1,8 +1,8 @@
 .footer { 
-    background-color: #878787;
+    background-color: #000b1f;
     color: #FFF;
     text-align: center;
-    padding: 20px 0;
+    padding: 30px 0;
     position: relative; /* Change to fixed if you want it always visible */
     width: 100%;
 }
@@ -28,9 +28,14 @@
 
 .copy_right { 
     margin-top: 2em;
+    display: flex;
+    /* justify-content: center; */
+    align-items: center;
 }
 
 .copy_right span { 
+    font-size: 20px;
     font-weight: bold;
-    color: black;
+    color: white;
+    margin-right: 10px;
 }

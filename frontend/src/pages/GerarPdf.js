@@ -1,4 +1,5 @@
 import styles from './GerarPdf.module.css';
+import backgroundAnimation from '../components/BackgroundAnimation';
 
 function GerarPdf(){ 
     return (

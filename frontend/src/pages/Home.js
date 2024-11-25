@@ -169,8 +169,10 @@ function Home(){
                         <li className={styles.session_infos_text_item}> O presente sistema trabalha como auxiliar na elaboração dos relatórios que são gerados e enviados aos coordenadores. Esses documentos refletem as percepções dos diversos atores da universidade sobre o funcionamento e impactos positivos levados à sociedade. Parte do recurso utilizado nesta plataforma adota rotinas de Inteligência Artificial. Com esse apoio, a equipe da CPA consegue interpretar os dados de forma massiva. Todo o material elaborado é revisado e corrigido antes de gerar os relatórios definitivos enviados aos gestores da universidade.</li>
                     </ul>
                 </div>
-                <p style={{marginTop:'10vh',fontSize: '2.5rem', fontWeight:'600'}}>Sobre o Sistema de geração automática de relatórios</p>
-                <p className={styles.session_infos_text}>Bem-vindo ao Sistema de Geração de Relatórios da CPA-UEM. Este site foi desenvolvido pela Comissão Própria de Avaliação (CPA) da Universidade Estadual de Maringá (UEM) com o objetivo de facilitar a geração e o acesso a relatórios detalhados e precisos. Nossa plataforma permite a coleta, armazenamento e análise de dados de forma eficiente, oferecendo ferramentas intuitivas e robustas para apoiar decisões estratégicas e melhorar continuamente a qualidade acadêmica e administrativa da UEM.</p>
+                <div className={styles.session_infos_sistema}>
+                    <p style={{marginTop:'10vh',fontSize: '2.5rem', fontWeight:'600'}}>Sobre o Sistema de geração automática de relatórios</p>
+                    <p className={styles.session_infos_sistema_text}>Este site foi desenvolvido pela Comissão Própria de Avaliação (CPA) da Universidade Estadual de Maringá (UEM) com o objetivo de facilitar a geração e o acesso a relatórios detalhados e precisos. Nossa plataforma permite a coleta, armazenamento e análise de dados de forma eficiente, oferecendo ferramentas intuitivas e robustas para apoiar decisões estratégicas e melhorar continuamente a qualidade acadêmica e administrativa da UEM. Foi feito uso de um Modelo de Inteligência Artificial geradora, combinado com outras ferramentas para ser feito a geração de dados.</p>
+                </div>
             </div>
         </div>
     );

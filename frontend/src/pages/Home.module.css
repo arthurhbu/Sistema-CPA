@@ -171,10 +171,22 @@ Link {
     list-style-type: none;
 }
 
+.session_infos_sistema{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 1px solid rgb(41, 40, 40);
+}
 
-/* .inicio_checklist_item { 
-    
-} */
+.session_infos_sistema_text { 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.7rem;
+    max-width: 50%;
+    margin-bottom: 20vh;
+}
 
 
 
