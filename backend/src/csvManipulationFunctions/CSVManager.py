@@ -162,7 +162,7 @@ class CSVManagment:
         :type: str
         """
         try:
-            CSVManagment.CSVFilterDocentesAndTecnicos(csvFileName)
+            CSVManagment.bruteCSVFilterDiscentes(csvFileName)
             filterCsv = 'csvFiltrado.csv'
             dirArquivo = CSVManagment.findPath()
             df = pd.read_csv(f'{dirArquivo}/CSVs/{filterCsv}', sep=',', header = 0)

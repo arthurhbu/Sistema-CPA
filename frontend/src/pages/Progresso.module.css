@@ -17,14 +17,16 @@
 .containerIntroducao_tituloPagina { 
     font-size: 3rem;
     font-family: 'Inter';
-    font-weight: 700;
+    font-weight: 600;
     margin-bottom: 10px;
+    margin-top: 10%;
 }
 
 .containerIntroducao_textoIntro { 
     font-size: 1.5em;
     font-weight: 400;
     text-align: justify;
+    color: #828282;
 }
 
 .containerProcessando { 

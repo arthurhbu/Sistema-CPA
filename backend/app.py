@@ -8,6 +8,7 @@ from database.pythonMongoConfig import readDBConfig
 from database.connectionDB import connection
 from general_controller import applicationController, getProgressoInsercao, getEtapas, atualizaEtapa
 from bson import ObjectId
+from collections import OrderedDict
 
 app = Flask(__name__)
 CORS(app)
@@ -120,12 +121,20 @@ def generateReports():
 def getSteps():
     data = request.json
     database = data.get('instrumento')
+    
+    if not database:
+        return {'error': 'Instrumento não fornecido'}, 400
+    
     etapas = getEtapas(database, client)
+    if not etapas:
+        return {'error': 'Não foi possível encontrar etapas para o instrumento'}, 404
+    
     etapas = converteObjectIDToStr(etapas)
     etapas = removeKeys(etapas, ['_id'])
-    print(etapas)
     
-    return {'etapas': etapas}, 200
+    
+    return jsonify({'etapas': etapas}), 200
+
 
 @app.route('/api/atualizarEtapa', methods=['POST'])
 def updateStep():
@@ -136,7 +145,7 @@ def updateStep():
     
     resultado = atualizaEtapa(database, etapaId, etapaValor, client)
     
-    if 'Sucesso':
+    if resultado == 'Sucesso':
         return {'message': 'Etapa atualizada com sucesso'}, 200
     
     return {'error': resultado}, 400

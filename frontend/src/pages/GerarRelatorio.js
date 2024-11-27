@@ -104,7 +104,7 @@ function GerarRelatorio(){
                 </p>
             </div>
             <div className={styles.containerInstrumento}>
-                <p style={{fontSize: '1.3rem', fontFamily: 'Inter', fontWeight: '600', marginTop:'40px', backgroundColor: '#80dfff', padding: '15px', borderRadius: '5px', border: '2px solid #000'}}>Instrumento</p>
+                {/* <p style={{fontSize: '1.3rem', fontFamily: 'Inter', fontWeight: '600', marginTop:'40px', backgroundColor: '#80dfff', padding: '15px', borderRadius: '5px', border: '2px solid #000'}}>Instrumento</p> */}
                 <SelectAutoWidth
                     onSelectChange={handleSelectDatabaseChange}
                     label='Instrumento'

@@ -15,16 +15,16 @@ ul {
 
 /*--Session contendo a introdução da importação*/
 .intro { 
-    width: 60%; 
+    width: 70%; 
     margin: auto;
     margin-bottom: 5%;
 }
 
 .titulo { 
     text-align: center;
-    font-size: 4rem;
+    font-size: 3rem;
     font-family: 'Inter';
-    font-weight: 700;
+    font-weight: 600;
     margin-top: 10%;
     margin-bottom: 1%;
 }

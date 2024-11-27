@@ -42,17 +42,17 @@ const baseStyle = {
     transition: 'border .24s ease-in-out'
   };
   
-  const focusedStyle = {
-    borderColor: '#2196f3'
-  };
-  
-  const acceptStyle = {
+const focusedStyle = {
+    borderColor: '#2196f3'  
+};
+
+const acceptStyle = {
     borderColor: '#00e676'
-  };
-  
-  const rejectStyle = {
+};
+
+const rejectStyle = {
     borderColor: '#ff1744'
-  };
+};
 
 
 

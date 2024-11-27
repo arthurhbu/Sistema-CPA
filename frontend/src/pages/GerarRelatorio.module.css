@@ -11,21 +11,22 @@
     display: flex;
     align-items: center;
     flex-direction: column;
-    width: 60%;
+    width: 70%;
     justify-content: center;
     text-align: justify;
 }
 
 .containerIntro_tituloPagina { 
-    font-size: 2.5rem;
+    font-size: 3rem;
     font-family: 'Inter';
     font-weight: 600;
     margin-bottom: 10px;
 }
 
 .containerIntro_infos { 
-    font-size: 1.2rem;
+    font-size: 1.5rem;
     font-family: 'Inter';
+    color: #828282;
 }
 
 .containerInstrumento { 

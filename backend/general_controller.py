@@ -51,11 +51,11 @@ def initalizeDatabaseInserts(databaseName: Database, collectionCurso: Collection
     progressoEtapa1 = CSVManagment.insertMainCSVtoDatabase(collectionCurso, csvFileName)
     update_progresso(progresso, 'Insercao_Main_CSV', progressoEtapa1)
     
-    # progressoEtapa2 = CSVManagment.insertCursoeCentroCSVtoDatabase(collectionCentroeCurso) 
-    # update_progresso(progresso, 'Insercao_Curso_Centro_Database', progressoEtapa2)
+    progressoEtapa2 = CSVManagment.insertCursoeCentroCSVtoDatabase(collectionCentroeCurso) 
+    update_progresso(progresso, 'Insercao_Curso_Centro_Database', progressoEtapa2)
     
-    # progressoEtapa3 = CSVManagment.insertCentroDiretorCSVDatabase(collectionDiretoreCentro)  
-    # update_progresso(progresso, 'Insercao_Centro_Diretor_Database', progressoEtapa3)
+    progressoEtapa3 = CSVManagment.insertCentroDiretorCSVDatabase(collectionDiretoreCentro)  
+    update_progresso(progresso, 'Insercao_Centro_Diretor_Database', progressoEtapa3)
 
     #Gerar Gráfico, Tabela e Relatório
     progressoEtapa4 = gerarGrafTabRelatorioGPT(client, databaseName, collectionCurso)
@@ -146,7 +146,7 @@ def applicationController(ano: int, csvFileName: str, modal: str, modo: str, cli
     
     if modo == 'inserir':
         initalizeDatabaseInserts(dbName, curso, cursos_e_centros, centros_e_diretores, csvFileName, client, progresso, etapas)
-        # prepareDataframesForReports(database, cursos_e_centros, ano, curso, modal)
+        prepareDataframesForReports(database, cursos_e_centros, ano, curso, modal)
     if modo == 'gerarRelatorio':
         generateReports(curso, centro_por_ano, cursos_por_centro, ano, dbName, modal)
 

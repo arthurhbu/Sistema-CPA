@@ -10,6 +10,11 @@ function Home(){
     const [databases, setDatabases] = useState([]);
     const [etapas, setEtapas] = useState({});
 
+    const ordemEtapas = ['Inserção/Análise do instrumento', 'Geração de Relatórios', 'Revisão de Relatórios', 'Correção de possíveis erros', 'Geração de PDFs', 'Entrega dos Relatórios', 'Finalizado']
+
+    const ordenarEtapas = ordemEtapas
+        .filter((key) => etapas.hasOwnProperty(key))
+        .map((key) => ({key, value: etapas[key] }));
 
     const handleCheckboxChange = async (etapa) => { 
         setEtapas((prevEtapas) => ({
@@ -101,10 +106,10 @@ function Home(){
                     </SelectAutoWidth>
                     <div>
                         <ul className={styles.inicio_checklist}>
-                            {Object.keys(etapas).map((key) => ( 
+                            {ordenarEtapas.map(({ key, value }) => ( 
                                 <li className={styles.inicio_checklist_item} key={key}>
                                     <Checkbox
-                                        checked={etapas[key]}
+                                        checked={value}
                                         onChange={() => handleCheckboxChange(key)}
                                         sx={{
                                             color: 'white', 
@@ -123,7 +128,7 @@ function Home(){
                 </div>
             </div>
             <p style={{marginBottom:'3vh',textAlign:'center', marginTop:'10vh', fontSize:'2.5rem', fontWeight:'500'}}>Tutorial Passo a Passo</p>
-            <p style={{textAlign:'center', marginTop:'1vh', fontSize:'2rem'}}>Siga esses passos para conseguir gerar os relatórios dos instrumentos.</p>
+            <p style={{textAlign:'center', marginTop:'1vh', fontSize:'2rem', color:'#828282'}}>Siga esses passos para conseguir gerar os relatórios dos instrumentos.</p>
             <p> </p>
             <div className={styles.sessions}>
                     <div className={styles.sessionBox_right}>
