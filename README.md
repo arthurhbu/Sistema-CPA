@@ -12,15 +12,21 @@ Na pasta Compose você pode executar os composes em dois níveis:
 
 Backend
 
-> podman-compose -f backend.yaml pull
-> podman-compose -f backend.yaml up -d
+```
+podman-compose -f backend.yaml pull
+
+podman-compose -f backend.yaml up -d
+```
 
 Tomar cuidado para importar o banco de dados original, caso haja necessidade.
 
 Frontend
 
-> podman-compose -f frontend.yaml pull
-> podman-compose -f frontend.yaml up -d
+```
+podman-compose -f frontend.yaml pull
+
+podman-compose -f frontend.yaml up -d
+```
 
 ## Portas que devem ser abertas
 
