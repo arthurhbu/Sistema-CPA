@@ -1,4 +1,12 @@
-O que precisa ser feito ainda:
+# Projeto Relatórios CPA
+
+Sistema de automação dos relatórios da UEM CPA. 
+
+Para iniciar, sugiro que configure as variáveis de ambiente.
+
+[Variáveis environment][exemplo.md]
+
+# Pendências
 
     PRIORIDADE:
         - Tela home adicionar o passo a passo do que fazer (PROXIMO A FAZER). Parte das etapas foi adicionado, mas o Tutotrial pode ficar melhor eu acho.
@@ -16,9 +24,11 @@ O que precisa ser feito ainda:
     - Realizar um teste completo, onde faça cada etapa necessária.
     - Talvez ter que criar uma slidebar para escolher qual csv estara sendo importado para que não haja problemas na hora da importação. Mas isso podemos esperar a próxima leva de CSVs
 
-FINALIZADOS
+# Finalizados
 
     - Confirmação se o cabeçalho está correto com o padrão (POPUP DE IMPORTAÇAO FINALIZADO, ACREDITO QUE SEJA ISSO NO MOMENTO PARA A PAGINA)
     - Tela de progresso, adicionar logs (ACREDITO ESTAR FINALIZADO, CONFIRMAR PARA VER O QUE O PROFESSOR ACHA COMO FICOU)
 
     
+
+[exemplo.md]: exemplo.md
