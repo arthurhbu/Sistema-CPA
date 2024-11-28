@@ -1,0 +1,24 @@
+services:
+  servidor-ai:
+    image: docker.io/ollama/ollama
+    volumes:
+      - volume-ollama:/root/.ollama:rw
+    networks:
+      - rede-cpa
+    
+  mongo:
+    image: docker.io/mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD}
+    volumes:
+      - vol-mongo:/data/db:rw      
+    networks:
+      - rede-cpa
+
+volumes: 
+  vol-mongo:
+  volume-ollama:
+
+networks:
+  rede-cpa:

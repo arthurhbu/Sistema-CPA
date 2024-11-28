@@ -1,5 +1,7 @@
 services:
-
+  wg:
+    image: docker.io/procustodibus/wireguard
+    
   servidor-ai:
     image: docker.io/ollama/ollama
     volumes:
