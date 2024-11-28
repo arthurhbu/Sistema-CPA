@@ -20,7 +20,7 @@ services:
   flask-backend:
     image: docker.io/uemcpa/relatorios-backend
     environment:  
-      - FLASK_ENV: development
+      FLASK_ENV: development
     networks: 
       - rede-cpa
     
@@ -29,7 +29,7 @@ services:
     depends_on:
       - flask-backend
     environment:
-      - WATCHPACK_POLLING=true
+      WATCHPACK_POLLING: true
     network_mode: service:wg
     networks: 
       - rede-cpa

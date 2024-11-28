@@ -4,7 +4,28 @@ Sistema de automação dos relatórios da UEM CPA.
 
 Para iniciar, sugiro que configure as variáveis de ambiente.
 
-[Variáveis environment][exemplo.md]
+[Variáveis environment][compose/exemplo.md]
+
+# Uso com Podman-Compose
+
+Na pasta Compose você pode executar os composes em dois níveis:
+
+Backend
+
+> podman-compose -f backend.yaml pull
+> podman-compose -f backend.yaml up -d
+
+Tomar cuidado para importar o banco de dados original, caso haja necessidade.
+
+Frontend
+
+> podman-compose -f frontend.yaml pull
+> podman-compose -f frontend.yaml up -d
+
+## Portas que devem ser abertas
+
+- Acesso ao FrontEnd - 3000
+- Acesso ao Mongo Express - 8081
 
 # Pendências
 
@@ -31,4 +52,3 @@ Para iniciar, sugiro que configure as variáveis de ambiente.
 
     
 
-[exemplo.md]: exemplo.md
