@@ -14,15 +14,15 @@ def zip_markdown_files(outputFilename: str, folderPath: str) -> None:
     :type: str
     :param folderPath: Nome do caminho para os arquivos markdowns
     :type: str
-    
     '''
-    
-    with zipfile.ZipFile(outputFilename, 'w') as zipf:
+    with zipfile.ZipFile(outputFilename, 'w', zipfile.ZIP_DEFLATED) as zipf:
+        root_name = os.path.basename(folderPath.rstrip(os.sep))  
         for root, dirs, files in os.walk(folderPath):
             for file in files:
-                if file.endswith('.md'):  # Filtrar apenas arquivos .md
-                    filepath = os.path.join(root, file)
-                    zipf.write(filepath, os.path.relpath(filepath, folderPath))
+                file_path = os.path.join(root, file)
+                arcname = os.path.join(root_name, os.path.relpath(file_path, folderPath))
+                zipf.write(file_path, arcname)
+
 
 # Exemplo de uso
 # zip_markdown_files('relatorios.zip', 'pasta_dos_markdowns')

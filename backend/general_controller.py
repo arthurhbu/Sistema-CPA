@@ -157,7 +157,7 @@ def listDatabases(client):
 
 def getProgressoInsercao(instrumento: str, client: MongoClient):
     dbName, database = connectToDatabase(instrumento, client)
-    progresso = database['progresso']
+    progresso = database['progresso_da_insercao']
     progressoDocument = progresso.find_one()
     return progressoDocument
     

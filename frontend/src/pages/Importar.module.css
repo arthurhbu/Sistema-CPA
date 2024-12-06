@@ -141,6 +141,7 @@ ul {
     margin-top: 10px;
     margin-left: 15px;
 }
+
 .grid_inputInfos { 
     grid-area: 2 / 2 / 3 / 3;
     display: flex;
@@ -344,12 +345,13 @@ ul {
     border: 1px solid #ccc; 
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); 
     z-index: 1000; 
-    width: 30%;
-    height: 15%;
+    width: 35%;
+    height: 25%;
     border-radius: 8px; 
     text-align: right;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
 }
 
 .popup_message { 

@@ -63,7 +63,7 @@ Vejamos de forma detalhada os resultados obtidos analisando cada grupo (I, II e 
 
 ### 1. Avaliação discente sobre a autoavaliação
 
-![1.1- Sua frequência nas disciplinas presenciais](./markdowns/EAD2021_AvaliaçãoDistância/figurasGraficos_EAD2021_AvaliaçãoDistância/fig_58_237_1831.png '1.1- Sua frequência nas disciplinas presenciais')
+![1.1- Sua frequência nas disciplinas presenciais](./figurasGrafico/fig_58_237_1831.png '1.1- Sua frequência nas disciplinas presenciais')
 
 Tabela 1 
 
@@ -74,18 +74,18 @@ Tabela 1
 None
 
 
-![1.2- Sua frequência nas disciplinas remotas](./markdowns/EAD2021_AvaliaçãoDistância/figurasGraficos_EAD2021_AvaliaçãoDistância/fig_58_237_1832.png '1.2- Sua frequência nas disciplinas remotas')
+![1.2- Sua frequência nas disciplinas remotas](./figurasGrafico/fig_58_237_1832.png '1.2- Sua frequência nas disciplinas remotas')
 
 Tabela 1 
 
-| Indicador | Regular | Bom | Ruim | Péssimo | Respondentes | 
+| Indicador | Bom | Regular | Ruim | Péssimo | Respondentes | 
 |---|---|---|---|---|---| 
-| Sua frequência nas disciplinas remotas | 100,0% |  0,0% |  0,0% |  0,0% | 2 | 
+| Sua frequência nas disciplinas remotas | 0,0% |  100,0% |  0,0% |  0,0% | 2 | 
  
 None
 
 
-![1.3- Seu empenho e participação nas disciplinas](./markdowns/EAD2021_AvaliaçãoDistância/figurasGraficos_EAD2021_AvaliaçãoDistância/fig_58_237_1833.png '1.3- Seu empenho e participação nas disciplinas')
+![1.3- Seu empenho e participação nas disciplinas](./figurasGrafico/fig_58_237_1833.png '1.3- Seu empenho e participação nas disciplinas')
 
 Tabela 1 
 
@@ -96,7 +96,7 @@ Tabela 1
 None
 
 
-![1.4- Sua aprendizagem nas disciplinas](./markdowns/EAD2021_AvaliaçãoDistância/figurasGraficos_EAD2021_AvaliaçãoDistância/fig_58_237_1834.png '1.4- Sua aprendizagem nas disciplinas')
+![1.4- Sua aprendizagem nas disciplinas](./figurasGrafico/fig_58_237_1834.png '1.4- Sua aprendizagem nas disciplinas')
 
 Tabela 2 
 
@@ -107,7 +107,7 @@ Tabela 2
 None
 
 
-![1.5- Seu interesse em participar de projetos de ensino, pesquisa, extensão, monitoria, programas, etc.](./markdowns/EAD2021_AvaliaçãoDistância/figurasGraficos_EAD2021_AvaliaçãoDistância/fig_58_237_1835.png '1.5- Seu interesse em participar de projetos de ensino, pesquisa, extensão, monitoria, programas, etc.')
+![1.5- Seu interesse em participar de projetos de ensino, pesquisa, extensão, monitoria, programas, etc.](./figurasGrafico/fig_58_237_1835.png '1.5- Seu interesse em participar de projetos de ensino, pesquisa, extensão, monitoria, programas, etc.')
 
 Tabela 2 
 
@@ -122,7 +122,7 @@ None
 
 ### 2. Avaliação discente sobre a infraestrutura
 
-![2.1 - Condições de acesso ao material bibliográfico das disciplinas](./markdowns/EAD2021_AvaliaçãoDistância/figurasGraficos_EAD2021_AvaliaçãoDistância/fig_58_238_1837.png '2.1 - Condições de acesso ao material bibliográfico das disciplinas')
+![2.1 - Condições de acesso ao material bibliográfico das disciplinas](./figurasGrafico/fig_58_238_1837.png '2.1 - Condições de acesso ao material bibliográfico das disciplinas')
 
 Tabela 2 
 
@@ -133,18 +133,18 @@ Tabela 2
 None
 
 
-![2.2 - Condições e atendimento dos laboratórios utilizados pelo curso](./markdowns/EAD2021_AvaliaçãoDistância/figurasGraficos_EAD2021_AvaliaçãoDistância/fig_58_238_1838.png '2.2 - Condições e atendimento dos laboratórios utilizados pelo curso')
+![2.2 - Condições e atendimento dos laboratórios utilizados pelo curso](./figurasGrafico/fig_58_238_1838.png '2.2 - Condições e atendimento dos laboratórios utilizados pelo curso')
 
 Tabela 3 
 
-| Indicador | Bom | Não se aplica | Regular | Ruim | Péssimo | Não sei informar | Respondentes | 
+| Indicador | Bom | Regular | Ruim | Péssimo | Não se aplica | Não sei informar | Respondentes | 
 |---|---|---|---|---|---|---|---| 
-| Condições e atendimento dos laboratórios utilizados pelo curso | 50,0% |  50,0% |  0,0% |  0,0% |  0,0% |  0,0% | 2 | 
+| Condições e atendimento dos laboratórios utilizados pelo curso | 50,0% |  0,0% |  0,0% |  0,0% |  50,0% |  0,0% | 2 | 
  
 None
 
 
-![2.3 - Condições e atendimento da biblioteca](./markdowns/EAD2021_AvaliaçãoDistância/figurasGraficos_EAD2021_AvaliaçãoDistância/fig_58_238_1839.png '2.3 - Condições e atendimento da biblioteca')
+![2.3 - Condições e atendimento da biblioteca](./figurasGrafico/fig_58_238_1839.png '2.3 - Condições e atendimento da biblioteca')
 
 Tabela 3 
 
@@ -155,7 +155,7 @@ Tabela 3
 None
 
 
-![2.4 - Atendimento na secretaria do curso](./markdowns/EAD2021_AvaliaçãoDistância/figurasGraficos_EAD2021_AvaliaçãoDistância/fig_58_238_1840.png '2.4 - Atendimento na secretaria do curso')
+![2.4 - Atendimento na secretaria do curso](./figurasGrafico/fig_58_238_1840.png '2.4 - Atendimento na secretaria do curso')
 
 Tabela 3 
 
@@ -166,29 +166,29 @@ Tabela 3
 None
 
 
-![2.5 - Limpeza e manutenção nas salas e no departamento do seu curso](./markdowns/EAD2021_AvaliaçãoDistância/figurasGraficos_EAD2021_AvaliaçãoDistância/fig_58_238_1841.png '2.5 - Limpeza e manutenção nas salas e no departamento do seu curso')
+![2.5 - Limpeza e manutenção nas salas e no departamento do seu curso](./figurasGrafico/fig_58_238_1841.png '2.5 - Limpeza e manutenção nas salas e no departamento do seu curso')
 
 Tabela 4 
 
-| Indicador | Bom | Não se aplica | Regular | Ruim | Péssimo | Não sei informar | Respondentes | 
+| Indicador | Bom | Regular | Ruim | Péssimo | Não se aplica | Não sei informar | Respondentes | 
 |---|---|---|---|---|---|---|---| 
-| Limpeza e manutenção nas salas e no departamento do seu curso | 50,0% |  50,0% |  0,0% |  0,0% |  0,0% |  0,0% | 2 | 
+| Limpeza e manutenção nas salas e no departamento do seu curso | 50,0% |  0,0% |  0,0% |  0,0% |  50,0% |  0,0% | 2 | 
  
 None
 
 
-![2.6 - Espaços de convivência e de alimentação próximas ao bloco onde estuda](./markdowns/EAD2021_AvaliaçãoDistância/figurasGraficos_EAD2021_AvaliaçãoDistância/fig_58_238_1842.png '2.6 - Espaços de convivência e de alimentação próximas ao bloco onde estuda')
+![2.6 - Espaços de convivência e de alimentação próximas ao bloco onde estuda](./figurasGrafico/fig_58_238_1842.png '2.6 - Espaços de convivência e de alimentação próximas ao bloco onde estuda')
 
 Tabela 4 
 
-| Indicador | Ruim | Não se aplica | Bom | Regular | Péssimo | Não sei informar | Respondentes | 
+| Indicador | Bom | Regular | Ruim | Péssimo | Não se aplica | Não sei informar | Respondentes | 
 |---|---|---|---|---|---|---|---| 
-| Espaços de convivência e de alimentação próximas ao bloco onde estuda | 50,0% |  50,0% |  0,0% |  0,0% |  0,0% |  0,0% | 2 | 
+| Espaços de convivência e de alimentação próximas ao bloco onde estuda | 0,0% |  0,0% |  50,0% |  0,0% |  50,0% |  0,0% | 2 | 
  
 None
 
 
-![2.7 - Acessibilidade física e instalações sanitárias para pessoas com deficiência e/ou mobilidade reduzida no bloco onde estuda](./markdowns/EAD2021_AvaliaçãoDistância/figurasGraficos_EAD2021_AvaliaçãoDistância/fig_58_238_1843.png '2.7 - Acessibilidade física e instalações sanitárias para pessoas com deficiência e/ou mobilidade reduzida no bloco onde estuda')
+![2.7 - Acessibilidade física e instalações sanitárias para pessoas com deficiência e/ou mobilidade reduzida no bloco onde estuda](./figurasGrafico/fig_58_238_1843.png '2.7 - Acessibilidade física e instalações sanitárias para pessoas com deficiência e/ou mobilidade reduzida no bloco onde estuda')
 
 Tabela 4 
 
@@ -199,7 +199,7 @@ Tabela 4
 None
 
 
-![2.8 - Acessibilidade pedagógica, atitudinal e das comunicações para pessoas com deficiência](./markdowns/EAD2021_AvaliaçãoDistância/figurasGraficos_EAD2021_AvaliaçãoDistância/fig_58_238_1844.png '2.8 - Acessibilidade pedagógica, atitudinal e das comunicações para pessoas com deficiência')
+![2.8 - Acessibilidade pedagógica, atitudinal e das comunicações para pessoas com deficiência](./figurasGrafico/fig_58_238_1844.png '2.8 - Acessibilidade pedagógica, atitudinal e das comunicações para pessoas com deficiência')
 
 Tabela 5 
 
@@ -210,35 +210,35 @@ Tabela 5
 None
 
 
-![2.9 - Acesso à rede wi-fi da UEM nas dependências da Universidade](./markdowns/EAD2021_AvaliaçãoDistância/figurasGraficos_EAD2021_AvaliaçãoDistância/fig_58_238_1845.png '2.9 - Acesso à rede wi-fi da UEM nas dependências da Universidade')
+![2.9 - Acesso à rede wi-fi da UEM nas dependências da Universidade](./figurasGrafico/fig_58_238_1845.png '2.9 - Acesso à rede wi-fi da UEM nas dependências da Universidade')
 
 Tabela 5 
 
-| Indicador | Bom | Não se aplica | Regular | Ruim | Péssimo | Não sei informar | Respondentes | 
+| Indicador | Bom | Regular | Ruim | Péssimo | Não se aplica | Não sei informar | Respondentes | 
 |---|---|---|---|---|---|---|---| 
-| Acesso à rede wi-fi da UEM nas dependências da Universidade | 50,0% |  50,0% |  0,0% |  0,0% |  0,0% |  0,0% | 2 | 
+| Acesso à rede wi-fi da UEM nas dependências da Universidade | 50,0% |  0,0% |  0,0% |  0,0% |  50,0% |  0,0% | 2 | 
  
 None
 
 
-![2.10 - Acesso às informações na página da UEM – www.uem.br](./markdowns/EAD2021_AvaliaçãoDistância/figurasGraficos_EAD2021_AvaliaçãoDistância/fig_58_238_1846.png '2.10 - Acesso às informações na página da UEM – www.uem.br')
+![2.10 - Acesso às informações na página da UEM – www.uem.br](./figurasGrafico/fig_58_238_1846.png '2.10 - Acesso às informações na página da UEM – www.uem.br')
 
 Tabela 5 
 
-| Indicador | Regular | Bom | Ruim | Péssimo | Não se aplica | Não sei informar | Respondentes | 
+| Indicador | Bom | Regular | Ruim | Péssimo | Não se aplica | Não sei informar | Respondentes | 
 |---|---|---|---|---|---|---|---| 
-| Acesso às informações na página da UEM – www.uem.br | 100,0% |  0,0% |  0,0% |  0,0% |  0,0% |  0,0% | 2 | 
+| Acesso às informações na página da UEM – www.uem.br | 0,0% |  100,0% |  0,0% |  0,0% |  0,0% |  0,0% | 2 | 
  
 None
 
 
-![2.11 - Disponibilidade e estrutura de auditórios para o atendimento às demandas do curso](./markdowns/EAD2021_AvaliaçãoDistância/figurasGraficos_EAD2021_AvaliaçãoDistância/fig_58_238_1847.png '2.11 - Disponibilidade e estrutura de auditórios para o atendimento às demandas do curso')
+![2.11 - Disponibilidade e estrutura de auditórios para o atendimento às demandas do curso](./figurasGrafico/fig_58_238_1847.png '2.11 - Disponibilidade e estrutura de auditórios para o atendimento às demandas do curso')
 
 Tabela 6 
 
-| Indicador | Bom | Não se aplica | Regular | Ruim | Péssimo | Não sei informar | Respondentes | 
+| Indicador | Bom | Regular | Ruim | Péssimo | Não se aplica | Não sei informar | Respondentes | 
 |---|---|---|---|---|---|---|---| 
-| Disponibilidade e estrutura de auditórios para o atendimento às demandas do curso | 50,0% |  50,0% |  0,0% |  0,0% |  0,0% |  0,0% | 2 | 
+| Disponibilidade e estrutura de auditórios para o atendimento às demandas do curso | 50,0% |  0,0% |  0,0% |  0,0% |  50,0% |  0,0% | 2 | 
  
 None
 
@@ -247,95 +247,95 @@ None
 
 ### 3. Avaliação discente sobre a oportunidade para a participação em projetos e programas
 
-![3.1 - Oportunidade para participar de Programa de Monitoria como monitor de disciplinas](./markdowns/EAD2021_AvaliaçãoDistância/figurasGraficos_EAD2021_AvaliaçãoDistância/fig_58_239_1850.png '3.1 - Oportunidade para participar de Programa de Monitoria como monitor de disciplinas')
+![3.1 - Oportunidade para participar de Programa de Monitoria como monitor de disciplinas](./figurasGrafico/fig_58_239_1850.png '3.1 - Oportunidade para participar de Programa de Monitoria como monitor de disciplinas')
 
 Tabela 6 
 
-| Indicador | Regular | Bom | Ruim | Péssimo | Não se aplica | Não sei informar | Respondentes | 
+| Indicador | Bom | Regular | Ruim | Péssimo | Não se aplica | Não sei informar | Respondentes | 
 |---|---|---|---|---|---|---|---| 
-| Oportunidade para participar de Programa de Monitoria como monitor de disciplinas | 100,0% |  0,0% |  0,0% |  0,0% |  0,0% |  0,0% | 2 | 
+| Oportunidade para participar de Programa de Monitoria como monitor de disciplinas | 0,0% |  100,0% |  0,0% |  0,0% |  0,0% |  0,0% | 2 | 
  
 None
 
 
-![3.2 - Oportunidade para participar de Projeto de Iniciação Científica (PIC ou PIBIC)](./markdowns/EAD2021_AvaliaçãoDistância/figurasGraficos_EAD2021_AvaliaçãoDistância/fig_58_239_1851.png '3.2 - Oportunidade para participar de Projeto de Iniciação Científica (PIC ou PIBIC)')
+![3.2 - Oportunidade para participar de Projeto de Iniciação Científica (PIC ou PIBIC)](./figurasGrafico/fig_58_239_1851.png '3.2 - Oportunidade para participar de Projeto de Iniciação Científica (PIC ou PIBIC)')
 
 Tabela 6 
 
-| Indicador | Regular | Não sei informar | Bom | Ruim | Péssimo | Não se aplica | Respondentes | 
+| Indicador | Bom | Regular | Ruim | Péssimo | Não se aplica | Não sei informar | Respondentes | 
 |---|---|---|---|---|---|---|---| 
-| Oportunidade para participar de Projeto de Iniciação Científica (PIC ou PIBIC) | 50,0% |  50,0% |  0,0% |  0,0% |  0,0% |  0,0% | 2 | 
+| Oportunidade para participar de Projeto de Iniciação Científica (PIC ou PIBIC) | 0,0% |  50,0% |  0,0% |  0,0% |  0,0% |  50,0% | 2 | 
  
 None
 
 
-![3.3 - Oportunidade para participar de Projetos de Pesquisa, de Ensino e de Extensão](./markdowns/EAD2021_AvaliaçãoDistância/figurasGraficos_EAD2021_AvaliaçãoDistância/fig_58_239_1852.png '3.3 - Oportunidade para participar de Projetos de Pesquisa, de Ensino e de Extensão')
+![3.3 - Oportunidade para participar de Projetos de Pesquisa, de Ensino e de Extensão](./figurasGrafico/fig_58_239_1852.png '3.3 - Oportunidade para participar de Projetos de Pesquisa, de Ensino e de Extensão')
 
 Tabela 7 
 
-| Indicador | Regular | Não sei informar | Bom | Ruim | Péssimo | Não se aplica | Respondentes | 
+| Indicador | Bom | Regular | Ruim | Péssimo | Não se aplica | Não sei informar | Respondentes | 
 |---|---|---|---|---|---|---|---| 
-| Oportunidade para participar de Projetos de Pesquisa, de Ensino e de Extensão | 50,0% |  50,0% |  0,0% |  0,0% |  0,0% |  0,0% | 2 | 
+| Oportunidade para participar de Projetos de Pesquisa, de Ensino e de Extensão | 0,0% |  50,0% |  0,0% |  0,0% |  0,0% |  50,0% | 2 | 
  
 None
 
 
-![3.4 - Oportunidade para participar de Programa de Preceptoria como preceptor](./markdowns/EAD2021_AvaliaçãoDistância/figurasGraficos_EAD2021_AvaliaçãoDistância/fig_58_239_1853.png '3.4 - Oportunidade para participar de Programa de Preceptoria como preceptor')
+![3.4 - Oportunidade para participar de Programa de Preceptoria como preceptor](./figurasGrafico/fig_58_239_1853.png '3.4 - Oportunidade para participar de Programa de Preceptoria como preceptor')
 
 Tabela 7 
 
-| Indicador | Regular | Não sei informar | Bom | Ruim | Péssimo | Não se aplica | Respondentes | 
+| Indicador | Bom | Regular | Ruim | Péssimo | Não se aplica | Não sei informar | Respondentes | 
 |---|---|---|---|---|---|---|---| 
-| Oportunidade para participar de Programa de Preceptoria como preceptor | 50,0% |  50,0% |  0,0% |  0,0% |  0,0% |  0,0% | 2 | 
+| Oportunidade para participar de Programa de Preceptoria como preceptor | 0,0% |  50,0% |  0,0% |  0,0% |  0,0% |  50,0% | 2 | 
  
 None
 
 
-![3.5 - Oportunidade para participar de Programa de Bolsa Permanência](./markdowns/EAD2021_AvaliaçãoDistância/figurasGraficos_EAD2021_AvaliaçãoDistância/fig_58_239_1854.png '3.5 - Oportunidade para participar de Programa de Bolsa Permanência')
+![3.5 - Oportunidade para participar de Programa de Bolsa Permanência](./figurasGrafico/fig_58_239_1854.png '3.5 - Oportunidade para participar de Programa de Bolsa Permanência')
 
 Tabela 7 
 
-| Indicador | Regular | Não se aplica | Bom | Ruim | Péssimo | Não sei informar | Respondentes | 
+| Indicador | Bom | Regular | Ruim | Péssimo | Não se aplica | Não sei informar | Respondentes | 
 |---|---|---|---|---|---|---|---| 
-| Oportunidade para participar de Programa de Bolsa Permanência | 50,0% |  50,0% |  0,0% |  0,0% |  0,0% |  0,0% | 2 | 
+| Oportunidade para participar de Programa de Bolsa Permanência | 0,0% |  50,0% |  0,0% |  0,0% |  50,0% |  0,0% | 2 | 
  
 None
 
 
-![3.6 - Oportunidade para participar do Programa de Educação Tutotial (PET)](./markdowns/EAD2021_AvaliaçãoDistância/figurasGraficos_EAD2021_AvaliaçãoDistância/fig_58_239_1855.png '3.6 - Oportunidade para participar do Programa de Educação Tutotial (PET)')
+![3.6 - Oportunidade para participar do Programa de Educação Tutotial (PET)](./figurasGrafico/fig_58_239_1855.png '3.6 - Oportunidade para participar do Programa de Educação Tutotial (PET)')
 
 Tabela 8 
 
-| Indicador | Regular | Não sei informar | Bom | Ruim | Péssimo | Não se aplica | Respondentes | 
+| Indicador | Bom | Regular | Ruim | Péssimo | Não se aplica | Não sei informar | Respondentes | 
 |---|---|---|---|---|---|---|---| 
-| Oportunidade para participar do Programa de Educação Tutotial (PET) | 50,0% |  50,0% |  0,0% |  0,0% |  0,0% |  0,0% | 2 | 
+| Oportunidade para participar do Programa de Educação Tutotial (PET) | 0,0% |  50,0% |  0,0% |  0,0% |  0,0% |  50,0% | 2 | 
  
 None
 
 
-![3.7 - Oportunidade para participar do Programa Institucional de Bolsa à Iniciação à Docência (PIBID)](./markdowns/EAD2021_AvaliaçãoDistância/figurasGraficos_EAD2021_AvaliaçãoDistância/fig_58_239_1856.png '3.7 - Oportunidade para participar do Programa Institucional de Bolsa à Iniciação à Docência (PIBID)')
+![3.7 - Oportunidade para participar do Programa Institucional de Bolsa à Iniciação à Docência (PIBID)](./figurasGrafico/fig_58_239_1856.png '3.7 - Oportunidade para participar do Programa Institucional de Bolsa à Iniciação à Docência (PIBID)')
 
 Tabela 8 
 
-| Indicador | Regular | Bom | Ruim | Péssimo | Não se aplica | Não sei informar | Respondentes | 
+| Indicador | Bom | Regular | Ruim | Péssimo | Não se aplica | Não sei informar | Respondentes | 
 |---|---|---|---|---|---|---|---| 
-| Oportunidade para participar do Programa Institucional de Bolsa à Iniciação à Docência (PIBID) | 100,0% |  0,0% |  0,0% |  0,0% |  0,0% |  0,0% | 2 | 
+| Oportunidade para participar do Programa Institucional de Bolsa à Iniciação à Docência (PIBID) | 0,0% |  100,0% |  0,0% |  0,0% |  0,0% |  0,0% | 2 | 
  
 None
 
 
-![3.8 - Oportunidade para participar do Programa Institucional de Bolsa de Iniciação em Desenvolvimento Tecnológico e Inovação (PIBITI)](./markdowns/EAD2021_AvaliaçãoDistância/figurasGraficos_EAD2021_AvaliaçãoDistância/fig_58_239_1857.png '3.8 - Oportunidade para participar do Programa Institucional de Bolsa de Iniciação em Desenvolvimento Tecnológico e Inovação (PIBITI)')
+![3.8 - Oportunidade para participar do Programa Institucional de Bolsa de Iniciação em Desenvolvimento Tecnológico e Inovação (PIBITI)](./figurasGrafico/fig_58_239_1857.png '3.8 - Oportunidade para participar do Programa Institucional de Bolsa de Iniciação em Desenvolvimento Tecnológico e Inovação (PIBITI)')
 
 Tabela 8 
 
-| Indicador | Regular | Não sei informar | Bom | Ruim | Péssimo | Não se aplica | Respondentes | 
+| Indicador | Bom | Regular | Ruim | Péssimo | Não se aplica | Não sei informar | Respondentes | 
 |---|---|---|---|---|---|---|---| 
-| Oportunidade para participar do Programa Institucional de Bolsa de Iniciação em Desenvolvimento Tecnológico e Inovação (PIBITI) | 50,0% |  50,0% |  0,0% |  0,0% |  0,0% |  0,0% | 2 | 
+| Oportunidade para participar do Programa Institucional de Bolsa de Iniciação em Desenvolvimento Tecnológico e Inovação (PIBITI) | 0,0% |  50,0% |  0,0% |  0,0% |  0,0% |  50,0% | 2 | 
  
 None
 
 
-![3.9 - Oportunidade para participar de eventos científicos, artísticos e culturais.](./markdowns/EAD2021_AvaliaçãoDistância/figurasGraficos_EAD2021_AvaliaçãoDistância/fig_58_239_1858.png '3.9 - Oportunidade para participar de eventos científicos, artísticos e culturais.')
+![3.9 - Oportunidade para participar de eventos científicos, artísticos e culturais.](./figurasGrafico/fig_58_239_1858.png '3.9 - Oportunidade para participar de eventos científicos, artísticos e culturais.')
 
 Tabela 9 
 
@@ -350,7 +350,7 @@ None
 
 ### 4. Avaliação discente sobre as políticas de atendimento aos alunos
 
-![4.1 - Atendimento oferecido pelo coordenador do curso.](./markdowns/EAD2021_AvaliaçãoDistância/figurasGraficos_EAD2021_AvaliaçãoDistância/fig_58_240_1860.png '4.1 - Atendimento oferecido pelo coordenador do curso.')
+![4.1 - Atendimento oferecido pelo coordenador do curso.](./figurasGrafico/fig_58_240_1860.png '4.1 - Atendimento oferecido pelo coordenador do curso.')
 
 Tabela 9 
 
@@ -361,35 +361,35 @@ Tabela 9
 None
 
 
-![4.2 - Atendimento médico.](./markdowns/EAD2021_AvaliaçãoDistância/figurasGraficos_EAD2021_AvaliaçãoDistância/fig_58_240_1861.png '4.2 - Atendimento médico.')
+![4.2 - Atendimento médico.](./figurasGrafico/fig_58_240_1861.png '4.2 - Atendimento médico.')
 
 Tabela 9 
 
-| Indicador | Não sei informar | Bom | Regular | Ruim | Péssimo | Respondentes | 
+| Indicador | Bom | Regular | Ruim | Péssimo | Não sei informar | Respondentes | 
 |---|---|---|---|---|---|---| 
-| Atendimento médico. | 100,0% |  0,0% |  0,0% |  0,0% |  0,0% | 2 | 
+| Atendimento médico. | 0,0% |  0,0% |  0,0% |  0,0% |  100,0% | 2 | 
  
 None
 
 
-![4.3 - Atendimento psicológico.](./markdowns/EAD2021_AvaliaçãoDistância/figurasGraficos_EAD2021_AvaliaçãoDistância/fig_58_240_1862.png '4.3 - Atendimento psicológico.')
+![4.3 - Atendimento psicológico.](./figurasGrafico/fig_58_240_1862.png '4.3 - Atendimento psicológico.')
 
 Tabela 10 
 
-| Indicador | Não sei informar | Bom | Regular | Ruim | Péssimo | Respondentes | 
+| Indicador | Bom | Regular | Ruim | Péssimo | Não sei informar | Respondentes | 
 |---|---|---|---|---|---|---| 
-| Atendimento psicológico. | 100,0% |  0,0% |  0,0% |  0,0% |  0,0% | 2 | 
+| Atendimento psicológico. | 0,0% |  0,0% |  0,0% |  0,0% |  100,0% | 2 | 
  
 None
 
 
-![4.4 - Atendimento aos alunos com necessidades educacionais especiais.](./markdowns/EAD2021_AvaliaçãoDistância/figurasGraficos_EAD2021_AvaliaçãoDistância/fig_58_240_1863.png '4.4 - Atendimento aos alunos com necessidades educacionais especiais.')
+![4.4 - Atendimento aos alunos com necessidades educacionais especiais.](./figurasGrafico/fig_58_240_1863.png '4.4 - Atendimento aos alunos com necessidades educacionais especiais.')
 
 Tabela 10 
 
-| Indicador | Não sei informar | Bom | Regular | Ruim | Péssimo | Respondentes | 
+| Indicador | Bom | Regular | Ruim | Péssimo | Não sei informar | Respondentes | 
 |---|---|---|---|---|---|---| 
-| Atendimento aos alunos com necessidades educacionais especiais. | 100,0% |  0,0% |  0,0% |  0,0% |  0,0% | 2 | 
+| Atendimento aos alunos com necessidades educacionais especiais. | 0,0% |  0,0% |  0,0% |  0,0% |  100,0% | 2 | 
  
 None
 
@@ -398,7 +398,7 @@ None
 
 ### 5. Avaliação discente sobre o Instrumento de Avaliação
 
-![5.1 - Como você avalia este Instrumento de Avaliação](./markdowns/EAD2021_AvaliaçãoDistância/figurasGraficos_EAD2021_AvaliaçãoDistância/fig_58_241_1865.png '5.1 - Como você avalia este Instrumento de Avaliação')
+![5.1 - Como você avalia este Instrumento de Avaliação](./figurasGrafico/fig_58_241_1865.png '5.1 - Como você avalia este Instrumento de Avaliação')
 
 Tabela 10 
 
@@ -501,9 +501,9 @@ Tabela 20 - Resultado do item: 6.10 - Carga horária destinada para a disciplina
 
 Tabela 21 - Resultado do item: 6.1 - Capacidade de comunicação oral (clareza) na exposição dos conteúdos. 
 
-| Indicador | Regular | Bom | Ruim | Péssimo | Não sei informar | Respondentes | 
+| Indicador | Bom | Regular | Ruim | Péssimo | Não sei informar | Respondentes | 
 |---|---|---|---|---|---|---| 
-| Capacidade de comunicação oral (clareza) na exposição dos conteúdos. | 100,0% |  0,0% |  0,0% |  0,0% |  0,0% | 2 | 
+| Capacidade de comunicação oral (clareza) na exposição dos conteúdos. | 0,0% |  100,0% |  0,0% |  0,0% |  0,0% | 2 | 
 
 
 
@@ -517,9 +517,9 @@ Tabela 22 - Resultado do item: 6.2 - Domínio do conteúdo pelo docente.
 
 Tabela 23 - Resultado do item: 6.3 - Disponibilidade para atender às dúvidas apresentadas pelos alunos. 
 
-| Indicador | Bom | Ruim | Regular | Péssimo | Não sei informar | Respondentes | 
+| Indicador | Bom | Regular | Ruim | Péssimo | Não sei informar | Respondentes | 
 |---|---|---|---|---|---|---| 
-| Disponibilidade para atender às dúvidas apresentadas pelos alunos. | 50,0% |  50,0% |  0,0% |  0,0% |  0,0% | 2 | 
+| Disponibilidade para atender às dúvidas apresentadas pelos alunos. | 50,0% |  0,0% |  50,0% |  0,0% |  0,0% | 2 | 
 
 
 
@@ -549,17 +549,17 @@ Tabela 26 - Resultado do item: 6.6 - Respeito ao horário de aula pelo professor
 
 Tabela 27 - Resultado do item: 6.7 - Apresentação do programa e do critério de avaliação da disciplina 
 
-| Indicador | Regular | Bom | Ruim | Péssimo | Não sei informar | Respondentes | 
+| Indicador | Bom | Regular | Ruim | Péssimo | Não sei informar | Respondentes | 
 |---|---|---|---|---|---|---| 
-| Apresentação do programa e do critério de avaliação da disciplina | 100,0% |  0,0% |  0,0% |  0,0% |  0,0% | 2 | 
+| Apresentação do programa e do critério de avaliação da disciplina | 0,0% |  100,0% |  0,0% |  0,0% |  0,0% | 2 | 
 
 
 
 Tabela 28 - Resultado do item: 6.8 - Cumprimento do programa e do critério de avaliação da disciplina 
 
-| Indicador | Regular | Ruim | Bom | Péssimo | Não sei informar | Respondentes | 
+| Indicador | Bom | Regular | Ruim | Péssimo | Não sei informar | Respondentes | 
 |---|---|---|---|---|---|---| 
-| Cumprimento do programa e do critério de avaliação da disciplina | 50,0% |  50,0% |  0,0% |  0,0% |  0,0% | 2 | 
+| Cumprimento do programa e do critério de avaliação da disciplina | 0,0% |  50,0% |  50,0% |  0,0% |  0,0% | 2 | 
 
 
 
@@ -653,9 +653,9 @@ Tabela 39 - Resultado do item: 6.9 - Importância da disciplina no curso
 
 Tabela 40 - Resultado do item: 6.10 - Carga horária destinada para a disciplina 
 
-| Indicador | Não sei informar | Boa | Condizente em parte | Insuficiente | Respondentes | 
+| Indicador | Boa | Condizente em parte | Insuficiente | Não sei informar | Respondentes | 
 |---|---|---|---|---|---| 
-| Carga horária destinada para a disciplina | 100,0% |  0,0% |  0,0% |  0,0% | 1 | 
+| Carga horária destinada para a disciplina | 0,0% |  0,0% |  0,0% |  100,0% | 1 | 
 
 
 
@@ -813,9 +813,9 @@ Tabela 59 - Resultado do item: 6.9 - Importância da disciplina no curso
 
 Tabela 60 - Resultado do item: 6.10 - Carga horária destinada para a disciplina 
 
-| Indicador | Condizente em parte | Boa | Insuficiente | Não sei informar | Respondentes | 
+| Indicador | Boa | Condizente em parte | Insuficiente | Não sei informar | Respondentes | 
 |---|---|---|---|---|---| 
-| Carga horária destinada para a disciplina | 100,0% |  0,0% |  0,0% |  0,0% | 1 | 
+| Carga horária destinada para a disciplina | 0,0% |  100,0% |  0,0% |  0,0% | 1 | 
 
 
 
@@ -985,68 +985,68 @@ Tabela 80 - Resultado do item: 6.10 - Carga horária destinada para a disciplina
 
 ### 7. Avaliação discente sobre o Estágio (diferenciar disciplina de estágio)
 
-![7.1 - Apresentação do regulamento e do critério de avaliação do estágio](./markdowns/EAD2021_AvaliaçãoDistância/figurasGraficos_EAD2021_AvaliaçãoDistância/fig_58_243_1879.png '7.1 - Apresentação do regulamento e do critério de avaliação do estágio')
+![7.1 - Apresentação do regulamento e do critério de avaliação do estágio](./figurasGrafico/fig_58_243_1879.png '7.1 - Apresentação do regulamento e do critério de avaliação do estágio')
 
 Tabela 81 
 
-| Indicador | Não sei informar | Bom | Regular | Ruim | Péssimo | Não se aplica | Respondentes | 
+| Indicador | Bom | Regular | Ruim | Péssimo | Não se aplica | Não sei informar | Respondentes | 
 |---|---|---|---|---|---|---|---| 
-| Apresentação do regulamento e do critério de avaliação do estágio | 100,0% |  0,0% |  0,0% |  0,0% |  0,0% |  0,0% | 2 | 
+| Apresentação do regulamento e do critério de avaliação do estágio | 0,0% |  0,0% |  0,0% |  0,0% |  0,0% |  100,0% | 2 | 
  
 None
 
 
-![7.2 - Carga horária destinada ao estágio](./markdowns/EAD2021_AvaliaçãoDistância/figurasGraficos_EAD2021_AvaliaçãoDistância/fig_58_243_1880.png '7.2 - Carga horária destinada ao estágio')
+![7.2 - Carga horária destinada ao estágio](./figurasGrafico/fig_58_243_1880.png '7.2 - Carga horária destinada ao estágio')
 
 Tabela 81 
 
-| Indicador | Não sei informar | Bom | Regular | Ruim | Péssimo | Não se aplica | Respondentes | 
+| Indicador | Bom | Regular | Ruim | Péssimo | Não se aplica | Não sei informar | Respondentes | 
 |---|---|---|---|---|---|---|---| 
-| Carga horária destinada ao estágio | 100,0% |  0,0% |  0,0% |  0,0% |  0,0% |  0,0% | 2 | 
+| Carga horária destinada ao estágio | 0,0% |  0,0% |  0,0% |  0,0% |  0,0% |  100,0% | 2 | 
  
 None
 
 
-![7.3 - Frequência e pontualidade do Professor Orientador nos encontros](./markdowns/EAD2021_AvaliaçãoDistância/figurasGraficos_EAD2021_AvaliaçãoDistância/fig_58_243_1881.png '7.3 - Frequência e pontualidade do Professor Orientador nos encontros')
+![7.3 - Frequência e pontualidade do Professor Orientador nos encontros](./figurasGrafico/fig_58_243_1881.png '7.3 - Frequência e pontualidade do Professor Orientador nos encontros')
 
 Tabela 81 
 
-| Indicador | Não sei informar | Bom | Regular | Ruim | Péssimo | Não se aplica | Respondentes | 
+| Indicador | Bom | Regular | Ruim | Péssimo | Não se aplica | Não sei informar | Respondentes | 
 |---|---|---|---|---|---|---|---| 
-| Frequência e pontualidade do Professor Orientador nos encontros | 100,0% |  0,0% |  0,0% |  0,0% |  0,0% |  0,0% | 2 | 
+| Frequência e pontualidade do Professor Orientador nos encontros | 0,0% |  0,0% |  0,0% |  0,0% |  0,0% |  100,0% | 2 | 
  
 None
 
 
-![7.4 - Contribuições do Professor/Profissional Supervisor no local do estágio](./markdowns/EAD2021_AvaliaçãoDistância/figurasGraficos_EAD2021_AvaliaçãoDistância/fig_58_243_1882.png '7.4 - Contribuições do Professor/Profissional Supervisor no local do estágio')
+![7.4 - Contribuições do Professor/Profissional Supervisor no local do estágio](./figurasGrafico/fig_58_243_1882.png '7.4 - Contribuições do Professor/Profissional Supervisor no local do estágio')
 
 Tabela 82 
 
-| Indicador | Não sei informar | Bom | Regular | Ruim | Péssimo | Não se aplica | Respondentes | 
+| Indicador | Bom | Regular | Ruim | Péssimo | Não se aplica | Não sei informar | Respondentes | 
 |---|---|---|---|---|---|---|---| 
-| Contribuições do Professor/Profissional Supervisor no local do estágio | 100,0% |  0,0% |  0,0% |  0,0% |  0,0% |  0,0% | 2 | 
+| Contribuições do Professor/Profissional Supervisor no local do estágio | 0,0% |  0,0% |  0,0% |  0,0% |  0,0% |  100,0% | 2 | 
  
 None
 
 
-![7.5 - Condições das unidades concedentes para o desenvolvimento do estágio](./markdowns/EAD2021_AvaliaçãoDistância/figurasGraficos_EAD2021_AvaliaçãoDistância/fig_58_243_1883.png '7.5 - Condições das unidades concedentes para o desenvolvimento do estágio')
+![7.5 - Condições das unidades concedentes para o desenvolvimento do estágio](./figurasGrafico/fig_58_243_1883.png '7.5 - Condições das unidades concedentes para o desenvolvimento do estágio')
 
 Tabela 82 
 
-| Indicador | Não sei informar | Bom | Regular | Ruim | Péssimo | Não se aplica | Respondentes | 
+| Indicador | Bom | Regular | Ruim | Péssimo | Não se aplica | Não sei informar | Respondentes | 
 |---|---|---|---|---|---|---|---| 
-| Condições das unidades concedentes para o desenvolvimento do estágio | 100,0% |  0,0% |  0,0% |  0,0% |  0,0% |  0,0% | 2 | 
+| Condições das unidades concedentes para o desenvolvimento do estágio | 0,0% |  0,0% |  0,0% |  0,0% |  0,0% |  100,0% | 2 | 
  
 None
 
 
-![7.6 - Relação entre o estágio e o futuro exercício profissional](./markdowns/EAD2021_AvaliaçãoDistância/figurasGraficos_EAD2021_AvaliaçãoDistância/fig_58_243_1884.png '7.6 - Relação entre o estágio e o futuro exercício profissional')
+![7.6 - Relação entre o estágio e o futuro exercício profissional](./figurasGrafico/fig_58_243_1884.png '7.6 - Relação entre o estágio e o futuro exercício profissional')
 
 Tabela 82 
 
-| Indicador | Não sei informar | Bom | Regular | Ruim | Péssimo | Não se aplica | Respondentes | 
+| Indicador | Bom | Regular | Ruim | Péssimo | Não se aplica | Não sei informar | Respondentes | 
 |---|---|---|---|---|---|---|---| 
-| Relação entre o estágio e o futuro exercício profissional | 100,0% |  0,0% |  0,0% |  0,0% |  0,0% |  0,0% | 2 | 
+| Relação entre o estágio e o futuro exercício profissional | 0,0% |  0,0% |  0,0% |  0,0% |  0,0% |  100,0% | 2 | 
  
 None
 
@@ -1055,79 +1055,79 @@ None
 
 ### 8. Avaliação discente sobre o TCC
 
-![8.1 - Apresentação do regulamento e do critério de avaliação do TCC](./markdowns/EAD2021_AvaliaçãoDistância/figurasGraficos_EAD2021_AvaliaçãoDistância/fig_58_244_1886.png '8.1 - Apresentação do regulamento e do critério de avaliação do TCC')
+![8.1 - Apresentação do regulamento e do critério de avaliação do TCC](./figurasGrafico/fig_58_244_1886.png '8.1 - Apresentação do regulamento e do critério de avaliação do TCC')
 
 Tabela 83 
 
-| Indicador | Não sei informar | Bom | Regular | Ruim | Péssimo | Não se aplica | Respondentes | 
+| Indicador | Bom | Regular | Ruim | Péssimo | Não se aplica | Não sei informar | Respondentes | 
 |---|---|---|---|---|---|---|---| 
-| Apresentação do regulamento e do critério de avaliação do TCC | 100,0% |  0,0% |  0,0% |  0,0% |  0,0% |  0,0% | 2 | 
+| Apresentação do regulamento e do critério de avaliação do TCC | 0,0% |  0,0% |  0,0% |  0,0% |  0,0% |  100,0% | 2 | 
  
 None
 
 
-![8.2 - Atividades realizadas pelo coordenador do TCC para o desenvolvimento e para o acompanhamento do seu trabalho](./markdowns/EAD2021_AvaliaçãoDistância/figurasGraficos_EAD2021_AvaliaçãoDistância/fig_58_244_1887.png '8.2 - Atividades realizadas pelo coordenador do TCC para o desenvolvimento e para o acompanhamento do seu trabalho')
+![8.2 - Atividades realizadas pelo coordenador do TCC para o desenvolvimento e para o acompanhamento do seu trabalho](./figurasGrafico/fig_58_244_1887.png '8.2 - Atividades realizadas pelo coordenador do TCC para o desenvolvimento e para o acompanhamento do seu trabalho')
 
 Tabela 83 
 
-| Indicador | Não sei informar | Bom | Regular | Ruim | Péssimo | Não se aplica | Respondentes | 
+| Indicador | Bom | Regular | Ruim | Péssimo | Não se aplica | Não sei informar | Respondentes | 
 |---|---|---|---|---|---|---|---| 
-| Atividades realizadas pelo coordenador do TCC para o desenvolvimento e para o acompanhamento do seu trabalho | 100,0% |  0,0% |  0,0% |  0,0% |  0,0% |  0,0% | 2 | 
+| Atividades realizadas pelo coordenador do TCC para o desenvolvimento e para o acompanhamento do seu trabalho | 0,0% |  0,0% |  0,0% |  0,0% |  0,0% |  100,0% | 2 | 
  
 None
 
 
-![8.3 - Carga horária destinada ao TCC](./markdowns/EAD2021_AvaliaçãoDistância/figurasGraficos_EAD2021_AvaliaçãoDistância/fig_58_244_1888.png '8.3 - Carga horária destinada ao TCC')
+![8.3 - Carga horária destinada ao TCC](./figurasGrafico/fig_58_244_1888.png '8.3 - Carga horária destinada ao TCC')
 
 Tabela 83 
 
-| Indicador | Não sei informar | Bom | Regular | Ruim | Péssimo | Não se aplica | Respondentes | 
+| Indicador | Bom | Regular | Ruim | Péssimo | Não se aplica | Não sei informar | Respondentes | 
 |---|---|---|---|---|---|---|---| 
-| Carga horária destinada ao TCC | 100,0% |  0,0% |  0,0% |  0,0% |  0,0% |  0,0% | 2 | 
+| Carga horária destinada ao TCC | 0,0% |  0,0% |  0,0% |  0,0% |  0,0% |  100,0% | 2 | 
  
 None
 
 
-![8.4 - Disponibilidade do professor orientador para as orientações do TCC](./markdowns/EAD2021_AvaliaçãoDistância/figurasGraficos_EAD2021_AvaliaçãoDistância/fig_58_244_1889.png '8.4 - Disponibilidade do professor orientador para as orientações do TCC')
+![8.4 - Disponibilidade do professor orientador para as orientações do TCC](./figurasGrafico/fig_58_244_1889.png '8.4 - Disponibilidade do professor orientador para as orientações do TCC')
 
 Tabela 84 
 
-| Indicador | Não sei informar | Bom | Regular | Ruim | Péssimo | Não se aplica | Respondentes | 
+| Indicador | Bom | Regular | Ruim | Péssimo | Não se aplica | Não sei informar | Respondentes | 
 |---|---|---|---|---|---|---|---| 
-| Disponibilidade do professor orientador para as orientações do TCC | 100,0% |  0,0% |  0,0% |  0,0% |  0,0% |  0,0% | 2 | 
+| Disponibilidade do professor orientador para as orientações do TCC | 0,0% |  0,0% |  0,0% |  0,0% |  0,0% |  100,0% | 2 | 
  
 None
 
 
-![8.5 - Bibliografia disponível no acervo (biblioteca, base de dados etc.) da UEM para o desenvolvimento do TCC](./markdowns/EAD2021_AvaliaçãoDistância/figurasGraficos_EAD2021_AvaliaçãoDistância/fig_58_244_1890.png '8.5 - Bibliografia disponível no acervo (biblioteca, base de dados etc.) da UEM para o desenvolvimento do TCC')
+![8.5 - Bibliografia disponível no acervo (biblioteca, base de dados etc.) da UEM para o desenvolvimento do TCC](./figurasGrafico/fig_58_244_1890.png '8.5 - Bibliografia disponível no acervo (biblioteca, base de dados etc.) da UEM para o desenvolvimento do TCC')
 
 Tabela 84 
 
-| Indicador | Não sei informar | Bom | Regular | Ruim | Péssimo | Não se aplica | Respondentes | 
+| Indicador | Bom | Regular | Ruim | Péssimo | Não se aplica | Não sei informar | Respondentes | 
 |---|---|---|---|---|---|---|---| 
-| Bibliografia disponível no acervo (biblioteca, base de dados etc.) da UEM para o desenvolvimento do TCC | 100,0% |  0,0% |  0,0% |  0,0% |  0,0% |  0,0% | 2 | 
+| Bibliografia disponível no acervo (biblioteca, base de dados etc.) da UEM para o desenvolvimento do TCC | 0,0% |  0,0% |  0,0% |  0,0% |  0,0% |  100,0% | 2 | 
  
 None
 
 
-![8.6 - Suporte de informática da UEM para o desenvolvimento do TCC](./markdowns/EAD2021_AvaliaçãoDistância/figurasGraficos_EAD2021_AvaliaçãoDistância/fig_58_244_1891.png '8.6 - Suporte de informática da UEM para o desenvolvimento do TCC')
+![8.6 - Suporte de informática da UEM para o desenvolvimento do TCC](./figurasGrafico/fig_58_244_1891.png '8.6 - Suporte de informática da UEM para o desenvolvimento do TCC')
 
 Tabela 84 
 
-| Indicador | Não sei informar | Bom | Regular | Ruim | Péssimo | Não se aplica | Respondentes | 
+| Indicador | Bom | Regular | Ruim | Péssimo | Não se aplica | Não sei informar | Respondentes | 
 |---|---|---|---|---|---|---|---| 
-| Suporte de informática da UEM para o desenvolvimento do TCC | 100,0% |  0,0% |  0,0% |  0,0% |  0,0% |  0,0% | 2 | 
+| Suporte de informática da UEM para o desenvolvimento do TCC | 0,0% |  0,0% |  0,0% |  0,0% |  0,0% |  100,0% | 2 | 
  
 None
 
 
-![8.7 - Importância do TCC para o futuro exercício profissional](./markdowns/EAD2021_AvaliaçãoDistância/figurasGraficos_EAD2021_AvaliaçãoDistância/fig_58_244_1892.png '8.7 - Importância do TCC para o futuro exercício profissional')
+![8.7 - Importância do TCC para o futuro exercício profissional](./figurasGrafico/fig_58_244_1892.png '8.7 - Importância do TCC para o futuro exercício profissional')
 
 Tabela 85 
 
-| Indicador | Não sei informar | Bom | Regular | Ruim | Péssimo | Não se aplica | Respondentes | 
+| Indicador | Bom | Regular | Ruim | Péssimo | Não se aplica | Não sei informar | Respondentes | 
 |---|---|---|---|---|---|---|---| 
-| Importância do TCC para o futuro exercício profissional | 100,0% |  0,0% |  0,0% |  0,0% |  0,0% |  0,0% | 2 | 
+| Importância do TCC para o futuro exercício profissional | 0,0% |  0,0% |  0,0% |  0,0% |  0,0% |  100,0% | 2 | 
  
 None
 
@@ -1140,7 +1140,7 @@ None
 
 ### 9. Avaliação discente sobre o Instrumento de Avaliação
 
-![9.1 - Como você avalia este Instrumento de Avaliação](./markdowns/EAD2021_AvaliaçãoDistância/figurasGraficos_EAD2021_AvaliaçãoDistância/fig_58_245_1894.png '9.1 - Como você avalia este Instrumento de Avaliação')
+![9.1 - Como você avalia este Instrumento de Avaliação](./figurasGrafico/fig_58_245_1894.png '9.1 - Como você avalia este Instrumento de Avaliação')
 
 Tabela 85 
 

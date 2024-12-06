@@ -6,6 +6,9 @@ import { useState } from 'react';
 import { FaFileCsv } from "react-icons/fa6";
 import StyledInput from '../components/StyledInput';
 import UploadButton from '../components/uploadButton';
+import { Link } from 'react-router-dom';
+
+
 
 const iconStyle = { 
     color: '#2ef092',
@@ -63,6 +66,7 @@ function Importar(){
     const [popupHeaderVisible, setPopupHeaderVisible] = useState(false);
     const [popupImportVisible, setPopupImportVisible] = useState(false);
     const [popupImportMessage, setPopupImportMessage] = useState('');
+    const [importStatus, setImportStatus] = useState(null);
     const [popupErrorVisible, setPopupErrorVisible] = useState(false);
     const [popupErrorMessage, setPopupErrorMessage] = useState('');
     const [header, setHeader] = useState([]);
@@ -132,7 +136,7 @@ function Importar(){
             const data = await res.json();
             if(data.error === ''){ 
                 setHeader(data.header);
-                setPopupHeaderVisible(true);
+                setPopupHeaderVisible(true);    
             }
             else { 
                 setPopupErrorVisible(true);
@@ -165,9 +169,10 @@ function Importar(){
             });
             
             const data = await res.json();
+            setImportStatus(res.status);
             setPopupHeaderVisible(false);
             setPopupImportMessage(data.response);
-            console.log(data.response)
+            console.log(data.response);
             setPopupImportVisible(true);
         } catch (error) { 
             console.error(error);
@@ -189,7 +194,7 @@ function Importar(){
             <div className={styles.intro}>
                 <p className={styles.titulo}>Inserir Arquivo</p>
                 <p className={styles.infos}>
-                    Inserir arquivo CSV para coletar e gerar novas informações importantes. O arquivo após ser inserido no banco será gerado novas informações utilizando um IA, talvez demore um pouco. A barra de processo será mostrado aqui. Importe um arquivo por vez para não gerar problemas.
+                    Insira o CSV do instrumento para que comece o processamento dos dados, nessa etapa é feito o uso de Inteligência Artificial por isso pode demorar um certo tempo para finalizar. Enquanto um instrumento está sendo processado não é possível inserir outro, pois o precesso é feito de maneira unitária. Mas é possível visualizar o progresso aqui: Acompanhe o progresso de seu csv.
                 </p>
             </div>
             <div className={styles.sessionProcArq}>
@@ -259,11 +264,21 @@ function Importar(){
 
             {popupImportVisible && <div className={styles.overlay}/>}
 
-            {popupImportVisible && (
+            {popupImportVisible && importStatus === 200 ? (
+                <div className={styles.popup}>
+                    <p className={styles.popup_message}>{popupImportMessage}</p>
+                    <Link to='/progresso'>
+                        <button type='button' className={styles.popup_confirm_button}>Progresso da inserção</button>
+                    </Link>
+                    <button className={styles.popup_buttonExit} onClick={() => setPopupImportVisible(false)}>X</button>
+                </div>
+            ) : popupImportVisible && importStatus !== 200 ? (
                 <div className={styles.popup}>
                     <p className={styles.popup_message}>{popupImportMessage}</p>
                     <button className={styles.popup_buttonExit} onClick={() => setPopupImportVisible(false)}>X</button>
                 </div>
+            ) : (
+                <div></div>
             )}
         </div>
     );

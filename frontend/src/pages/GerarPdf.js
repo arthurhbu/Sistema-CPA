@@ -3,6 +3,13 @@ import { useState, useEffect, useMemo } from 'react';
 import { useDropzone } from 'react-dropzone';
 import zip_upload_logo from '../img/zip_upload_logo.png';
 import UploadButtonZip from '../components/uploadButtonZip';
+import { RiFileZipFill } from "react-icons/ri";
+
+const iconStyle = { 
+    color: '#41ADFF',
+    marginTop: '1.5vh',
+    fontSize: '3.5em'
+}
 
 
 const listElementStyle = {
@@ -10,7 +17,7 @@ const listElementStyle = {
     justifyContent:'center'
 }
 
-const archiveNameStyle = {
+const filenameStyle = {
     paddingLeft:'1em',
     fontSize:'1.5rem',
     fontWeight:'600',
@@ -48,7 +55,7 @@ const rejectStyle = {
 
 
 function GerarPdf(){ 
-    const [compressArchive, setCompressArchive] = useState(null);
+    const [compressArchive, setCompressArchive] = useState([]);
 
     const {
         getRootProps,
@@ -69,20 +76,19 @@ function GerarPdf(){
             'application/x-xz': ['.xz'],
         },
         onDrop: acceptedFiles => { 
-            if(acceptedFiles.length > 0) {
-                const updateFile = Object.assign(acceptedFiles[0], {
-                    preview: acceptedFiles.name
-                });
-                setCompressArchive(updateFile);
+            console.log(acceptedFiles[0])
+            setCompressArchive(acceptedFiles.map(compressArchive => Object.assign(compressArchive, {
+                preview: compressArchive.name
+            })))
             }
-        },
-    });
+        });
 
-    const thumbs = compressArchive => (
+    const thumbs = compressArchive.map(compressArchive => ( 
         <div key={compressArchive.name} style={listElementStyle}>
-            <p style={archiveNameStyle}>{compressArchive.name}</p>
+            <RiFileZipFill style={iconStyle}/>
+            <p style={filenameStyle}>{compressArchive.name}</p>
         </div>
-    )
+    ));
 
     const style = useMemo(() => ({
         ...baseStyle,
@@ -110,6 +116,13 @@ function GerarPdf(){
                     <p className={styles.procurarArquivos__text}>Arraste e solte o arquivo ou</p>
                     <UploadButtonZip/>
                     <p className={styles.procurarArquivos_arqSuportados}>Apenas arquivos compactados</p>  
+                </div>
+                <div className={styles.display_flex_session}>
+                    <div className={styles.session_filebox}>
+                        <p className={styles.arquivosImportados_text}> Arquivo Escolhido:</p>
+                        <p>{thumbs}</p>
+                    </div>
+                    <button className={styles.gerarPDFButton}>Gerar PDFs</button>
                 </div>
             </div>
         </div>

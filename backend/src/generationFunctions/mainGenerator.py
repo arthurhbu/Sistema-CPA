@@ -11,7 +11,7 @@ from pymongo.database import Database
 from pymongo.mongo_client import MongoClient
 from database.connectionDB import connection
 from pymongo.errors import OperationFailure, CursorNotFound, ConnectionFailure, InvalidOperation, DuplicateKeyError
-from src.supportFunctions.compactAndSend import zip_markdown_files,enviar_email_com_anexo
+from src.supportFunctions.compactAndSendZip import zip_markdown_files,enviar_email_com_anexo
 import random as rand
 import sys
 sys.stdout.reconfigure(encoding="utf-8")
@@ -42,7 +42,7 @@ def gerarGrafTabRelatorioGPT(client: MongoClient, databaseName: Database, collec
                     try:
                         sorted_pctOptDict = dict(sorted(document["pct_por_opcao"].items(), key=lambda x: x[1], reverse=True))
                         opcoes, pct = dictToList(sorted_pctOptDict)
-                        table = composeTable(pergunta_formatada, sorted_pctOptDict, document['total_do_curso'])
+                        table = composeTable(pergunta_formatada, document['pct_por_opcao'], document['total_do_curso'])
                     except KeyError as key_error:
                         return f'Erro de chave: {key_error}'
                     
@@ -251,7 +251,7 @@ def gerarRelatoriosPorCentro(collectionCurso: Collection, collectionCentroPorAno
         cursoArquivo = f'{curso}.md'
         substituirIdentificadores(cursoArquivo, dbName)
     zip_markdown_files(f'./relatorio/markdowns/{dbName}/{dbName}.zip', f'./relatorio/markdowns/{dbName}')
-    enviar_email_com_anexo(f'./relatorio/markdowns/{dbName}/{dbName}.zip','arthurhbu@gmail.com','ra129406@uem.br','175839123zx')
+    # enviar_email_com_anexo(f'./relatorio/markdowns/{dbName}/{dbName}.zip','','','')
 
 
 

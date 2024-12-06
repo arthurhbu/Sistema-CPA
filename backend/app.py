@@ -74,7 +74,7 @@ def confirmImportation():
     if filename and ano:
         processing = True
         socketio.start_background_task(target=processCsv, filename=filename, ano=ano)
-        return jsonify({'response': 'Análise confirmada e importação iniciada!'}), 200
+        return jsonify({'response': 'Análise confirmada e importação iniciada!',}), 200
     
     return jsonify({'response':'Erro ao confirmar a analise'}), 400
 

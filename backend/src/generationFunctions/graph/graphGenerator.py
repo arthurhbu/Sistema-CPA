@@ -85,16 +85,10 @@ def controllerGraphGenerator(databaseName: Database,collectionName: Collection, 
 
     #Realizando a busca pelo caminho para o diretório em que serão salvos as figuras
     dirFigName = f'figurasGraficos_{databaseName}'
-    diretorio_trabalho = Path(f'relatorio/markdowns/{databaseName}/{dirFigName}/')
+    diretorio_trabalho = Path(f'relatorio/markdowns/{databaseName}/figurasGrafico/')
     diretorio_trabalho.mkdir(parents=True, exist_ok=True)
-    subdiretorio_trabalho = f'./markdowns/{databaseName}/{dirFigName}'
+    subdiretorio_trabalho = f'./figurasGrafico'
 
-    # diretorioSaidaFigura = f'figurasGraficos/{databaseName}'
-    # diretorioSaidaFigura = os.path.join(diretorio_trabalho, subdiretorio_trabalho)
-
-    # if not os.path.exists(subdiretorio_trabalho):
-    #     os.makedirs(subdiretorio_trabalho)
-    
     finalPath = graphPlot(subdiretorio_trabalho, diretorio_trabalho, cod_curso, cd_subgrupo, opcoes, porcentagem, nu_pergunta, pergunta)
     
     return finalPath

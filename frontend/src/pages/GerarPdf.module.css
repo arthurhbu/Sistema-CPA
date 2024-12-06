@@ -1,5 +1,6 @@
 .containerGerarPdfs { 
-    min-height: 1000px;
+    /* height: 100%; */
+    min-height: 1200px;
     width: 100%;
 }
 
@@ -31,12 +32,14 @@
 /*------------------------------------MAIN SESSION--------------------------------------*/
 .mainSession{ 
     display: flex;
-    justify-content: center;
+    justify-content: space-evenly;
     margin: auto;
     background-color: #E8E8E8;
     width: 100%;
-    height: 60%;
+    height: 80vh;
     align-items: center;
+    /* margin-bottom: 10vh; */
+    margin-top: 6vh;
 }
 
 .responsiveLogo { 
@@ -60,4 +63,86 @@
     font-size: 1.2rem;
     margin-top: 2em;
     color: #9A9A9A;
+}
+
+.display_flex_session { 
+    /* display: 'flex', justifyContent:'flex-start', flexDirection:'column', height:'100%', minWidth:'30%'} */
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: column;
+    height: 100%;
+    min-width: 30%;
+    /* margin-top: 15%; */
+    /* padding: 15%; */
+}
+
+.session_filebox {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    /* min-width: 30%; */
+    background-color: #fff;
+    border-radius: 15px;
+    padding: 20px;
+    /* margin-top: 20%; */
+}
+
+.arquivosImportados_text { 
+    font-family: 'Inter';
+    font-weight: 600;
+    font-size: 1.3vw;
+    margin: 0;
+    margin-top: 10px;
+    margin-left: 15px;
+}
+
+.gerarPDFButton { 
+    margin-top: 10vh;
+    list-style: none;
+    width: 30%;
+    height: 3.5em;
+    background-color: #ffffff;
+    color: rgb(0, 0, 0);
+    border: 2px solid currentColor;
+    border-radius: 7px;
+    font-family: 'Inter';
+    font-weight: 700;
+    font-size: 1em;
+    overflow: hidden;
+    position: relative;
+    text-decoration: none;
+    will-change: transform;
+    z-index: 0;
+    transition: 0.2s ease-in-out;
+    align-self: center;
+}
+
+.gerarPDFButton::after { 
+    background-color: #52AFFF;
+    border-radius: 7px;
+    content: '';
+    display: block;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    transform: translate(-100%, 0) rotate(10deg);
+    transform-origin: top left;
+    transition: .2s transform ease-out;
+    will-change: transform;
+    z-index: -1;
+}
+
+.gerarPDFButton:hover::after{
+    transform: translate(0, 0);
+}
+
+.gerarPDFButton:hover{
+    /* border: 2px solid transparent; */
+    border: none;
+    color: #ffffff;
+    transform: scale(1.05);
+    will-change: transform;
+    cursor:pointer;
 }
