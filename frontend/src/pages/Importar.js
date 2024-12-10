@@ -1,14 +1,18 @@
 import styles from './Importar.module.css';
 import upload_logo from '../img/upload_logo.png';
 import { useDropzone } from 'react-dropzone';
-import {useMemo} from 'react';
+import {useEffect, useMemo} from 'react';
 import { useState } from 'react';
 import { FaFileCsv } from "react-icons/fa6";
 import StyledInput from '../components/StyledInput';
 import UploadButton from '../components/uploadButton';
 import { Link } from 'react-router-dom';
+import { io } from 'socket.io-client'
 
-
+const socket = io("http://localhost:5000", { 
+    transports: [ 'websocket', 'polling'],
+    withCredentials: true,
+})
 
 const iconStyle = { 
     color: '#2ef092',
@@ -36,7 +40,6 @@ const baseStyle = {
     alignItems: 'center',
     textAlign: 'center',
     maxWidth: '50%',
-    // minHeight: '30em',
     padding: '5em',
     borderWidth: '2px',
     borderRadius: '10px',
@@ -62,20 +65,34 @@ const rejectStyle = {
 function Importar(){
     const [files, setFiles] = useState([]);
     const [ano, setAno] = useState('');
-    const [response, setResponse] = useState('');
     const [popupHeaderVisible, setPopupHeaderVisible] = useState(false);
     const [popupImportVisible, setPopupImportVisible] = useState(false);
     const [popupImportMessage, setPopupImportMessage] = useState('');
     const [importStatus, setImportStatus] = useState(null);
     const [popupErrorVisible, setPopupErrorVisible] = useState(false);
-    const [popupErrorMessage, setPopupErrorMessage] = useState('');
     const [header, setHeader] = useState([]);
     const [errorMessage, setErrorMessage] = useState('');
+    const [isProcessing, setIsProcessing] = useState(false);
     const correctHeader = ['Nome Instrumento', 'Ano Instrumento', 'Data Inicio', 'Data Fim', 'Codigo Curso', 'Nome Curso', 'Codigo Grupo', 'Nome Grupo', 'Codigo Subgrupo', 'Nome Subgrupo', 'Codigo Disciplina', 'Disciplina', 'Turma', 'Serie', 'Ordem Pergunta', 'Codigo Pergunta', 'Pergunta', 'Ordem Opcoes', 'Opcao', 'Porcentagem', 'Respostas', 'Total do Curso']
+
+    console.log(isProcessing)
+
+    useEffect(() => {
+        socket.on("importacao_concluida", (data) => { 
+            setIsProcessing(false)
+        }); 
+
+        return () => { 
+            socket.off("importacao_concluida");
+        };
+    }, []);
+
+    useEffect(() => {
+        checkProcessingStatus();
+    }, []);
 
     const {
         getRootProps, 
-        acceptedFiles,
         getInputProps,
         isFocused, 
         isDragAccept,
@@ -105,7 +122,7 @@ function Importar(){
         </div>
     ))
     
-    const style = useMemo(() => ({
+    const styleDropzone = useMemo(() => ({
         ...baseStyle,
         ...(isFocused ? focusedStyle : {}),
         ...(isDragAccept ? acceptStyle : {}),
@@ -154,29 +171,27 @@ function Importar(){
             setErrorMessage('Preencha todos os campos antes de importar!');
             return;
         }
-        console.log("Arquivo sendo enviado:] ", files[0])
+        console.log("Arquivo sendo enviado: ", files[0])
 
 
         await getHeaderCSV(files[0], ano)
     };
 
     const confirmImportCSV = async () => { 
+        setIsProcessing(true);
         try { 
             const res = await fetch('http://localhost:5000/api/confirmarImportacao', { 
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({ano})
             });
-            
-            const data = await res.json();
-            setImportStatus(res.status);
             setPopupHeaderVisible(false);
-            setPopupImportMessage(data.response);
-            console.log(data.response);
+            setImportStatus(res.status);
+            setPopupImportMessage(res.response);
             setPopupImportVisible(true);
         } catch (error) { 
             console.error(error);
-        }
+        } 
     }
 
     const handleImportSubmit = async (e) => { 
@@ -185,9 +200,18 @@ function Importar(){
             console.error('Está faltando o campo ano');
             return;
         }
-
         await confirmImportCSV();
     }
+
+    const checkProcessingStatus = async () => { 
+        try {
+        const response = await fetch('http://localhost:5000/progresso');
+            const data = await response.json();
+            setIsProcessing(data.processing) 
+        } catch(error) { 
+            console.error('Erro ao verificar status de processamento', error);
+        }
+    };
 
     return(
         <div className={styles.importar}>
@@ -198,9 +222,15 @@ function Importar(){
                 </p>
             </div>
             <div className={styles.sessionProcArq}>
+                {isProcessing && (
+                    <div className={styles.overlay_blocked_section}>
+                        <div style={{fontSize: '2rem'}}>Outro instrumento já está sendo processado</div>
+                        <div className={styles.spinner}>◠</div>
+                    </div>
+                )}
                 <div className={styles.session_grid__arqInputBox}>
                     <div className={styles.session_flex_arqInputBox}>
-                        <div {...getRootProps({style})}>
+                        <div {...getRootProps({style: styleDropzone})}>
                             <input {...getInputProps()}/>
                                 <img src={upload_logo} alt='upload_logo' className={styles.responsiveLogo} />
                                 <p className={styles.procurarArquivos__text}>Arraste e solte o arquivo ou</p>
@@ -228,11 +258,11 @@ function Importar(){
                     {errorMessage && <p className={styles.errorMessage}>{errorMessage}</p>}
                 </div>
             </div>
+
             {popupHeaderVisible && <div className={styles.overlay}/>}
 
             {popupHeaderVisible && (
                 <div className={styles.popup_header}>
-                    {/* <button className={styles.popup_buttonExit} onClick={() => setPopupVisible(false)}>X</button> */}
                     <p className={styles.popup_message_header}>Confira o cabeçalho do CSV para ver se está dentro dos padrões: </p>
                     <div className={styles.popup_headerComparison}>
                         <div className={styles.popup_headerColumn}>
@@ -266,7 +296,7 @@ function Importar(){
 
             {popupImportVisible && importStatus === 200 ? (
                 <div className={styles.popup}>
-                    <p className={styles.popup_message}>{popupImportMessage}</p>
+                    <p className={styles.popup_message}>Acompanhe o progesso da inserção</p>
                     <Link to='/progresso'>
                         <button type='button' className={styles.popup_confirm_button}>Progresso da inserção</button>
                     </Link>
@@ -280,6 +310,7 @@ function Importar(){
             ) : (
                 <div></div>
             )}
+
         </div>
     );
 }

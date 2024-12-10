@@ -38,6 +38,7 @@ ul {
 
 /*--Session contendo área para procurar arquivo e inputar informações*/
 .sessionProcArq { 
+    position: relative;
     min-height: 550px;
     padding: 5em;
     background-color: #E8E8E8;
@@ -49,6 +50,21 @@ ul {
     grid-row-gap: 0px;
     justify-content: center;
 }
+
+.overlay_blocked_section {
+    position: absolute;
+    top: 0%;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(10px);
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+  }
 
 /*---Div que contém Drag'n Drop*/
 
@@ -218,6 +234,16 @@ ul {
     z-index: 999;
 }
 
+.overlay_blockImport { 
+    position:fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+
 .popup_header { 
     position: fixed;
     height: 70%;
@@ -364,3 +390,17 @@ ul {
     align-items: center;
 }
 
+.spinner {
+    font-size: 6rem;
+    animation: spin 1s linear infinite;
+    margin-left: 20px;
+  }
+  
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}

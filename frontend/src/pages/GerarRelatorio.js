@@ -2,7 +2,6 @@ import styles from './GerarRelatorio.module.css';
 import StyledInput from '../components/StyledInput';
 import { useEffect, useState } from 'react';
 import SelectAutoWidth from '../components/selectAutoWidth';
-import { Button } from '@mui/material';
 
 function GerarRelatorio(){
     const [ano, setAno] = useState('');

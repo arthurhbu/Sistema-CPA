@@ -1,5 +1,5 @@
 import styles from './GerarPdf.module.css';
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import { useDropzone } from 'react-dropzone';
 import zip_upload_logo from '../img/zip_upload_logo.png';
 import UploadButtonZip from '../components/uploadButtonZip';
@@ -59,7 +59,6 @@ function GerarPdf(){
 
     const {
         getRootProps,
-        acceptedFiles,
         getInputProps,
         isFocused,
         isDragAccept,

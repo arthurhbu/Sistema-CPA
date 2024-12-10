@@ -11,8 +11,8 @@ from bson import ObjectId
 from collections import OrderedDict
 
 app = Flask(__name__)
-CORS(app)
-socketio = SocketIO(app)
+CORS(app, resources={r"/*": {"origins": "*"}})
+socketio = SocketIO(app, cors_allowed_origins="*")
 
 dbConfig: dict  = readDBConfig()
 client: MongoClient = connection(dbConfig)
@@ -60,7 +60,11 @@ def importCsv():
 def processCsv(filename, ano):
     global processing
     try:
-        applicationController(int(ano), filename, '', 'inserir', client)
+        with app.app_context():
+            response = applicationController(int(ano), filename, '', 'inserir', client)
+            socketio.emit('importacao_concluida', {'status':'sucesso', 'message': f'{response}'})
+    except Exception as e:
+        socketio.emit('importacao_concluida', {'status': 'erro', 'message': f'Ocorreu um erro na importação: {e}'})
     finally: 
         processing = False
 
@@ -69,28 +73,25 @@ def processCsv(filename, ano):
 def confirmImportation():
     global processing, filename
     ano = request.json.get('ano')
-    print(filename)
-    print(ano)
     if filename and ano:
-        processing = True
-        socketio.start_background_task(target=processCsv, filename=filename, ano=ano)
-        return jsonify({'response': 'Análise confirmada e importação iniciada!',}), 200
-    
-    return jsonify({'response':'Erro ao confirmar a analise'}), 400
+        try: 
+            processing = True
+            socketio.start_background_task(target=processCsv, filename=filename, ano=ano)
+            return jsonify({'message': 'importacao iniciada com sucesso'}), 200
+        except Exception as e: 
+            return jsonify({'message': 'um erro ocorreu durante a importação'}), 400
+    return jsonify({'message': 'faltando nome do arquivo ou ano'}), 400
 
 
 @app.route('/progresso', methods=['GET'])
 def getStatus():
     global filename
     global processing
-    processing = True
     progresso = {}
     if processing == True:
         progresso = getProgressoInsercao(filename, client)
         progresso = converteObjectIDToStr(progresso)  
-        
         progresso = removeKeys(progresso, ['_id', 'instrumento'])
-        print(progresso)
     return {'processing': processing, 'file': filename, 'progresso': progresso}, 200
 
 

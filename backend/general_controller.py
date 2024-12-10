@@ -144,11 +144,16 @@ def applicationController(ano: int, csvFileName: str, modal: str, modo: str, cli
     progresso = database['progresso_da_insercao']
     etapas = database['etapas']
     
-    if modo == 'inserir':
-        initalizeDatabaseInserts(dbName, curso, cursos_e_centros, centros_e_diretores, csvFileName, client, progresso, etapas)
-        prepareDataframesForReports(database, cursos_e_centros, ano, curso, modal)
-    if modo == 'gerarRelatorio':
-        generateReports(curso, centro_por_ano, cursos_por_centro, ano, dbName, modal)
+    try: 
+        if modo == 'inserir':
+            initalizeDatabaseInserts(dbName, curso, cursos_e_centros, centros_e_diretores, csvFileName, client, progresso, etapas)
+            prepareDataframesForReports(database, cursos_e_centros, ano, curso, modal)
+        if modo == 'gerarRelatorio':
+            generateReports(curso, centro_por_ano, cursos_por_centro, ano, dbName, modal)
+            
+        return 'Inserção finalizada com sucesso'
+    except Exception as e: 
+        return f'Ocorreu um erro na importação: {e}'
 
 def listDatabases(client): 
     dbs = client.list_database_names()

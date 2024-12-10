@@ -9,9 +9,8 @@ function NavBar() {
         <div>
             <nav className={styles.navbar}>
                 
-                    {/* <img src={logo} alt='cpa'/> */}
-                    {/* <p className={styles.p}>Comissão Própria de Avaliação</p> */}
-                    <img src={CPA_logo} style={{maxWidth:'10vw'}}></img>
+
+                    <img alt='cpa_logo' src={CPA_logo} style={{maxWidth:'10vw'}}></img>
                     <ul className={styles.list}>
                         <li className={styles.item}>
                             <Link to="/">Home</Link>
@@ -29,13 +28,8 @@ function NavBar() {
                             <Link to='/gerar_pdfs'>Gerar PDFs</Link>
                         </li>
                     </ul>
-                    <img src={UEM_logo} style={{maxWidth:'10vw'}}></img>
+                    <img alt='uem_logo' src={UEM_logo} style={{maxWidth:'10vw'}}></img>
             </nav>
-            {/* <div className={styles.header}>
-                <img src={GRE_logo} alt='header' className={styles.responsive}></img> 
-                <img src={CPA_logo_full} alt='header' className={styles.responsiveCpaLogo}></img>
-                <img src={UEM_logo} alt='header' className={styles.responsive}></img>
-            </div> */}
         </div>
     );
 }

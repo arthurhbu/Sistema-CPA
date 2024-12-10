@@ -30,6 +30,10 @@ const Processo = () => {
     }, [processing, filename, progresso]);
 
     useEffect(() => { 
+        checkStatus();
+    }, [])
+
+    useEffect(() => { 
         const interval = setInterval(checkStatus, 5000);
         return () => {
             clearInterval(interval);
