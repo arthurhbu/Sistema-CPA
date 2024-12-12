@@ -2,7 +2,7 @@ services:
   wg:
     image: docker.io/procustodibus/wireguard
     volumes: 
-      - ./wireguard:/etc/wireguard:rw
+      - ../wg:/etc/wireguard:rw
     cap_add:
       - NET_ADMIN
       - NET_RAW
@@ -17,8 +17,16 @@ services:
     networks:
       - rede-cpa
 
+  
+  web01:
+    image: docker.io/traefik/whoami
+    network_mode: service: wg
+    networks:
+      - rede-cpa
+
   flask-backend:
     image: docker.io/uemcpa/relatorios-backend
+    
     environment:  
       FLASK_ENV: development
     networks: 
