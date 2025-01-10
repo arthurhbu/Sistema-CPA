@@ -5,9 +5,8 @@ from pymongo import MongoClient
 from database.connectionDB import connectToDatabase 
 from src.csv.csv_controller import *
 from src.data_generator.generator_controller import *
-from src.data_generator.relatorio.gerar_relatorio import gerar_relatorio_por_curso
+from src.relatorio import gerar_todos_relatorios, zip_markdown_files
 from database.databaseQuerys import df_centro_por_ano,df_cursos_por_centro
-from database.pythonMongoConfig import readDBConfig
 from database.databaseQuerys import update_progresso
 
 '''
@@ -20,7 +19,6 @@ def initalize_database_inserts(database_name: Database, collection_instrumento: 
     Função que junta os primeiros passos da execução do programa que seria as inserções e os realiza de uma vez.
     """
 
-    #Inserir CSVs no banco de dados
     progresso.insert_one(
         {
             'instrumento': f'{database_name}',
@@ -54,7 +52,6 @@ def initalize_database_inserts(database_name: Database, collection_instrumento: 
     progresso_etapa3 = CSVManagment.insert_centro_diretor_csv_database(collection_diretor_e_centro)  
     update_progresso(progresso, 'Insercao_Centro_Diretor_Database', progresso_etapa3)
     
-
     progresso_etapa4 = generate_graph_table_report(client, database_name, collection_instrumento)
     update_progresso(progresso, 'Geracao_de_Dados', progresso_etapa4)
     
@@ -93,7 +90,7 @@ def prepare_side_dataframes(collection_instrumento: Collection, database: Databa
 
 
 
-def generate_reports(collection_instrumento: Collection, collection_centro_por_ano: Collection, collection_cursos_por_centro: Collection, ano: int, dbName: str, modal: str) -> None:
+def generate_reports(collection_instrumento: Collection, collection_centro_por_ano: Collection, collection_cursos_por_centro: Collection, ano: int, database_name: str, modal: str) -> None:
     """
     Realiza a criação de relatórios, podendo ser possível escolher se será gerado um único relatório,
     por centro ou todos os relatórios.
@@ -113,13 +110,23 @@ def generate_reports(collection_instrumento: Collection, collection_centro_por_a
     arquivo_intro_esc = f'introducao_{modal}.md'
     arquivo_conclusao_esc = f'conclusao_{modal}.md'
     
-    gerar_todos_relatorios(collection_instrumento, collection_centro_por_ano, collection_cursos_por_centro, arquivo_intro_esc, arquivo_conclusao_esc, ano, dbName)
+    gerar_todos_relatorios(collection_instrumento, collection_centro_por_ano, collection_cursos_por_centro, arquivo_intro_esc, arquivo_conclusao_esc, ano, database_name, modal)
+    zip_markdown_files(f'./relatorio/markdowns/{database_name}/{database_name}.zip', f'./relatorio/markdowns/{database_name}')
 
 
 
 def application_controller(ano: int, csv_Filename: str, modal: str, modo: str, client: MongoClient) -> None:
     """
-    Junta todos os passos das funções acima e os realiza em ordem.
+    Args:
+        ano (int): Ano de referência para a operação.
+        csv_Filename (str): Caminho para o arquivo CSV que contém os dados.
+        modal (str): Modalidade de operação.
+        modo (str): Modo de operação, pode ser 'inserir' ou 'gerarRelatorio'.
+        client (MongoClient): Cliente MongoDB para conexão com o banco de dados.
+    Returns:
+        None: A função não retorna nenhum valor, mas pode retornar mensagens de sucesso ou erro.
+    Raises:
+        Exception: Lança uma exceção se ocorrer algum erro durante a execução.
     """
     
     dbName, database = connectToDatabase(csv_Filename, client)

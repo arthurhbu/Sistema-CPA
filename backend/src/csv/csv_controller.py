@@ -19,7 +19,6 @@ class CSVManagment:
         path = Path(__file__).parent.resolve()
         return path
     
-    
     def csv_filter_docentes_and_tecnicos(csvFileName) -> None:
         cabecalho = [   
             'cd_grupo',
@@ -59,8 +58,6 @@ class CSVManagment:
         print(df_principal)        
         df_principal.to_csv(f'{dirArquivo}/CSVs/csvFiltrado.csv', index=False) 
         
-        
-
     def csv_filter_discentes(csvFileName) -> None:
         
         #USADO SOMENTE PARA OS CSV DE GRADUAÇÃO QUE POSSUEM SERIE, PARA OS OUTROS A FUNÇÃO ACABA NÃO SENDO NECESSÁRIA.
@@ -123,7 +120,6 @@ class CSVManagment:
         df_final.dropna(subset=['respostas'], inplace=True)
         df_final.to_csv(f'{dirArquivo}/CSVs/csvFiltrado.csv', index=False) 
 
-    #Criar outra rotina para CSVs de Docentes
     def insert_main_csv_to_database(collectionName: Collection, csvFileName: str) -> str:
         """
         Realiza a leitura do arquivo csv transformando ele em um dataframe temporário (OBS: Futuramente talvez seja interessante dropar esse dataframe)

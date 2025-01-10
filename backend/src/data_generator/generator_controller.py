@@ -2,18 +2,14 @@ from src.utils.dict_to_two_lists import dict_to_list
 from src.data_generator.graph.graph_generator import controller_graph_generator
 from src.data_generator.text.text_functions import compose_table
 from src.ollama.ollama import create_report
-from src.data_generator.relatorio.compor_partes_relatorio import *
-from src.data_generator.relatorio.gerar_relatorio import gerar_relatorio_por_curso
-from src.utils.ordenar_opcoes import ordenar_opcoes_dict
-from datetime import datetime, timedelta
+from datetime import datetime
 from pymongo.collection import Collection
 from pymongo.database import Database
 from pymongo.mongo_client import MongoClient
-from database.connectionDB import connection
 from pymongo.errors import OperationFailure, CursorNotFound, ConnectionFailure, InvalidOperation, DuplicateKeyError
-from src.utils.compact_and_send_zip import zip_markdown_files,enviar_email_com_anexo
 import random as rand
 import sys
+import re
 sys.stdout.reconfigure(encoding="utf-8")
 
 
@@ -193,79 +189,3 @@ def generate_graph_table_report(client: MongoClient, database_name: Database, co
     #         }  
     #     )        
 
-
-
-def gerar_todos_relatorios(collection_instrumento: Collection, collection_centro_por_ano: Collection, collection_cursos_por_centro: Collection, arquivo_intro: str, arquivo_conclusao: str, ano: int, dbName: str) -> None:
-    """
-    Gera relatório de todos os cursos.
-
-    :param collectionCurso: Nome da collection que contém as informações do csv principal.
-    :type collectionCurso: Collection (MongoDB)     
-    :param collectionCentroPorAno: Nome da collection que contém as informações sobre os centros.
-    :type: Collection (MongoDB)
-    :param CollectionCursosPorCentro: Nome da collection que contém informações sobre os cursos de um centro.
-    :type: Collection (MongoDB)
-    :param arquivo_intro: Nome do arquivo que contém o template da introdução do relatório
-    :type: String
-    :param arquivo_conclusao: Nome do arquivo que contém o template de conclusão do relatório 
-    :type arquivo_conclusao: String
-    :param ano: O ano de que será feito o relatório.
-    :type ano: Integer
-    :param dbName: Nome do banco de dados que está sendo manipulado
-    :type dbName: str
-    """
-    centros = collection_instrumento.distinct('centro_de_ensino')
-    for centro in centros:
-        gerar_relatorios_por_centro(collection_instrumento, collection_centro_por_ano, collection_cursos_por_centro, arquivo_intro, arquivo_conclusao, ano, centro, dbName)
-
-        
-
-def gerar_relatorios_por_centro(collection_instrumento: Collection, collectionCentroPorAno: Collection, collectionCursosPorCentro: Collection, arquivo_intro: str, arquivo_conclusao: str, ano: int, centro_de_ensino: str, dbName: str) -> None:
-    """
-    Gera relatórios dos cursos pertencentes a um centro.
-
-    :param collectionCurso: Nome da collection que contém as informações do csv principal.
-    :type collectionCurso: Collection (MongoDB)     
-    :param collectionCentroPorAno: Nome da collection que contém as informações sobre os centros.
-    :param CollectionCursosPorCentro: Nome da collection que contém informações sobre os cursos de um centro.
-    :type: Collection (MongoDB)
-    :param arquivo_intro: Nome do arquivo que contém o template da introdução do relatório
-    :type: String
-    :param arquivo_conclusao: Nome do arquivo que contém o template de conclusão do relatório 
-    :type arquivo_conclusao: String
-    :param ano: O ano de que será feito o relatório.
-    :type ano: Integer
-    :param centro_de_ensino: Centro de ensino escolhido para gerar os relatórios dos cursos pertencentes ao mesmo
-    :type centro_de_ensino: String
-    :param dbName: Nome do banco de dados que está sendo manipulado
-    :type dbName: str
-    """
-    compor_introducao(collectionCentroPorAno, collectionCursosPorCentro, arquivo_intro, ano, centro_de_ensino)
-    compor_conclusao(collectionCursosPorCentro, arquivo_conclusao, ano)
-
-    cursos = collection_instrumento.distinct('nm_curso', {'centro_de_ensino': centro_de_ensino})
-    print(cursos)
-    for curso in cursos:
-        gerar_relatorio_por_curso(curso, collection_instrumento, collectionCursosPorCentro, dbName)
-        cursoArquivo = f'{curso}.md'
-        substituirIdentificadores(cursoArquivo, dbName)
-    zip_markdown_files(f'./relatorio/markdowns/{dbName}/{dbName}.zip', f'./relatorio/markdowns/{dbName}')
-    # enviar_email_com_anexo(f'./relatorio/markdowns/{dbName}/{dbName}.zip','','','')
-
-
-
-# def gerarUmRelatorio(collectionCurso: Collection, collectionCentroPorAno: Collection, collectionCursosPorCentro: Collection, arquivo_intro: str, arquivo_conclusao: str, ano: int, curso: str, dbName: str): # type: ignore
-
-#     print(curso)
-#     document = collectionCurso.find_one(
-#         {'nm_curso': curso},
-#     )
-#     print(document['centro_de_ensino'])
-
-#     comporIntroducao(collectionCentroPorAno, collectionCursosPorCentro, arquivo_intro, ano, document['centro_de_ensino'])
-#     comporConclusao(collectionCursosPorCentro, arquivo_conclusao, ano)
-#     gerarRelatorioPorCurso(curso, collectionCurso, collectionCursosPorCentro, dbName)
-#     cursoArquivo = f'{curso}.md'
-#     substituirIdentificadores(cursoArquivo, dbName)
-
-    

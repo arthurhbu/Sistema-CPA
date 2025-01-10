@@ -61,7 +61,6 @@ const rejectStyle = {
 };
 
 
-
 function Importar(){
     const [files, setFiles] = useState([]);
     const [ano, setAno] = useState('');
@@ -75,7 +74,6 @@ function Importar(){
     const [isProcessing, setIsProcessing] = useState(false);
     const correctHeader = ['Nome Instrumento', 'Ano Instrumento', 'Data Inicio', 'Data Fim', 'Codigo Curso', 'Nome Curso', 'Codigo Grupo', 'Nome Grupo', 'Codigo Subgrupo', 'Nome Subgrupo', 'Codigo Disciplina', 'Disciplina', 'Turma', 'Serie', 'Ordem Pergunta', 'Codigo Pergunta', 'Pergunta', 'Ordem Opcoes', 'Opcao', 'Porcentagem', 'Respostas', 'Total do Curso']
 
-    console.log(isProcessing)
 
     useEffect(() => {
         socket.on("importacao_concluida", (data) => { 
@@ -176,6 +174,15 @@ function Importar(){
 
         await getHeaderCSV(files[0], ano)
     };
+
+    const importationType = [
+        {label: "Nenhum", value: ""},
+        {label: "Discente", value: "Discente"},
+        {label: "Docente", value: "Docente"},
+        {label: "Egresso", value: "Egresso"},
+        {label: "EAD", value: "EAD"},
+        {label: "Agente", value: "Agente"},
+    ]
 
     const confirmImportCSV = async () => { 
         setIsProcessing(true);
