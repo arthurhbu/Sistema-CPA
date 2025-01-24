@@ -2,10 +2,10 @@ services:
   servidor-ai:
     image: docker.io/ollama/ollama
     volumes:
-      - volume-ollama:/root/.ollama:rw
+      - vol-ollama:/root/.ollama:rw
     networks:
       - rede-cpa
-    
+
   mongo:
     image: docker.io/mongo
     environment:
@@ -24,8 +24,8 @@ services:
       ME_CONFIG_MONGODB_ENABLE_ADMIN: "true"
       ME_CONFIG_MONGODB_AUTH_DATABASE: admin
       ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_ROOT_USER}
-      ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_ROOT_PASSWORD} 
-      ME_CONFIG_BASICAUTH: false     
+      ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_ROOT_PASSWORD}
+      ME_CONFIG_BASICAUTH: false
     ports:
       - 8081:8081
     depends_on:
@@ -35,7 +35,7 @@ services:
 
 volumes: 
   vol-mongo:
-  volume-ollama:
+  vol-ollama:
 
 networks:
   rede-cpa:

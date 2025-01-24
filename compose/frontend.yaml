@@ -1,14 +1,13 @@
 services:
-
   flask-backend:
-    image: docker.io/uemcpa/relatorios-backend
+    image: docker.io/uemcpa/sistema-backend
     environment:  
       FLASK_ENV: development
     networks: 
       - rede-cpa
     
   react-frontend:
-    image: docker.io/uemcpa/relatorios-frontend
+    image: docker.io/uemcpa/sistema-frontend
     ports:
       - 3000:3000
     depends_on:
