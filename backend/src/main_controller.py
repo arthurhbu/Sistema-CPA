@@ -5,9 +5,10 @@ from pymongo import MongoClient
 from database.connectionDB import connectToDatabase 
 from src.csv.csv_controller import *
 from src.data_generator.generator_controller import *
-from src.relatorio import gerar_todos_relatorios, zip_markdown_files
+from src.relatorio.relatorio_controller import gerar_todos_relatorios
 from database.databaseQuerys import df_centro_por_ano,df_cursos_por_centro
 from database.databaseQuerys import update_progresso
+from src.utils.compact_and_send_zip import zip_markdown_files
 
 '''
 Controller principal onde funciona como um controlador de um repositório de funções que é usada pela api.
