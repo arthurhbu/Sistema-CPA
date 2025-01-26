@@ -1,7 +1,7 @@
 FROM docker.io/node:23 
 LABEL mainatainer="CPA <cpa@uem.br>"
 LABEL br.uem.cpa.sistema.frontend.author="Arthur Ueda"
-LABEL br.uem.cpa.sistema.frontend.version="v010"
+# LABEL br.uem.cpa.sistema.frontend.version="v010"
 WORKDIR /app
 COPY package*.json ./
 RUN npm install
