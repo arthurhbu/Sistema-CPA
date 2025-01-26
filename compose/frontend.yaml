@@ -17,5 +17,24 @@ services:
     networks: 
       - rede-cpa
 
+  conversor-pdf-backend:
+    image: quay.io/uemcpa/conversor-pdf-backend
+    networks:
+      - rede-cpa
+
+  conversor-pdf-frontend:
+    image: quay.io/uemcpa/conversor-pdf-frontend
+    volumes:
+      - conversor-pdf-frontend-data:/data:rw
+    environment:
+      - API_URL=http://conversor-pdf-backend:5000/upload
+    ports:
+      - 3001:3000
+    networks:
+      - rede-cpa
+
+volumes:
+  conversor-pdf-frontend-data:
+
 networks:
   rede-cpa:
