@@ -8,5 +8,5 @@ podman build . -t sistema-frontend:$version -t sistema-frontend:latest
 # Faz o login para enviar aos repositórios públicos
 podman login quay.io --authfile ../auth.json
 
-podman push sistema-frontend:$version quay.io/uemcpa/sistema-frontend:$version
-podman push sistema-frontend:latest quay.io/uemcpa/sistema-frontend:latest
+podman push sistema-frontend:$version quay.io/uemcpa/sistema-frontend:$version --auth=../auth.json
+podman push sistema-frontend:latest quay.io/uemcpa/sistema-frontend:latest --auth=../auth.json
