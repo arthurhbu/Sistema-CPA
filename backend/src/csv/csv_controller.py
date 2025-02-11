@@ -120,6 +120,58 @@ class CSVManagment:
         df_final.dropna(subset=['respostas'], inplace=True)
         df_final.to_csv(f'{dirArquivo}/CSVs/csvFiltrado.csv', index=False) 
 
+    def csv_filter_egressos(csvFileName) -> None:
+
+        columns_positions_toDrop_csv_cursoEcentro = [1,4,5]
+        columns_positions_toDrop_mainCsv = [0,1,2,3,5,15]
+        cabecalho = [   
+            'cd_curso', 
+            'cd_grupo',
+            'nm_grupo',
+            'cd_subgrupo',
+            'nm_subgrupo',
+            'cd_disciplina',
+            'nm_disciplina',
+            'ordem_pergunta',
+            'cd_pergunta',
+            'nm_pergunta',
+            'ordem_opcoes',
+            'opcao',
+            'respostas',
+            'total_do_curso'
+        ]
+
+        dirArquivo = CSVManagment.findPath()
+        
+        df_principal = pd.read_csv(f'{dirArquivo}/CSVs/{csvFileName}', sep=',', header = 0)
+        df_cursoCentro = pd.read_csv(f'{dirArquivo}/CSVs/cursos_e_centros.csv', sep=',', header = 0)
+
+        columns_to_drop_main_csv = df_principal.columns[columns_positions_toDrop_mainCsv]
+        df_principal = df_principal.drop(columns=columns_to_drop_main_csv)
+
+        columns_to_drop_centroEcurso_csv = df_cursoCentro.columns[columns_positions_toDrop_csv_cursoEcentro]
+        df_cursoCentro = df_cursoCentro.drop(columns=columns_to_drop_centroEcurso_csv)
+
+        df_principal.insert(5, 'cd_disciplina', 0)
+        df_principal.insert(6, 'nm_disciplina', '-')
+
+        index = 0
+        for coluna in cabecalho:
+            df_principal.rename(columns={df_principal.columns[index]: coluna}, inplace=True)
+            index+=1 
+        df_cursoCentro.rename(columns={df_cursoCentro.columns[0]: 'cd_curso'}, inplace=True)
+
+        df_final = pd.merge(df_principal, df_cursoCentro, on='cd_curso', how='outer')
+        df_final.drop_duplicates(inplace=True)
+
+        cabecalho.insert(1, 'Nome_Do_Curso')
+        cabecalho.insert(2, 'Centro_de_Ensino')
+
+        df_final = df_final[cabecalho]
+
+        df_final.dropna(subset=['respostas'], inplace=True)
+        df_final.to_csv(f'{dirArquivo}/CSVs/csvFiltrado.csv', index=False)
+    
     def insert_main_csv_to_database(collectionName: Collection, csvFileName: str) -> str:
         """
         Realiza a leitura do arquivo csv transformando ele em um dataframe temporário (OBS: Futuramente talvez seja interessante dropar esse dataframe)
@@ -235,7 +287,6 @@ class CSVManagment:
             return f"Erro no MongoDB: {e}"
         except Exception as e:
             return f"Erro inesperado: {e}"
-
 
     def insert_curso_e_centro_csv_to_database(collectionName: Collection) -> print:
         '''

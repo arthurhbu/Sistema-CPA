@@ -1,10 +1,10 @@
 # CONCLUSÕES
 
-O processo avaliativo ainda está sendo consolidado em nossa Instituição. Historicamente, a participação dos discentes no processo de avaliação interna da UEM tem se mantido num percentual abaixo do esperado. Conforme dados apontados na Tabela 1 desse relatório, em 2020, o índice de respondentes foi de 0,51%.
+O processo avaliativo ainda está sendo consolidado em nossa Instituição. Historicamente, a participação dos discentes no processo de avaliação interna da UEM tem se mantido num percentual abaixo do esperado. Conforme dados apontados na Tabela 1 desse relatório, em 2020, o índice de respondentes foi de 0,53%.
 
 A CPA tem realizado esforços no sentido de aumentar a participação, principalmente dos discentes, na avaliação interna de modo a torná-la mais efetiva e representativa.
 
-Em relação à participação dos alunos do Curso de {{curso}} na avaliação interna da UEM, temos o índice de 6,44%, em 2021.
+Em relação à participação dos alunos do Curso de {{curso}} na avaliação interna da UEM, temos o índice de 7,73%, em 2023.
 
 Cabe lembrar que os resultados dessa avaliação devem ser vistos e analisados com cuidado e atenção, tendo em vista que o índice de participação discente nos últimos anos ainda está muito abaixo do desejado, dificultando que sejam garantidas a representatividade e a imparcialidade da amostra.
 

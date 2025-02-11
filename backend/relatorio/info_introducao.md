@@ -16,7 +16,7 @@ O programa/sistema de avaliação que a CPA adota é desenvovido pelo Núcleo de
 
 Para a divulgação da avaliação discentes aos alunos, a CPA utilizou diversos meios, a rádio, a televisão, as páginas institucionais da UEM e o email institucional. Com o apoio da Diretoria de Assuntos Acadêmicos (DAA), no ano que o **Instrumento de Avaliação pelo Discente** foi aplicado considerando a realidade dos discentes de graduação.
 
-Neste relatório apresentamos, especificamente, os resultados da **Avaliação Discente do Curso de {{curso}}** relativos ao ano letivos de 2021.
+Neste relatório apresentamos, especificamente, os resultados da **Avaliação Discente do Curso de {{curso}}** relativos ao ano letivos de 2023.
 
 # METODOLOGIA
 
@@ -39,55 +39,56 @@ Ressalta-se que em cada grupo, o discente dispõe de um campo aberto para coment
 
 Os resultados relativo às sete partes do Instrumento de Avaliação pelo Discente estão organizados da seguinte forma:
 
--   percentual de respondentes em relação ao número de matriculados de acordo com os sete Centros de Ensino no ano de 2021;
+-   percentual de respondentes em relação ao número de matriculados de acordo com os sete Centros de Ensino no ano de 2023;
 
 -   percentual da participação discente na avaliação de acordo com o curso em relação ao seu Centro;
 
--   resultado da avaliação discente do curso em 2021, de acordo com os Grupos de indicadore;
+-   resultado da avaliação discente do curso em 2023, de acordo com os Grupos de indicadore;
 
 -   resultado de cada indicador no ano avaliado.
 
-## Resultados Gerais da Avaliação Discente do Curso de {{curso}} referentes ao ano letivo de 2021
+## Resultados Gerais da Avaliação Discente do Curso de {{curso}} referentes ao ano letivo de 2023
 
-No quadro 2 está sistematizado o percentual de respondentes em relação ao número de matriculados, de acordo com os sete Centros de Ensino da UEM no ano de 2021.
+No quadro 2 está sistematizado o percentual de respondentes em relação ao número de matriculados, de acordo com os sete Centros de Ensino da UEM no ano de 2023.
 
-Quadro 2 - Participantes da avaliação discente, de acordo com os Centros de Ensino, 2021.
+Quadro 2 - Participantes da avaliação discente, de acordo com os Centros de Ensino, 2023.
 
 | Sigla | Centro   | Matr. | Resp.   |  %   |
  |------|:----:|:-----:|:---:|:---:| 
-| EAD| NEAD(Ensino a Distância)| 323| 4| 1.24| 
-| CTC| Centro de Tecnologia| 3583| 256| 7.14| 
-| CCE| Centro de Ciências Exatas| 974| 55| 5.65| 
-| CCH| Centro de Ciências Humanas, Letras e Artes| 3224| 223| 6.92| 
-| CCA| Centro de Ciências Agrárias| 1209| 84| 6.95| 
-| CCB| Centro de Ciências Biológicas| 732| 68| 9.29| 
-| CSA| Centro de Ciências Sociais Aplicadas| 2778| 246| 8.86| 
-| CCS| Centro de Ciências da Saúde| 1647| 86| 5.22| 
+| CCS| Centro de Ciências da Saúde| 1557| 86| 5.52| 
+| CCH| Centro de Ciências Humanas, Letras e Artes| 3088| 223| 7.22| 
+| CCB| Centro de Ciências Biológicas| 584| 68| 11.64| 
+| CTC| Centro de Tecnologia| 3276| 256| 7.81| 
+| CSA| Centro de Ciências Sociais Aplicadas| 2702| 246| 9.1| 
+| EAD| NEAD(Ensino a Distância)| 430| 4| 0.93| 
+| CCE| Centro de Ciências Exatas| 888| 55| 6.19| 
+| CCA| Centro de Ciências Agrárias| 1164| 84| 7.22| 
 
 
 Resp.: Respondentes; Matr.: Matriculados
 
-De acordo com os dados do quadro 2, verifica-se que no ano de 2021 a média dos alunos matriculados da UEM que responderam ao **Instrumento de Avaliação pelo Discente** foi de 7,06%.
+De acordo com os dados do quadro 2, verifica-se que no ano de 2023 a média dos alunos matriculados da UEM que responderam ao **Instrumento de Avaliação pelo Discente** foi de 7,47%.
 
 O qudro 3 apresenta o número total de matrículas e o respectivo percentual de respondentes dos cursos que compõem o , dentre os quais o **Curso de {{curso}}**.
 
-Quadro 3 - Participantes da avaliação discente do , de acordo com os respectivos cursos, 2021.
+Quadro 3 - Participantes da avaliação discente do , de acordo com os respectivos cursos, 2023.
 
 | Curso |  Resp. |Matr.|   %   | 
  |------|:-----:|:-----:|:---:| 
- | Ciências Biológicas| 1| 209| 0.48| 
-| Física | 1| 95| 1.05| 
-| História  | 2| 19| 10.53| 
-| Pedagogia| 2| 393| 0.51| 
+ | Agronomia| 35| 453| 7.73| 
+| Agronomia (CAU)| 12| 177| 6.78| 
+| Engenharia Agrícola (CAR)| 8| 44| 18.18| 
+| Medicina Veterinária (CAU)| 17| 188| 9.04| 
+| Zootecnia| 12| 302| 3.97| 
  
 
 Resp.: Respondentes; Matr.: Matriculados.
 
-Na avaliação discente no ano de 2021, o índice de participação discente do **Curso de {{curso}}** foi de {{participacao_curso}}% dos alunos matriculados.
+Na avaliação discente no ano de 2023, o índice de participação discente do **Curso de {{curso}}** foi de {{participacao_curso}}% dos alunos matriculados.
 
 [^1]: Os dados dessa e das demais tabelas apresentadas neste relatório têm como fonte as informações básicas das avaliações discentes de cada ano letivo no qual o instrumento foi aplicado pela CPA.
 
-## Resultados específicos da Avaliação Discente do Curso de {{curso}} referentes ao ano letivo de 2021
+## Resultados específicos da Avaliação Discente do Curso de {{curso}} referentes ao ano letivo de 2023
 
 
 Vejamos de forma detalhada os resultados obtidos analisando cada grupo (Parte I, Parte II e Parte III) de perguntas do curso avaliado. As perguntas analisadas estão subdivididas em questionamentos mais gerais ou questionamentos relacionados a uma certa disciplina. Para as perguntas relacionadas às disciplinas, iremos apenas expor tabelas sem descrições adicionais. Para as demais perguntas, iremos expor tabelas, gráficos e uma breve descrição de seus resultados.
