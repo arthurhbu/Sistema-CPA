@@ -172,7 +172,7 @@ class CSVManagment:
         df_final.dropna(subset=['respostas'], inplace=True)
         df_final.to_csv(f'{dirArquivo}/CSVs/csvFiltrado.csv', index=False)
     
-    def insert_main_csv_to_database(collectionName: Collection, csvFileName: str) -> str:
+    def insert_main_csv_to_database(collectionName: Collection, csvFileName: str, modalidade: str) -> str:
         """
         Realiza a leitura do arquivo csv transformando ele em um dataframe temporário (OBS: Futuramente talvez seja interessante dropar esse dataframe)
         
@@ -184,13 +184,20 @@ class CSVManagment:
         :type: str
         """
         try:
-            CSVManagment.csv_filter_discentes(csvFileName)
+            
+            if modalidade == 'Discentes' or modalidade == 'EAD':
+                CSVManagment.csv_filter_discentes(csvFileName)
+            elif modalidade == 'Docentes' or modalidade == 'Técnicos':
+                CSVManagment.csv_filter_docentes_and_tecnicos(csvFileName)
+            elif modalidade == 'Egressos':
+                CSVManagment.csv_filter_egressos(csvFileName)
+            else: 
+                return 'Modalidade não encontrada'
+                
             filterCsv = 'csvFiltrado.csv'
             dirArquivo = CSVManagment.findPath()
             df = pd.read_csv(f'{dirArquivo}/CSVs/{filterCsv}', sep=',', header = 0)
 
-            print(df.columns.values)
-            #O cabeçalho terá um formato padrão para evitar erros e problemas futuros, apenas sendo necessário manter a ordem de cada coluna
             cabecalho = [
                 'cd_curso', 
                 'nm_curso', 

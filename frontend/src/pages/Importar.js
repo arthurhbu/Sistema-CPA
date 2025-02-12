@@ -8,6 +8,7 @@ import StyledInput from '../components/StyledInput';
 import UploadButton from '../components/uploadButton';
 import { Link } from 'react-router-dom';
 import { io } from 'socket.io-client'
+import SelectAutoWidth from '../components/selectAutoWidth';
 
 const socket = io("http://localhost:5000", { 
     transports: [ 'websocket', 'polling'],
@@ -72,8 +73,9 @@ function Importar(){
     const [header, setHeader] = useState([]);
     const [errorMessage, setErrorMessage] = useState('');
     const [isProcessing, setIsProcessing] = useState(false);
-    const correctHeader = ['Nome Instrumento', 'Ano Instrumento', 'Data Inicio', 'Data Fim', 'Codigo Curso', 'Nome Curso', 'Codigo Grupo', 'Nome Grupo', 'Codigo Subgrupo', 'Nome Subgrupo', 'Codigo Disciplina', 'Disciplina', 'Turma', 'Serie', 'Ordem Pergunta', 'Codigo Pergunta', 'Pergunta', 'Ordem Opcoes', 'Opcao', 'Porcentagem', 'Respostas', 'Total do Curso']
+    const [selectedCsvType, setSelectedCsvType] = useState('');
 
+    const correctHeader = ['Nome Instrumento', 'Ano Instrumento', 'Data Inicio', 'Data Fim', 'Codigo Curso', 'Nome Curso', 'Codigo Grupo', 'Nome Grupo', 'Codigo Subgrupo', 'Nome Subgrupo', 'Codigo Disciplina', 'Disciplina', 'Turma', 'Serie', 'Ordem Pergunta', 'Codigo Pergunta', 'Pergunta', 'Ordem Opcoes', 'Opcao', 'Porcentagem', 'Respostas', 'Total do Curso']
 
     useEffect(() => {
         socket.on("importacao_concluida", (data) => { 
@@ -88,6 +90,11 @@ function Importar(){
     useEffect(() => {
         checkProcessingStatus();
     }, []);
+
+    const handleSelectCsvTypeChange = (value) => {
+        setSelectedCsvType(value);
+        console.log(selectedCsvType)
+    }
 
     const {
         getRootProps, 
@@ -185,12 +192,15 @@ function Importar(){
     ]
 
     const confirmImportCSV = async () => { 
+        const formData = new FormData();
+        formData.append('ano', ano);
+        formData.append('modalidade', selectedCsvType);
         setIsProcessing(true);
         try { 
             const res = await fetch('http://localhost:5000/api/confirmarImportacao', { 
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ano})
+                body: formData
             });
             setPopupHeaderVisible(false);
             setImportStatus(res.status);
@@ -203,8 +213,8 @@ function Importar(){
 
     const handleImportSubmit = async (e) => { 
         e.preventDefault();
-        if (!ano) { 
-            console.error('Está faltando o campo ano');
+        if (!ano || !selectedCsvType) { 
+            console.error('Está faltando o campo ano ou modalidade do instrumento');
             return;
         }
         await confirmImportCSV();
@@ -227,6 +237,19 @@ function Importar(){
                 <p className={styles.infos}>
                     Insira o CSV do instrumento para que comece o processamento dos dados, nessa etapa é feito o uso de Inteligência Artificial por isso pode demorar um certo tempo para finalizar. Enquanto um instrumento está sendo processado não é possível inserir outro, pois o precesso é feito de maneira unitária. Mas é possível visualizar o progresso aqui: Acompanhe o progresso de seu csv.
                 </p>
+                <div style={{display:'flex', justifyContent:'center'}}>
+                    <div style={{backgroundColor:'#E8E8E8', borderRadius:'10px', padding:'3.5vh', marginTop:'5vh', width:'40%',display:'flex', justifyContent:'center', flexDirection: 'column'}} >
+                        <p style={{marginTop: '0', fontFamily:'Inter', fontSize:'1.4rem', fontWeight:'500', alignItems: 'center'}}>Primeiro insira a modalidade do instrumento que será processado: </p>
+                        <div style={{width: '100%', display:'flex', alignSelf:'center'}}>
+                            <SelectAutoWidth 
+                                onSelectChange={handleSelectCsvTypeChange} 
+                                label='Modal'
+                                options={importationType}  
+                                textColor={'#6C6C6C'}
+                            />
+                        </div>
+                    </div>
+                </div>
             </div>
             <div className={styles.sessionProcArq}>
                 {isProcessing && (
@@ -257,8 +280,8 @@ function Importar(){
                 <div className={styles.grid_inputInfos}>
                     <div className={styles.session_inputInfos}>
                         <div style={{width:'100%'}}>
-                            <p style={{fontFamily:'Inter', fontSize:'1.5vw', fontWeight:'500'}}>Insira o ano do relatório que será gerado: </p>
-                            <StyledInput type='number' value={ano} onChange={handleAnoChange}></StyledInput>  
+                            <p style={{fontFamily:'Inter', fontSize:'1.5rem', fontWeight:'500'}}>Insira o ano do relatório que será gerado: </p>
+                            <StyledInput style={{}} type='number' value={ano} onChange={handleAnoChange}></StyledInput>  
                         </div>
                     </div>
                     <button onClick={handleSubmit} className={styles.importarButton}>Importar</button>

@@ -15,7 +15,7 @@ Controller principal onde funciona como um controlador de um repositório de fun
 
 '''
 
-def initalize_database_inserts(database_name: Database, collection_instrumento: Collection, collection_centro_e_curso: Collection, collection_diretor_e_centro: Collection, csv_filename: str, client: MongoClient, progresso: Database, etapas: Database) -> None:
+def initalize_database_inserts(database_name: Database, collection_instrumento: Collection, collection_centro_e_curso: Collection, collection_diretor_e_centro: Collection, csv_filename: str, client: MongoClient, progresso: Database, etapas: Database, modalidade: str) -> None:
     """
     Função que junta os primeiros passos da execução do programa que seria as inserções e os realiza de uma vez.
     """
@@ -44,7 +44,7 @@ def initalize_database_inserts(database_name: Database, collection_instrumento: 
         }
     )
     
-    progresso_etapa1 = CSVManagment.insert_main_csv_to_database(collection_instrumento, csv_filename)
+    progresso_etapa1 = CSVManagment.insert_main_csv_to_database(collection_instrumento, csv_filename, modalidade)
     update_progresso(progresso, 'Insercao_Main_CSV', progresso_etapa1)
     
     progresso_etapa2 = CSVManagment.insert_curso_e_centro_csv_to_database(collection_centro_e_curso) 
@@ -116,7 +116,7 @@ def generate_reports(collection_instrumento: Collection, collection_centro_por_a
 
 
 
-def application_controller(ano: int, csv_Filename: str, modal: str, modo: str, client: MongoClient) -> None:
+def application_controller(ano: int, csv_Filename: str, modal: str, modo: str, client: MongoClient, modalidade: str) -> None:
     """
     Args:
         ano (int): Ano de referência para a operação.
@@ -141,7 +141,7 @@ def application_controller(ano: int, csv_Filename: str, modal: str, modo: str, c
     
     try: 
         if modo == 'inserir':
-            initalize_database_inserts(dbName, instrumento, cursos_e_centros, centros_e_diretores, csv_Filename, client, progresso, etapas)
+            initalize_database_inserts(dbName, instrumento, cursos_e_centros, centros_e_diretores, csv_Filename, client, progresso, etapas, modalidade)
             prepare_side_dataframes(instrumento, database, cursos_e_centros, ano, modal, progresso)
             return 'Inserção finalizada com sucesso'
         elif modo == 'gerarRelatorio':

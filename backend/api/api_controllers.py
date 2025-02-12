@@ -52,14 +52,16 @@ def setup_routes(app, client, socketio):
         '''
         global processing, filename
         ano = request.json.get('ano')
-        if filename and ano:
+        modalidade = request.json.get('modalidade')
+        print(ano, modalidade)
+        if filename and ano and modalidade:
             try: 
                 processing = True
-                socketio.start_background_task(target=processCsv, filename=filename, ano=ano)
+                socketio.start_background_task(target=processCsv, filename=filename, ano=ano, modalidade=modalidade)
                 return jsonify({'message': 'importacao iniciada com sucesso'}), 200
             except Exception as e: 
                 return jsonify({'message': 'um erro ocorreu durante a importação'}), 400
-        return jsonify({'message': 'faltando nome do arquivo ou ano'}), 400
+        return jsonify({'message': 'faltando nome do arquivo ou ano ou modalidade'}), 400
 
 
     @app.route('/progresso', methods=['GET'])
@@ -148,11 +150,11 @@ def setup_routes(app, client, socketio):
         
         return {'error': resultado}, 400
     
-    def processCsv(filename, ano):
+    def processCsv(filename, ano, modalidade):
         global processing
         try:
             with app.app_context():
-                response = application_controller(int(ano), filename, '', 'inserir', client)
+                response = application_controller(int(ano), filename, '', 'inserir', client, modalidade)
                 socketio.emit('importacao_concluida', {'status':'sucesso', 'message': f'{response}'})
         except Exception as e:
             socketio.emit('importacao_concluida', {'status': 'erro', 'message': f'Ocorreu um erro na importação: {e}'})

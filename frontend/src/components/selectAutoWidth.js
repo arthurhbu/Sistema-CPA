@@ -14,15 +14,14 @@ export default function SelectAutoWidth({ onSelectChange, label, options, textCo
   };
 
   return (
-    <div >
-      <FormControl sx={{ m: 5, minWidth: 130 }} style={{margin: '0', marginTop:'20px'}}>
+      <FormControl sx={{ m: 5, minWidth: 130}} style={{width: 'auto', margin: '0', marginTop:'20px'}}>
         <InputLabel id={`select-${label}-label`} sx={{ color: textColor }}>{label}</InputLabel>
         <Select
           labelId={`select-${label}-label`}
           id={`select-${label}`}
           value={selectedValue}
           onChange={handleChange}
-          autoWidth
+          autoWidth={true} 
           label="introConclusao"
           sx={{
             color: textColor,  // Cor do texto do Select
@@ -43,6 +42,5 @@ export default function SelectAutoWidth({ onSelectChange, label, options, textCo
           ))}
         </Select>
       </FormControl>
-    </div>
   );
 }
