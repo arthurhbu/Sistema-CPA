@@ -309,6 +309,32 @@ ul {
     text-align: start;
 }
 
+.sidebar {
+    width: 30%;
+    background: #f4f4f4;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.optionButton {
+    padding: 10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    font-size: 1rem;
+}
+
+.optionButton:hover {
+    background: #ddd;
+}
+
+.selectedButton {
+    background: #2ef092;
+    font-weight: bold;
+}
+
 /* CSS */
 .popup_confirm_button {
     margin-top: 20px;

@@ -9,6 +9,7 @@ import UploadButton from '../components/uploadButton';
 import { Link } from 'react-router-dom';
 import { io } from 'socket.io-client'
 import SelectAutoWidth from '../components/selectAutoWidth';
+import HeaderPopup from '../components/PopupHeader';
 
 const socket = io("http://localhost:5000", { 
     transports: [ 'websocket', 'polling'],
@@ -75,7 +76,17 @@ function Importar(){
     const [isProcessing, setIsProcessing] = useState(false);
     const [selectedCsvType, setSelectedCsvType] = useState('');
 
-    const correctHeader = ['Nome Instrumento', 'Ano Instrumento', 'Data Inicio', 'Data Fim', 'Codigo Curso', 'Nome Curso', 'Codigo Grupo', 'Nome Grupo', 'Codigo Subgrupo', 'Nome Subgrupo', 'Codigo Disciplina', 'Disciplina', 'Turma', 'Serie', 'Ordem Pergunta', 'Codigo Pergunta', 'Pergunta', 'Ordem Opcoes', 'Opcao', 'Porcentagem', 'Respostas', 'Total do Curso']
+    const correctHeaderDiscenteAndEad = ['Nome Instrumento', 'Ano Instrumento', 'Data Inicio', 'Data Fim', 'Codigo Curso', 'Nome Curso', 'Codigo Grupo', 'Nome Grupo', 'Codigo Subgrupo', 'Nome Subgrupo', 'Codigo Disciplina', 'Disciplina', 'Turma', 'Serie', 'Ordem Pergunta', 'Codigo Pergunta', 'Pergunta', 'Ordem Opcoes', 'Opcao', 'Porcentagem', 'Respostas', 'Total do Curso']
+
+    const correctHeaderEgresso = ['Nome Instrumento', 'Ano Instrumento', 'Data Inicio', 'Data Fim', 'Codigo Curso', 'Nome Curso', 'Codigo Grupo', 'Nome Grupo', 'Codigo Subgrupo', 'Nome Subgrupo', 'Ordem Pergunta', 'Codigo Pergunta', 'Pergunta', 'Ordem Opcoes', 'Opcao', 'Porcentagem', 'Respostas', 'Total do Curso']
+
+    const correctHeaderDocenteAndTecnicos = ['Nome Instrumento', 'Ano Instrumento', 'Data Inicio', 'Data Fim', 'Classe', 'Codigo Grupo', 'Nome Grupo', 'Codigo Subgrupo', 'Nome Subgrupo', 'Ordem Pergunta', 'Codigo Pergunta', 'Pergunta', 'Ordem Opcoes', 'Opcao', 'Porcentagem', 'Respostas', 'Total do Curso']
+
+    const headersDisponiveis = {
+        "Discente & EAD": ['Nome Instrumento', 'Ano Instrumento', 'Data Inicio', 'Data Fim', 'Codigo Curso', 'Nome Curso', 'Codigo Grupo', 'Nome Grupo', 'Codigo Subgrupo', 'Nome Subgrupo', 'Codigo Disciplina', 'Disciplina', 'Turma', 'Serie', 'Ordem Pergunta', 'Codigo Pergunta', 'Pergunta', 'Ordem Opcoes', 'Opcao', 'Porcentagem', 'Respostas', 'Total do Curso'],
+        "Egresso": ['Nome Instrumento', 'Ano Instrumento', 'Data Inicio', 'Data Fim', 'Codigo Curso', 'Nome Curso', 'Codigo Grupo', 'Nome Grupo', 'Codigo Subgrupo', 'Nome Subgrupo', 'Ordem Pergunta', 'Codigo Pergunta', 'Pergunta', 'Ordem Opcoes', 'Opcao', 'Porcentagem', 'Respostas', 'Total do Curso'],
+        "Docente & Técnicos": ['Nome Instrumento', 'Ano Instrumento', 'Data Inicio', 'Data Fim', 'Classe', 'Codigo Grupo', 'Nome Grupo', 'Codigo Subgrupo', 'Nome Subgrupo', 'Ordem Pergunta', 'Codigo Pergunta', 'Pergunta', 'Ordem Opcoes', 'Opcao', 'Porcentagem', 'Respostas', 'Total do Curso']
+    };
 
     useEffect(() => {
         socket.on("importacao_concluida", (data) => { 
@@ -192,15 +203,18 @@ function Importar(){
     ]
 
     const confirmImportCSV = async () => { 
-        const formData = new FormData();
-        formData.append('ano', ano);
-        formData.append('modalidade', selectedCsvType);
+        const data = { 
+            ano: ano, 
+            modalidade: selectedCsvType,
+        };
+
+
         setIsProcessing(true);
         try { 
             const res = await fetch('http://localhost:5000/api/confirmarImportacao', { 
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
-                body: formData
+                body: JSON.stringify(data),
             });
             setPopupHeaderVisible(false);
             setImportStatus(res.status);
@@ -290,14 +304,37 @@ function Importar(){
             </div>
 
             {popupHeaderVisible && <div className={styles.overlay}/>}
-
             {popupHeaderVisible && (
+                <HeaderPopup 
+                headerOptions={headersDisponiveis} 
+                currentHeader="Discente & EAD"
+                onClose={() => setPopupHeaderVisible(false)}
+                header={header}
+                handleImportSubmit={handleImportSubmit}
+                setPopupHeaderVisible={setPopupHeaderVisible}
+                />
+            )}
+
+            {/* {popupHeaderVisible && (
                 <div className={styles.popup_header}>
                     <p className={styles.popup_message_header}>Confira o cabeçalho do CSV para ver se está dentro dos padrões: </p>
+                    <div className={styles.sidebar}>
+                        <h3>Opções de Header</h3>
+                        {Object.keys(headersDisponiveis).map((key) => (
+                            <button
+                                key={key}
+                                className={selectedHeader === key ? styles.selectedButton : styles.optionButton}
+                                onClick={() => setSelectedHeader(key)}
+                            >
+                                {key}
+                            </button>
+                        ))}
+                    </div>
+                    
                     <div className={styles.popup_headerComparison}>
                         <div className={styles.popup_headerColumn}>
                             <p style={{fontSize:'2.4vh', marginTop:'1vh', marginBottom:'1vh', textAlign: 'start', color:'#00DC1D', fontWeight: '700'}}>Correto</p>
-                            {correctHeader.map((value) => (
+                            {correctHeaderDiscenteAndEad.map((value) => (
                                 <p className={styles.popup_HeaderValues}>{value}</p>
                             ))}
                         </div>
@@ -311,7 +348,7 @@ function Importar(){
                     <button className={styles.popup_cancel_button} onClick={() => setPopupHeaderVisible(false)}>Cancelar</button>
                     <button className={styles.popup_confirm_button} onClick={handleImportSubmit}>Confirmar</button>
                 </div>
-            )}
+            )} */}
 
             {popupErrorVisible && <div className={styles.overlay}/>}
 

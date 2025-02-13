@@ -58,7 +58,7 @@ class CSVManagment:
         print(df_principal)        
         df_principal.to_csv(f'{dirArquivo}/CSVs/csvFiltrado.csv', index=False) 
         
-    def csv_filter_discentes(csvFileName) -> None:
+    def csv_filter_discentes_and_ead(csvFileName) -> None:
         
         #USADO SOMENTE PARA OS CSV DE GRADUAÇÃO QUE POSSUEM SERIE, PARA OS OUTROS A FUNÇÃO ACABA NÃO SENDO NECESSÁRIA.
 
@@ -185,15 +185,15 @@ class CSVManagment:
         """
         try:
             
-            if modalidade == 'Discentes' or modalidade == 'EAD':
-                CSVManagment.csv_filter_discentes(csvFileName)
-            elif modalidade == 'Docentes' or modalidade == 'Técnicos':
+            if modalidade == 'Discente' or modalidade == 'EAD':
+                CSVManagment.csv_filter_discentes_and_ead(csvFileName)
+            elif modalidade == 'Docente' or modalidade == 'Agente':
                 CSVManagment.csv_filter_docentes_and_tecnicos(csvFileName)
-            elif modalidade == 'Egressos':
+            elif modalidade == 'Egresso':
                 CSVManagment.csv_filter_egressos(csvFileName)
             else: 
                 return 'Modalidade não encontrada'
-                
+            
             filterCsv = 'csvFiltrado.csv'
             dirArquivo = CSVManagment.findPath()
             df = pd.read_csv(f'{dirArquivo}/CSVs/{filterCsv}', sep=',', header = 0)
