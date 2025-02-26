@@ -73,7 +73,7 @@ function Home(){
     useEffect(() => {
         const fetchDatabase = async () => { 
             try { 
-                // const res = await fetch('http://localhost:5000/api/instrumentos');
+                // const res = await fetch(`${process.env.REACT_APP_API_URL}/api/instrumentos`);
                 const res = await fetch(`${process.env.REACT_APP_API_URL}/api/instrumentos`);
 
                 const instrumentosDisponiveis = await res.json();

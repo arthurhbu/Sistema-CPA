@@ -19,10 +19,9 @@ services:
         - "3000:3000"
       volumes:
         - ./frontend:/app
-      depends_on:
-        - flask-backend
       environment: 
         - WATCHPACK_POLLING=true
+        - BACKEND=${BACKEND}
       networks:
         - backend-network
 

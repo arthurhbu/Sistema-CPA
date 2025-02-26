@@ -13,7 +13,7 @@ const Processo = () => {
 
     const checkStatus = useCallback(async () => { 
         try {
-            const response = await fetch('http://localhost:5000/progresso');
+            const response = await fetch(`${process.env.REACT_APP_BACKEND}/progresso`);
             if (!response.ok) {
                 throw new Error('Erro ao buscar o status do processo');
             }

@@ -11,9 +11,9 @@ from pymongo import MongoClient
 
 app = Flask(__name__)
 
-CORS(app, resources={r"/*": {"origins": ["http://react-frontend:3000", "http://localhost:3000"]}})
+CORS(app, resources={r"/*": {"origins": "*"}})
 
-socketio = SocketIO(app, cors_allowed_origins=["http://react-frontend:3000", "http://localhost:3000"])
+socketio = SocketIO(app, cors_allowed_origins="*")
 
 dbConfig: dict = readDBConfig()
 client: MongoClient = connection(dbConfig)

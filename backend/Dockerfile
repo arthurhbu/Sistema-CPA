@@ -11,4 +11,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 EXPOSE 5000
 
-ENTRYPOINT ["python","-u", "app.py"]
+ENTRYPOINT ["python","-u", "/app/app.py"]

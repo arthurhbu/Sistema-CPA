@@ -11,7 +11,12 @@ import { io } from 'socket.io-client'
 import SelectAutoWidth from '../components/selectAutoWidth';
 import HeaderPopup from '../components/PopupHeader';
 
-const socket = io("http://localhost:5000", { 
+
+console.log(process.env);
+
+console.log("API URL:", process.env.REACT_APP_BACKEND); // Debugging line to check the BACKEND variable
+const socket = io(process.env.REACT_APP_BACKEND, {
+
     transports: [ 'websocket', 'polling'],
     withCredentials: true,
 })
@@ -98,9 +103,19 @@ function Importar(){
         };
     }, []);
 
-    useEffect(() => {
-        checkProcessingStatus();
-    }, []);
+const checkProcessingStatus = async () => { 
+    try {
+        const response = await fetch(`${process.env.REACT_APP_BACKEND}/progresso`);
+        const data = await response.json();
+        setIsProcessing(data.processing);
+    } catch (error) {
+        console.error('Erro ao verificar status de processamento', error);
+    }
+};
+
+useEffect(() => {
+    checkProcessingStatus();
+}, []);
 
     const handleSelectCsvTypeChange = (value) => {
         setSelectedCsvType(value);
@@ -159,7 +174,8 @@ function Importar(){
         formData.append('file', file)
         formData.append('ano', ano)
         try{
-            const res = await fetch('http://localhost:5000/api/importar', {
+            console.log("Fetching from:", `${process.env.REACT_APP_BACKEND}/api/importar`); // Debugging line to check the fetch URL
+            const res = await fetch(`${process.env.REACT_APP_BACKEND}/api/importar`, {
                 method: 'POST',
                 body: formData,
                 headers: { 
@@ -181,17 +197,35 @@ function Importar(){
         }
     };
 
-    const handleSubmit = async (e) => { 
-        e.preventDefault();
-        if(!files.length || !ano) { 
-            setErrorMessage('Preencha todos os campos antes de importar!');
-            return;
+const handleSubmit = async (e) => { 
+    e.preventDefault();
+    if(!files.length || !ano) { 
+        setErrorMessage('Preencha todos os campos antes de importar!');
+        return;
+    }
+    
+    const formData = new FormData();
+    formData.append('file', files[0]);
+    formData.append('ano', ano);
+    
+    try {
+        const res = await fetch(`${process.env.REACT_APP_BACKEND}/api/importar`, {
+            method: 'POST',
+            body: formData,
+        });
+        const data = await res.json();
+        if (data.error === '') {
+            setHeader(data.header);
+            setPopupHeaderVisible(true);
+        } else {
+            setPopupErrorVisible(true);
+            setErrorMessage(data.error);
         }
-        console.log("Arquivo sendo enviado: ", files[0])
+    } catch (error) {
+        console.error('Erro ao tentar fazer requisição', error);
+    }
+};
 
-
-        await getHeaderCSV(files[0], ano)
-    };
 
     const importationType = [
         {label: "Nenhum", value: ""},
@@ -202,49 +236,36 @@ function Importar(){
         {label: "Agente", value: "Agente"},
     ]
 
-    const confirmImportCSV = async () => { 
-        const data = { 
-            ano: ano, 
-            modalidade: selectedCsvType,
-        };
-
-
-        setIsProcessing(true);
-        try { 
-            const res = await fetch('http://localhost:5000/api/confirmarImportacao', { 
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(data),
-            });
-            setPopupHeaderVisible(false);
-            setImportStatus(res.status);
-            setPopupImportMessage(res.response);
-            setPopupImportVisible(true);
-        } catch (error) { 
-            console.error(error);
-        } 
-    }
-
-    const handleImportSubmit = async (e) => { 
-        e.preventDefault();
-        if (!ano || !selectedCsvType) { 
-            console.error('Está faltando o campo ano ou modalidade do instrumento');
-            return;
-        }
-        await confirmImportCSV();
-    }
-
-    const checkProcessingStatus = async () => { 
-        try {
-        const response = await fetch('http://localhost:5000/progresso');
-            const data = await response.json();
-            setIsProcessing(data.processing) 
-        } catch(error) { 
-            console.error('Erro ao verificar status de processamento', error);
-        }
+const confirmImportCSV = async () => { 
+    const data = { 
+        ano: ano, 
+        modalidade: selectedCsvType,
     };
 
-    return(
+    setIsProcessing(true);
+    try { 
+        const res = await fetch(`${process.env.REACT_APP_BACKEND}/api/confirmarImportacao`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(data),
+        });
+        const result = await res.json();
+        setPopupHeaderVisible(false);
+        setImportStatus(res.status);
+        setPopupImportMessage(result.message);
+        setPopupImportVisible(true);
+    } catch (error) { 
+        console.error(error);
+    } 
+};
+
+
+const handleImportSubmit = async () => {
+    // Logic to handle the import submission
+    await confirmImportCSV();
+};
+
+return (
         <div className={styles.importar}>
             <div className={styles.intro}>
                 <p className={styles.titulo}>Inserir Arquivo</p>
@@ -382,4 +403,4 @@ function Importar(){
     );
 }
 
-export default Importar
+export default Importar;
