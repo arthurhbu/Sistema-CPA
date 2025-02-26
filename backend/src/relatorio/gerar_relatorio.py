@@ -74,8 +74,8 @@ def gerar_relatorio_por_curso(curso_escolhido, collection_instrumento, collectio
             if document['nm_disciplina'] == '-':
                 pergunta_formatada = re.sub(r"^\d+\.\d+-\s*",'',document["nm_pergunta"])
                 print(f'**Pergunta: {pergunta_formatada}**\n', file=arquivo)
-                arquivo.write(f"![{document['nm_pergunta']}]({document['path']}.png '{document['nm_pergunta']}')")
-                print('<p style="text-align: center; color: grey;"> Figura index_ </p>', file=arquivo)
+                arquivo.write(f"![{document['nm_pergunta']}]({document['path']}.png)")
+                print(f'<p style="text-align: center; color: #E2E1E1;"> Figura index_ - {document['nm_pergunta']} </p>', file=arquivo)
                 print('\n', file=arquivo)
                 print(f"Tabela index_ \n", file=arquivo)
                 arquivo.write(document['tabela'])
