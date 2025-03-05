@@ -191,5 +191,27 @@ def substituirIdentificadores(filename: str, dbName: str):
     
     with open(f'./relatorio/markdowns/{dbName}/{filename}', 'w', encoding='utf-8') as file:
         file.write(new_content)
+        
+def replace_reference_in_caption(caption_from_ai: str, index: int) -> str:
+    """
+    Substitui a referência index_ da legenda gerada pela AI por um valor que será usada na geração de PDF utilizando o pandoc.
+    """
 
+    substitions = { 
+        "Index_": "index_",
+        "tabela": "Tabela",
+        "Figura": "figura"
+    }
 
+    substitions_to_pandoc_format = {
+        "Tabela index_": f'[@tbl:tabela{index}]',
+        "figura index_": f'[@fig:figura{index}]',
+    }
+
+    pattern = re.compile("|".join(map(re.escape, substitions.keys())))
+    pattern_to_sub = re.compile("|".join(map(re.escape, substitions_to_pandoc_format.keys())))
+
+    default_caption = pattern.sub(lambda match: substitions[match.group(0)], caption_from_ai)
+    formated_caption = pattern_to_sub.sub(lambda match: substitions_to_pandoc_format[match.group(0)], default_caption)
+
+    return formated_caption
