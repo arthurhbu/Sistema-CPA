@@ -3,10 +3,11 @@ import re
 import sys
 from src.utils.ponto_2_virgula import ponto_2_virgula
 from pathlib import Path
+from src.relatorio.compor_partes_relatorio import replace_reference_in_caption
 
 sys.stdout.reconfigure(encoding="utf-8")
 
-def gerar_relatorio_por_curso(curso_escolhido, collection_instrumento, collection_cursos_por_centro, dbName: str):
+def gerarRelatorioPorCurso(curso_escolhido, collectionCurso, collectionCursosPorCentro, dbName: str):
     """
     Gerar um relatório de apenas um curso.
 
@@ -22,7 +23,6 @@ def gerar_relatorio_por_curso(curso_escolhido, collection_instrumento, collectio
     """
 
 
-    #Talvez separar parte inicial para virar uma função compor capa
     
     directory = Path(f'relatorio/markdowns/{dbName}')
     directory.mkdir(parents=True, exist_ok=True)
@@ -35,30 +35,29 @@ def gerar_relatorio_por_curso(curso_escolhido, collection_instrumento, collectio
 
         arquivo.write("---\n")
         arquivo.write("title: \"Relatório do Curso de {}\"\n".format(curso_escolhido))
-        arquivo.write("titlepage: true\n")
-        arquivo.write("titlepage-background: \"capa\"\n")
-        arquivo.write("titlepage-rule-color: \"B3B3B3\"\n")
-        arquivo.write("page-background: \"interna02\"\n")
-        arquivo.write("page-background-opacity: '1.0'\n")
-        arquivo.write("author: [CPA-Comissão Própria de Avaliação]\n")
-        arquivo.write("lang: \"pt-BR\"\n")
         arquivo.write("---\n\n")
 
-        #Precisa criar a função que compõe a introdução
         with open("relatorio/info_introducao.md",'r', encoding='utf-8') as f:
             template_introducao = f.read()
         renderer = pystache.Renderer()
         participacao_curso = 0.0
-        for document in collection_cursos_por_centro.find({'nm_curso': curso_escolhido}):
+        for document in collectionCursosPorCentro.find({'nm_curso': curso_escolhido}):
             participacao_curso = document['porcentagem']
         intro = renderer.render(template_introducao, {'curso': curso_escolhido, 'participacao_curso': participacao_curso})
         arquivo.write(f'{intro} \n')
 
-        codGrupo = []
-        codSubgrupo = []
+        codGrupo: list = []
+        codSubgrupo: list = []
+        codDisciplina: list = []
 
-        for document in collection_instrumento.find({'nm_curso': curso_escolhido}).sort({'cd_grupo': 1, 'cd_subgrpo': 1}):
+        contador: int = 0
+        print(curso_escolhido)
+
+        for document in collectionCurso.find({'nm_curso': curso_escolhido}).sort({'cd_grupo': 1, 'cd_subgrupo': 1}):
             
+
+            captionToPandoc = replace_reference_in_caption(document['relatorioGraficoAI'], contador)
+
             if document['cd_grupo'] not in codGrupo:
                 print('\n',file=arquivo)
                 arquivo.write(f"## {document['nm_grupo']}")
@@ -72,25 +71,33 @@ def gerar_relatorio_por_curso(curso_escolhido, collection_instrumento, collectio
                 codSubgrupo.append(document['cd_subgrupo'])
 
             if document['nm_disciplina'] == '-':
-                pergunta_formatada = re.sub(r"^\d+\.\d+-\s*",'',document["nm_pergunta"])
-                print(f'**Pergunta: {pergunta_formatada}**\n', file=arquivo)
-                arquivo.write(f"![{document['nm_pergunta']}]({document['path']}.png)")
-                print(f'<p style="text-align: center; color: #E2E1E1;"> Figura index_ - {document['nm_pergunta']} </p>', file=arquivo)
+                pergunta_formatada: str = re.sub(r"^\d+\.\d+-\s*",'',document["nm_pergunta"])
+                print(f'#### **Pergunta: {pergunta_formatada}**\n', file=arquivo)
+                arquivo.write(f"![{document['nm_pergunta']}:]({document['path']}.png) {{#fig:figura{contador}}}")
                 print('\n', file=arquivo)
-                print(f"Tabela index_ \n", file=arquivo)
+                print(f': Tabela com dados referentes à pergunta apresentada. {{#tbl:tabela{contador}}} \n', file=arquivo)
                 arquivo.write(document['tabela'])
                 arquivo.write('\n')
                 print(' ', file=arquivo)
-                print(document['relatorioGraficoAI'], file=arquivo)
+                print(captionToPandoc, file=arquivo)
                 arquivo.write('\n')
                 arquivo.write('\n')
-                # print(f"Edição da pergunta {document['cd_pergunta']} do subgrupo {document['cd_subgrupo']} do curso {document['nm_curso']} concluida com sucesso!")
+                contador += 1
                 continue
             
+            if document['cd_disciplina'] not in codDisciplina:
+                print('\n', file=arquivo)
+                arquivo.write(f"Considerando a disciplina **{document['nm_disciplina']}**, temos os seguintes resultados expressos por tabelas.")
+                print('\n', file=arquivo)
+                codDisciplina.append(document['cd_disciplina'])
+
             print('\n', file=arquivo)
-            print(f"Tabela indexDisciplina - Resultado do item: {document['nm_pergunta']} \n", file=arquivo)
+            print(f"{{#tbl:tabela{contador}}} - Resultado do item: {document['nm_pergunta']} \n", file=arquivo)
             arquivo.write(document['tabela'])
             print('\n', file=arquivo)
+
+            contador += 1 
+            print('contador: ', contador)
 
         with open("relatorio/info_conclusao.md",'r',encoding='utf-8') as f:
             template_conclusao = f.read()
