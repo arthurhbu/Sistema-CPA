@@ -15,8 +15,8 @@ import HeaderPopup from '../components/PopupHeader';
 console.log(process.env);
 
 console.log("API URL:", process.env.REACT_APP_BACKEND); // Debugging line to check the BACKEND variable
-const socket = io(process.env.REACT_APP_BACKEND, {
 
+const socket = io(process.env.REACT_APP_BACKEND, {
     transports: [ 'websocket', 'polling'],
     withCredentials: true,
 })
@@ -93,34 +93,42 @@ function Importar(){
         "Docente & Técnicos": ['Nome Instrumento', 'Ano Instrumento', 'Data Inicio', 'Data Fim', 'Classe', 'Codigo Grupo', 'Nome Grupo', 'Codigo Subgrupo', 'Nome Subgrupo', 'Ordem Pergunta', 'Codigo Pergunta', 'Pergunta', 'Ordem Opcoes', 'Opcao', 'Porcentagem', 'Respostas', 'Total do Curso']
     };
 
-    useEffect(() => {
-        socket.on("importacao_concluida", (data) => { 
-            setIsProcessing(false)
-        }); 
+    // useEffect(() => {
+    //     socket.on("importacao_concluida", (data) => { 
+    //         setIsProcessing(false)
+    //     }); 
 
-        return () => { 
-            socket.off("importacao_concluida");
-        };
+    //     return () => { 
+    //         socket.off("importacao_concluida");
+    //     };
+    // }, []);
+
+    useEffect(() => { 
+        const interval = setInterval(() => {
+            checkProcessingStatus();
+        }, 5000);
+
+        return () => clearInterval(interval);
     }, []);
 
-const checkProcessingStatus = async () => { 
-    try {
-        const response = await fetch(`${process.env.REACT_APP_BACKEND}/progresso`);
-        const data = await response.json();
-        setIsProcessing(data.processing);
-    } catch (error) {
-        console.error('Erro ao verificar status de processamento', error);
-    }
-};
+    const checkProcessingStatus = async () => { 
+        try {
+            const response = await fetch(`${process.env.REACT_APP_BACKEND}/progresso`);
+            const data = await response.json();
+            setIsProcessing(data.processing);
+        } catch (error) {
+            console.error('Erro ao verificar status de processamento', error);
+        }
+    };
 
-useEffect(() => {
-    checkProcessingStatus();
-}, []);
+    useEffect(() => {
+        checkProcessingStatus();
+    }, []);
 
-    const handleSelectCsvTypeChange = (value) => {
-        setSelectedCsvType(value);
-        console.log(selectedCsvType)
-    }
+        const handleSelectCsvTypeChange = (value) => {
+            setSelectedCsvType(value);
+            console.log(selectedCsvType)
+        }
 
     const {
         getRootProps, 
@@ -197,34 +205,34 @@ useEffect(() => {
         }
     };
 
-const handleSubmit = async (e) => { 
-    e.preventDefault();
-    if(!files.length || !ano) { 
-        setErrorMessage('Preencha todos os campos antes de importar!');
-        return;
-    }
-    
-    const formData = new FormData();
-    formData.append('file', files[0]);
-    formData.append('ano', ano);
-    
-    try {
-        const res = await fetch(`${process.env.REACT_APP_BACKEND}/api/importar`, {
-            method: 'POST',
-            body: formData,
-        });
-        const data = await res.json();
-        if (data.error === '') {
-            setHeader(data.header);
-            setPopupHeaderVisible(true);
-        } else {
-            setPopupErrorVisible(true);
-            setErrorMessage(data.error);
+    const handleSubmit = async (e) => { 
+        e.preventDefault();
+        if(!files.length || !ano) { 
+            setErrorMessage('Preencha todos os campos antes de importar!');
+            return;
         }
-    } catch (error) {
-        console.error('Erro ao tentar fazer requisição', error);
-    }
-};
+        
+        const formData = new FormData();
+        formData.append('file', files[0]);
+        formData.append('ano', ano);
+        
+        try {
+            const res = await fetch(`${process.env.REACT_APP_BACKEND}/api/importar`, {
+                method: 'POST',
+                body: formData,
+            });
+            const data = await res.json();
+            if (data.error === '') {
+                setHeader(data.header);
+                setPopupHeaderVisible(true);
+            } else {
+                setPopupErrorVisible(true);
+                setErrorMessage(data.error);
+            }
+        } catch (error) {
+            console.error('Erro ao tentar fazer requisição', error);
+        }
+    };
 
 
     const importationType = [
@@ -236,34 +244,34 @@ const handleSubmit = async (e) => {
         {label: "Agente", value: "Agente"},
     ]
 
-const confirmImportCSV = async () => { 
-    const data = { 
-        ano: ano, 
-        modalidade: selectedCsvType,
+    const confirmImportCSV = async () => { 
+        const data = { 
+            ano: ano, 
+            modalidade: selectedCsvType,
+        };
+
+        setIsProcessing(true);
+        try { 
+            const res = await fetch(`${process.env.REACT_APP_BACKEND}/api/confirmarImportacao`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(data),
+            });
+            const result = await res.json();
+            setPopupHeaderVisible(false);
+            setImportStatus(res.status);
+            setPopupImportMessage(result.message);
+            setPopupImportVisible(true);
+        } catch (error) { 
+            console.error(error);
+        } 
     };
 
-    setIsProcessing(true);
-    try { 
-        const res = await fetch(`${process.env.REACT_APP_BACKEND}/api/confirmarImportacao`, {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify(data),
-        });
-        const result = await res.json();
-        setPopupHeaderVisible(false);
-        setImportStatus(res.status);
-        setPopupImportMessage(result.message);
-        setPopupImportVisible(true);
-    } catch (error) { 
-        console.error(error);
-    } 
-};
 
-
-const handleImportSubmit = async () => {
-    // Logic to handle the import submission
-    await confirmImportCSV();
-};
+    const handleImportSubmit = async () => {
+        // Logic to handle the import submission
+        await confirmImportCSV();
+    };
 
 return (
         <div className={styles.importar}>
@@ -335,41 +343,6 @@ return (
                 setPopupHeaderVisible={setPopupHeaderVisible}
                 />
             )}
-
-            {/* {popupHeaderVisible && (
-                <div className={styles.popup_header}>
-                    <p className={styles.popup_message_header}>Confira o cabeçalho do CSV para ver se está dentro dos padrões: </p>
-                    <div className={styles.sidebar}>
-                        <h3>Opções de Header</h3>
-                        {Object.keys(headersDisponiveis).map((key) => (
-                            <button
-                                key={key}
-                                className={selectedHeader === key ? styles.selectedButton : styles.optionButton}
-                                onClick={() => setSelectedHeader(key)}
-                            >
-                                {key}
-                            </button>
-                        ))}
-                    </div>
-                    
-                    <div className={styles.popup_headerComparison}>
-                        <div className={styles.popup_headerColumn}>
-                            <p style={{fontSize:'2.4vh', marginTop:'1vh', marginBottom:'1vh', textAlign: 'start', color:'#00DC1D', fontWeight: '700'}}>Correto</p>
-                            {correctHeaderDiscenteAndEad.map((value) => (
-                                <p className={styles.popup_HeaderValues}>{value}</p>
-                            ))}
-                        </div>
-                        <div className={styles.popup_headerColumn}>
-                            <p style={{fontSize:'2.4vh', marginTop:'1vh', marginBottom:'1vh', textAlign: 'start', fontWeight:'700'}}>Do CSV importado</p>
-                            {header?.map((col,index) => (
-                                <p className={styles.popup_HeaderValues} key={index}>{col}</p>
-                            ))}
-                        </div>
-                    </div>
-                    <button className={styles.popup_cancel_button} onClick={() => setPopupHeaderVisible(false)}>Cancelar</button>
-                    <button className={styles.popup_confirm_button} onClick={handleImportSubmit}>Confirmar</button>
-                </div>
-            )} */}
 
             {popupErrorVisible && <div className={styles.overlay}/>}
 

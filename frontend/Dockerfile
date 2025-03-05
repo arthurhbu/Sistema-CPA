@@ -3,7 +3,7 @@ LABEL mainatainer="CPA <cpa@uem.br>"
 LABEL br.uem.cpa.sistema.frontend.author="Arthur Ueda"
 # LABEL br.uem.cpa.sistema.frontend.version="v010"
 WORKDIR /app
-COPY package*.json ./
+COPY package.json package-lock.json ./
 RUN npm install
 RUN npm upgrade
 COPY . .

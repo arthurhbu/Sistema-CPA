@@ -7,7 +7,7 @@ from src.relatorio.compor_partes_relatorio import replace_reference_in_caption
 
 sys.stdout.reconfigure(encoding="utf-8")
 
-def gerarRelatorioPorCurso(curso_escolhido, collectionCurso, collectionCursosPorCentro, dbName: str):
+def gerar_relatorio_por_curso(curso_escolhido, collectionCurso, collectionCursosPorCentro, dbName: str):
     """
     Gerar um relatório de apenas um curso.
 
@@ -21,8 +21,6 @@ def gerarRelatorioPorCurso(curso_escolhido, collectionCurso, collectionCursosPor
     :param dbName: Nome do banco de dados que está sendo manipulado
     :type dbName: str
     """
-
-
     
     directory = Path(f'relatorio/markdowns/{dbName}')
     directory.mkdir(parents=True, exist_ok=True)

@@ -2,6 +2,8 @@ from flask import request, jsonify
 from api.utils_api import converteObjectIDToStr, removeKeys
 from src.main_controller import list_databases,get_etapas,atualiza_etapa,application_controller,get_progresso_insercao
 import os, csv
+import threading
+import time
 
 filename: str = ''
 processing: bool = False
@@ -55,12 +57,15 @@ def setup_routes(app, client, socketio):
         modalidade = request.json.get('modalidade')
         print(ano, modalidade)
         if filename and ano and modalidade:
-            try: 
-                processing = True
-                socketio.start_background_task(target=processCsv, filename=filename, ano=ano, modalidade=modalidade)
-                return jsonify({'message': 'importacao iniciada com sucesso'}), 200
-            except Exception as e: 
-                return jsonify({'message': 'um erro ocorreu durante a importação'}), 400
+            if processing: 
+                return jsonify({'message': 'Importação já em andamento'}), 400
+            
+            processing = True
+            thread = threading.Thread(target=processCsv, args=(filename, ano, modalidade))
+            thread.start()
+            
+            print('Thread iniciada')
+            return jsonify({'message': 'Importação iniciada com sucesso'}), 200
         return jsonify({'message': 'faltando nome do arquivo ou ano ou modalidade'}), 400
 
 
@@ -78,6 +83,7 @@ def setup_routes(app, client, socketio):
             progresso = get_progresso_insercao(filename, client)
             progresso = converteObjectIDToStr(progresso)  
             progresso = removeKeys(progresso, ['_id', 'instrumento'])
+            
         return {'processing': processing, 'file': filename, 'progresso': progresso}, 200
 
 
@@ -155,8 +161,9 @@ def setup_routes(app, client, socketio):
         try:
             with app.app_context():
                 response = application_controller(int(ano), filename, '', 'inserir', client, modalidade)
-                socketio.emit('importacao_concluida', {'status':'sucesso', 'message': f'{response}'})
+                print(f'Processamento concluido: {response}')
         except Exception as e:
-            socketio.emit('importacao_concluida', {'status': 'erro', 'message': f'Ocorreu um erro na importação: {e}'})
+            print(f'Erro no processamento: {e}')
         finally: 
+            time.sleep(2)
             processing = False
