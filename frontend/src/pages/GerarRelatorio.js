@@ -31,6 +31,7 @@ function GerarRelatorio(){
         {label: 'EAD', value: 'EAD'},
         {label: 'Docente', value: 'Docente'},
         {label: 'Agente', value: 'Agente'},
+        {label: 'Pos', value: 'Pos'},
     ];
 
     const listDatabases = []
