@@ -19,6 +19,55 @@ class CSVManagment:
         path = Path(__file__).parent.resolve()
         return path
     
+    def csv_filter_pos_graduacao(csvFileName) -> None:
+        columns_positions_toDrop_mainCsv = [0,1,2,3,5,6,7,22]
+        cabecalho = [   
+            'cd_curso',
+            'nm_curso',
+            'centro_de_ensino',
+            'cd_grupo',
+            'nm_grupo',
+            'cd_subgrupo',
+            'nm_subgrupo',
+            'cd_disciplina',
+            'nm_disciplina',
+            'ordem_pergunta',
+            'cd_pergunta',
+            'nm_pergunta',
+            'ordem_opcoes',
+            'opcao',
+            'respostas',
+            'total_do_curso',
+        ]
+
+        dir_arquivo = CSVManagment.findPath()
+
+        df_principal = pd.read_csv(f'{dir_arquivo}/CSVs/{csvFileName}', sep=',', header = 0)
+
+
+        columns_to_drop_main_csv = df_principal.columns[columns_positions_toDrop_mainCsv]
+        df_principal = df_principal.drop(columns=columns_to_drop_main_csv)
+
+
+        df_principal.iloc[:, 2] = df_principal.apply(lambda row: f"{row.iloc[3]} em {row.iloc[2]}", axis=1)
+
+        columns = df_principal.columns[3]
+        df_principal = df_principal.drop(columns=[columns])
+
+        colums_df = list(df_principal.columns)
+        colums_df[0], colums_df[1] = colums_df[1], colums_df[0]
+        colums_df[1], colums_df[2] = colums_df[2], colums_df[1]
+
+        df_principal = df_principal[colums_df]
+
+        index = 0
+        for coluna in cabecalho:
+            df_principal.rename(columns={df_principal.columns[index]: coluna}, inplace=True)
+            index+=1 
+
+        df_principal.dropna(subset=['respostas'], inplace=True)
+        df_principal.to_csv(f'{dir_arquivo}/CSVs/csvFiltrado.csv', index=False)
+    
     def csv_filter_docentes_and_tecnicos(csvFileName) -> None:
         cabecalho = [   
             'cd_grupo',

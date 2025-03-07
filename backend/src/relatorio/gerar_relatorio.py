@@ -69,9 +69,9 @@ def gerar_relatorio_por_curso(curso_escolhido, collectionCurso, collectionCursos
                 codSubgrupo.append(document['cd_subgrupo'])
 
             if document['nm_disciplina'] == '-':
-                pergunta_formatada: str = re.sub(r"^\d+\.\d+-\s*",'',document["nm_pergunta"])
+                pergunta_formatada: str = re.sub(r"^\s*\d+\.\d+\s*-\s*",'',document["nm_pergunta"]).strip()
                 print(f'#### **Pergunta: {pergunta_formatada}**\n', file=arquivo)
-                arquivo.write(f"![{document['nm_pergunta']}:]({document['path']}.png) {{#fig:figura{contador}}}")
+                arquivo.write(f"![{document['nm_pergunta']}:]({document['path']}.png){{#fig:figura{contador}}}")
                 print('\n', file=arquivo)
                 print(f': Tabela com dados referentes à pergunta apresentada. {{#tbl:tabela{contador}}} \n', file=arquivo)
                 arquivo.write(document['tabela'])
