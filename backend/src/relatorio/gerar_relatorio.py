@@ -51,8 +51,7 @@ def gerar_relatorio_por_curso(curso_escolhido, collectionCurso, collectionCursos
         contador: int = 0
         print(curso_escolhido)
 
-        for document in collectionCurso.find({'nm_curso': curso_escolhido}).sort({'cd_grupo': 1, 'cd_subgrupo': 1}):
-            
+        for document in collectionCurso.find({'nm_curso': curso_escolhido}).sort({'cd_grupo': 1, 'cd_subgrupo': 1, 'ordem_pergunta': 1}):
 
             captionToPandoc = replace_reference_in_caption(document['relatorioGraficoAI'], contador)
 

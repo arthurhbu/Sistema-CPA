@@ -50,7 +50,7 @@ function GerarRelatorio(){
         formData.append('instrumento', instrumento);
 
         try { 
-            const res = await fetch(`${process.env.REACT_APP_API_URL}/api/gerarRelatorios`, {
+            const res = await fetch(`${process.env.REACT_APP_BACKEND}/api/gerarRelatorios`, {
 
                 method: 'POST',
                 body: formData
@@ -84,7 +84,7 @@ function GerarRelatorio(){
     useEffect(() => {
         const fetchDatabase = async () => { 
             try { 
-                const res = await fetch(`${process.env.REACT_APP_API_URL}/api/instrumentos`);
+                const res = await fetch(`${process.env.REACT_APP_BACKEND}/api/instrumentos`);
 
                 const instrumentosDisponiveis = await res.json();
                 setDatabases(instrumentosDisponiveis)

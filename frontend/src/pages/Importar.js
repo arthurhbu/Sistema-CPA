@@ -16,10 +16,10 @@ console.log(process.env);
 
 console.log("API URL:", process.env.REACT_APP_BACKEND); // Debugging line to check the BACKEND variable
 
-const socket = io(process.env.REACT_APP_BACKEND, {
-    transports: [ 'websocket', 'polling'],
-    withCredentials: true,
-})
+// const socket = io(process.env.REACT_APP_BACKEND, {
+//     transports: [ 'websocket', 'polling'],
+//     withCredentials: true,
+// })
 
 const iconStyle = { 
     color: '#2ef092',
@@ -92,6 +92,10 @@ function Importar(){
         "Egresso": ['Nome Instrumento', 'Ano Instrumento', 'Data Inicio', 'Data Fim', 'Codigo Curso', 'Nome Curso', 'Codigo Grupo', 'Nome Grupo', 'Codigo Subgrupo', 'Nome Subgrupo', 'Ordem Pergunta', 'Codigo Pergunta', 'Pergunta', 'Ordem Opcoes', 'Opcao', 'Porcentagem', 'Respostas', 'Total do Curso'],
         "Docente & Técnicos": ['Nome Instrumento', 'Ano Instrumento', 'Data Inicio', 'Data Fim', 'Classe', 'Codigo Grupo', 'Nome Grupo', 'Codigo Subgrupo', 'Nome Subgrupo', 'Ordem Pergunta', 'Codigo Pergunta', 'Pergunta', 'Ordem Opcoes', 'Opcao', 'Porcentagem', 'Respostas', 'Total do Curso']
     };
+
+    console.log(process.env);
+
+    console.log("API URL:", process.env.REACT_APP_BACKEND);
 
     // useEffect(() => {
     //     socket.on("importacao_concluida", (data) => { 

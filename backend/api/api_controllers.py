@@ -12,7 +12,7 @@ UPLOAD_FOLDER = 'src/csv/CSVs'
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
 
-def setup_routes(app, client, socketio): 
+def setup_routes(app, client): 
     
     @app.route('/api/importar', methods=["POST"])
     def importCsv():
@@ -112,7 +112,7 @@ def setup_routes(app, client, socketio):
         instrumento = request.form.get('instrumento')
         
         if ano and introConcl and instrumento:
-            application_controller(int(ano), instrumento, introConcl, 'gerarRelatorio', client)
+            application_controller(int(ano), instrumento, introConcl, 'gerarRelatorio', client, introConcl)
             return jsonify({'message': 'Relatórios gerados com sucesso!'}), 200
                 
         return jsonify({'message': 'Não foi possível gerar os relatórios'}), 400

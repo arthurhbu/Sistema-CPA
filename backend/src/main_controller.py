@@ -8,7 +8,7 @@ from src.data_generator.generator_controller import *
 from src.relatorio.relatorio_controller import gerar_todos_relatorios
 from database.databaseQuerys import df_centro_por_ano,df_cursos_por_centro
 from database.databaseQuerys import update_progresso
-from src.utils.compact_and_send_zip import zip_markdown_files
+from src.utils.compact_and_send_zip import zip_markdown_files, send_email_zip
 
 '''
 Controller principal onde funciona como um controlador de um repositório de funções que é usada pela api.
@@ -23,12 +23,12 @@ def initalize_database_inserts(database_name: Database, collection_instrumento: 
     progresso.insert_one(
         {
             'instrumento': f'{database_name}',
-            'Insercao_Main_CSV': 'Pendente',
-            'Insercao_Curso_Centro_Database': 'Pendente',
-            'Insercao_Centro_Diretor_Database': 'Pendente',
-            'Geracao_de_Dados': 'Pendente',
-            'Criacao_Cursos_por_Centro_Database': 'Pendente',
-            'Criacao_Centro_por_Ano_Database': 'Pendente',
+            'Insercao_Main_CSV': 'Finalizado',
+            'Insercao_Curso_Centro_Database': 'Finalizado',
+            'Insercao_Centro_Diretor_Database': 'Finalizado',
+            'Geracao_de_Dados': 'Finalizado',
+            'Criacao_Cursos_por_Centro_Database': 'Finalizado',
+            'Criacao_Centro_por_Ano_Database': 'Finalizado',
         }
     )
     
@@ -44,17 +44,17 @@ def initalize_database_inserts(database_name: Database, collection_instrumento: 
         }
     )
     
-    progresso_etapa1 = CSVManagment.insert_main_csv_to_database(collection_instrumento, csv_filename, modalidade)
-    update_progresso(progresso, 'Insercao_Main_CSV', progresso_etapa1)
+    # progresso_etapa1 = CSVManagment.insert_main_csv_to_database(collection_instrumento, csv_filename, modalidade)
+    # update_progresso(progresso, 'Insercao_Main_CSV', progresso_etapa1)
     
-    progresso_etapa2 = CSVManagment.insert_curso_e_centro_csv_to_database(collection_centro_e_curso) 
-    update_progresso(progresso, 'Insercao_Curso_Centro_Database', progresso_etapa2)
+    # progresso_etapa2 = CSVManagment.insert_curso_e_centro_csv_to_database(collection_centro_e_curso) 
+    # update_progresso(progresso, 'Insercao_Curso_Centro_Database', progresso_etapa2)
     
-    progresso_etapa3 = CSVManagment.insert_centro_diretor_csv_database(collection_diretor_e_centro)  
-    update_progresso(progresso, 'Insercao_Centro_Diretor_Database', progresso_etapa3)
+    # progresso_etapa3 = CSVManagment.insert_centro_diretor_csv_database(collection_diretor_e_centro)  
+    # update_progresso(progresso, 'Insercao_Centro_Diretor_Database', progresso_etapa3)
     
-    progresso_etapa4 = generate_graph_table_report(client, database_name, collection_instrumento)
-    update_progresso(progresso, 'Geracao_de_Dados', progresso_etapa4)
+    # progresso_etapa4 = generate_graph_table_report(client, database_name, collection_instrumento)
+    # update_progresso(progresso, 'Geracao_de_Dados', progresso_etapa4)
     
 
 
@@ -90,7 +90,6 @@ def prepare_side_dataframes(collection_instrumento: Collection, database: Databa
     update_progresso(progresso, 'Criacao_Centro_por_Ano_Database', progresso_etapa6)
 
 
-
 def generate_reports(collection_instrumento: Collection, collection_centro_por_ano: Collection, collection_cursos_por_centro: Collection, ano: int, database_name: str, modal: str) -> None:
     """
     Realiza a criação de relatórios, podendo ser possível escolher se será gerado um único relatório,
@@ -113,7 +112,9 @@ def generate_reports(collection_instrumento: Collection, collection_centro_por_a
     
     gerar_todos_relatorios(collection_instrumento, collection_centro_por_ano, collection_cursos_por_centro, arquivo_intro_esc, arquivo_conclusao_esc, ano, database_name, modal)
     zip_markdown_files(f'./relatorio/markdowns/{database_name}/{database_name}.zip', f'./relatorio/markdowns/{database_name}')
-
+    send_email_zip(f'./relatorio/markdowns/{database_name}/{database_name}.zip', 'ra129406@uem.br', 'sec-cpa@uem.br', 'senha')
+    
+    
 
 
 def application_controller(ano: int, csv_Filename: str, modal: str, modo: str, client: MongoClient, modalidade: str) -> None:
@@ -142,7 +143,7 @@ def application_controller(ano: int, csv_Filename: str, modal: str, modo: str, c
     try: 
         if modo == 'inserir':
             initalize_database_inserts(dbName, instrumento, cursos_e_centros, centros_e_diretores, csv_Filename, client, progresso, etapas, modalidade)
-            prepare_side_dataframes(instrumento, database, cursos_e_centros, ano, modal, progresso)
+            # prepare_side_dataframes(instrumento, database, cursos_e_centros, ano, modal, progresso)
             return 'Inserção finalizada com sucesso'
         elif modo == 'gerarRelatorio':
             generate_reports(instrumento, centro_por_ano, cursos_por_centro, ano, dbName, modal)

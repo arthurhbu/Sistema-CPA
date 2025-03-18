@@ -34,7 +34,7 @@ def zip_markdown_files(outputFilename: str, folderPath: str) -> None:
         print(f'Erro ao compactar os arquivos: {e}')
 
 
-def enviar_email_com_anexo(arquivo_zip, destinatario_email, remetente_email, senha_remetente):
+def send_email_zip(arquivo_zip, destinatario_email, remetente_email, senha_remetente):
     # Configuração do email
     msg = MIMEMultipart()
     msg['From'] = remetente_email

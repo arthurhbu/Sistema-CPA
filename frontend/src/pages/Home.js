@@ -23,7 +23,7 @@ function Home(){
         }));
 
         try { 
-            const res = await fetch(`${process.env.REACT_APP_API_URL}/api/atualizarEtapa`, { 
+            const res = await fetch(`${process.env.REACT_APP_BACKEND}/api/atualizarEtapa`, { 
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json'},
                 body: JSON.stringify({ instrumento, etapa, novoValor: !etapas[etapa] })
@@ -44,7 +44,7 @@ function Home(){
 
     const getStepsDatabase = async (instrumento) => { 
         try{
-            const res = await fetch(`${process.env.REACT_APP_API_URL}/api/etapasInstrumento`, { 
+            const res = await fetch(`${process.env.REACT_APP_BACKEND}/api/etapasInstrumento`, { 
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({instrumento})
@@ -73,8 +73,7 @@ function Home(){
     useEffect(() => {
         const fetchDatabase = async () => { 
             try { 
-                // const res = await fetch(`${process.env.REACT_APP_API_URL}/api/instrumentos`);
-                const res = await fetch(`${process.env.REACT_APP_API_URL}/api/instrumentos`);
+                const res = await fetch(`${process.env.REACT_APP_BACKEND}/api/instrumentos`);
 
                 const instrumentosDisponiveis = await res.json();
                 setDatabases(instrumentosDisponiveis)
