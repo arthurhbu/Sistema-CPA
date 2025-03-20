@@ -54,7 +54,6 @@ def gerar_relatorios_por_centro(collection_instrumento: Collection, collectionCe
     """
 
     cursos = collection_instrumento.distinct('nm_curso', {'centro_de_ensino': centro_de_ensino})
-    print(cursos)
     for curso in cursos:
         compor_introducao(collectionCentroPorAno, collectionCursosPorCentro, arquivo_intro, ano, centro_de_ensino, modal)
         compor_conclusao(collectionCursosPorCentro, arquivo_conclusao, ano, curso, modal)

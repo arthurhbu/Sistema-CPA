@@ -27,6 +27,7 @@ def generate_graph_table_report(client: MongoClient, database_name: Database, co
 
             cursor = collection_name.find({'tabela': {'$exists': False}}, no_cursor_timeout = True, session=session).batch_size(10)
             
+            
             refresh_timeStamp = datetime.now()
             
             try:
@@ -93,6 +94,8 @@ def generate_graph_table_report(client: MongoClient, database_name: Database, co
                         return f'Erro no banco de dados: {db_error}'
                     
                 return 'Finalizado'
+            except Exception as e:
+                print(f'Erro: {e}')
             finally:
                 cursor.close()
                 

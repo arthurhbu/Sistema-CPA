@@ -94,7 +94,6 @@ class CSVManagment:
 
         index = 0
         for coluna in cabecalho: 
-            print(coluna)
             df_principal.rename(columns={df_principal.columns[index]: coluna}, inplace=True)
             index+=1 
         
@@ -139,7 +138,6 @@ class CSVManagment:
         
         if len(df_principal.columns) < header_graduacao:
             columnsToDrop_CSVP = df_principal.columns[posDropColumnCSVP_SemSerie]
-            print(columnsToDrop_CSVP)
             df_principal = df_principal.drop(columns=columnsToDrop_CSVP)
         else:
             columnsToDrop_CSVP = df_principal.columns[posDropColumnCSVP]
@@ -280,7 +278,6 @@ class CSVManagment:
                 proxima_pergunta = df.iloc[i+1,11] if i < len(df)-1 else None
 
                 temp_pctdict.update({df.iloc[i,13]: int(df.iloc[i,14])})
-                print(temp_pctdict)
 
                 if pergunta_atual != proxima_pergunta or (i+1) == len(df):
                     

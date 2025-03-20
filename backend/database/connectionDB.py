@@ -33,11 +33,29 @@ def connection(db_config):
     print("Connected successfully!")
     return Mclient
 
-def connectToDatabase(databaseName, client):
+def connectToDatabase(database_name, client):
     print("Connection Established with MongoDB")
-    filterDBName = databaseName.replace(" ", "")
+    filterDBName = database_name.replace(" ", "")
     filterDBName = filterDBName.replace(".csv", "")
     database = client[filterDBName]
     print(filterDBName)
     return filterDBName, database
 
+def initialize_all_collections(database: str):
+    """
+    Inicializa todos as coleções pertencentes ao banco que foi escolhido.
+    
+    """
+
+    dict_collections = {
+        'instrumento': database['instrumento'],
+        'cursos_e_centros': database['cursos_e_centros'], 
+        'centros_e_diretores': database['centros_e_diretores'],
+        'cursos_por_centro': database['cursos_por_centro'],
+        'centro_por_ano': database['centro_por_ano'],
+        'progresso': database['progresso_da_insercao'],
+        'etapas': database['etapas'],
+    }
+    
+    return dict_collections
+    

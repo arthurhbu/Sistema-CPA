@@ -16,11 +16,6 @@ console.log(process.env);
 
 console.log("API URL:", process.env.REACT_APP_BACKEND); // Debugging line to check the BACKEND variable
 
-// const socket = io(process.env.REACT_APP_BACKEND, {
-//     transports: [ 'websocket', 'polling'],
-//     withCredentials: true,
-// })
-
 const iconStyle = { 
     color: '#2ef092',
     marginTop: '1.5vh',

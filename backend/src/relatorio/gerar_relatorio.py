@@ -49,52 +49,55 @@ def gerar_relatorio_por_curso(curso_escolhido, collectionCurso, collectionCursos
         codDisciplina: list = []
 
         contador: int = 0
-        print(curso_escolhido)
+        print(f'Curso que está sendo gerado o relatório: {curso_escolhido}')
 
         for document in collectionCurso.find({'nm_curso': curso_escolhido}).sort({'cd_grupo': 1, 'cd_subgrupo': 1, 'ordem_pergunta': 1}):
 
-            captionToPandoc = replace_reference_in_caption(document['relatorioGraficoAI'], contador)
+            try:
+                captionToPandoc = replace_reference_in_caption(document['relatorioGraficoAI'], contador)
 
-            if document['cd_grupo'] not in codGrupo:
-                print('\n',file=arquivo)
-                arquivo.write(f"## {document['nm_grupo']}")
-                print('\n', file=arquivo)
-                codGrupo.append(document['cd_grupo'])
-                codSubgrupo = []
-            if document['cd_subgrupo'] not in codSubgrupo:
-                print('\n',file=arquivo)
-                arquivo.write(f"### {document['nm_subgrupo']}")
-                print('\n',file=arquivo)
-                codSubgrupo.append(document['cd_subgrupo'])
+                if document['cd_grupo'] not in codGrupo:
+                    print('\n',file=arquivo)
+                    arquivo.write(f"## {document['nm_grupo']}")
+                    print('\n', file=arquivo)
+                    codGrupo.append(document['cd_grupo'])
+                    codSubgrupo = []
+                if document['cd_subgrupo'] not in codSubgrupo:
+                    print('\n',file=arquivo)
+                    arquivo.write(f"### {document['nm_subgrupo']}")
+                    print('\n',file=arquivo)
+                    codSubgrupo.append(document['cd_subgrupo'])
 
-            if document['nm_disciplina'] == '-':
-                pergunta_formatada: str = re.sub(r"^\s*\d+\.\d+\s*-\s*",'',document["nm_pergunta"]).strip()
-                print(f'#### **Pergunta: {pergunta_formatada}**\n', file=arquivo)
-                arquivo.write(f"![{document['nm_pergunta']}:]({document['path']}.png){{#fig:figura{contador}}}")
+                if document['nm_disciplina'] == '-':
+                    pergunta_formatada: str = re.sub(r"^\s*\d+\.\d+\s*-\s*",'',document["nm_pergunta"]).strip()
+                    print(f'#### **Pergunta: {pergunta_formatada}**\n', file=arquivo)
+                    arquivo.write(f"![{document['nm_pergunta']}:]({document['path']}.png){{#fig:figura{contador}}}")
+                    print('\n', file=arquivo)
+                    print(f': Tabela com dados referentes à pergunta apresentada. {{#tbl:tabela{contador}}} \n', file=arquivo)
+                    arquivo.write(document['tabela'])
+                    arquivo.write('\n')
+                    print(' ', file=arquivo)
+                    print(captionToPandoc, file=arquivo)
+                    arquivo.write('\n')
+                    arquivo.write('\n')
+                    contador += 1
+                    continue
+                
+                if document['cd_disciplina'] not in codDisciplina:
+                    print('\n', file=arquivo)
+                    arquivo.write(f"Considerando a disciplina **{document['nm_disciplina']}**, temos os seguintes resultados expressos por tabelas.")
+                    print('\n', file=arquivo)
+                    codDisciplina.append(document['cd_disciplina'])
+
                 print('\n', file=arquivo)
-                print(f': Tabela com dados referentes à pergunta apresentada. {{#tbl:tabela{contador}}} \n', file=arquivo)
+                print(f"{{#tbl:tabela{contador}}} - Resultado do item: {document['nm_pergunta']} \n", file=arquivo)
                 arquivo.write(document['tabela'])
-                arquivo.write('\n')
-                print(' ', file=arquivo)
-                print(captionToPandoc, file=arquivo)
-                arquivo.write('\n')
-                arquivo.write('\n')
-                contador += 1
-                continue
-            
-            if document['cd_disciplina'] not in codDisciplina:
                 print('\n', file=arquivo)
-                arquivo.write(f"Considerando a disciplina **{document['nm_disciplina']}**, temos os seguintes resultados expressos por tabelas.")
-                print('\n', file=arquivo)
-                codDisciplina.append(document['cd_disciplina'])
 
-            print('\n', file=arquivo)
-            print(f"{{#tbl:tabela{contador}}} - Resultado do item: {document['nm_pergunta']} \n", file=arquivo)
-            arquivo.write(document['tabela'])
-            print('\n', file=arquivo)
-
-            contador += 1 
-            print('contador: ', contador)
+                contador += 1 
+                
+            except Exception as e :
+                print(f'Erro: {e}')
 
         with open("relatorio/info_conclusao.md",'r',encoding='utf-8') as f:
             template_conclusao = f.read()

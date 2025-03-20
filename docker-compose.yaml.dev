@@ -1,4 +1,11 @@
 services:
+  servidor-ai:
+    image: docker.io/ollama/ollama
+    volumes:
+      - vol-ollama:/root/.ollama:rw
+    networks:
+      - backend-network
+
   flask-backend:
     build: ./backend
     container_name: flask-backend
@@ -19,6 +26,7 @@ services:
         - "3000:3000"
       volumes:
         - ./frontend:/app
+        - /app/node_modules
       environment: 
         - WATCHPACK_POLLING=true
         - REACT_APP_BACKEND=${BACKEND}
@@ -63,7 +71,7 @@ services:
 
 volumes:
   vol-mongo:
-  volume-ollama:
+  vol-ollama:
 
 networks:
   backend-network:

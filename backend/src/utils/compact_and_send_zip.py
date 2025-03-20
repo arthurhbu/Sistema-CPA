@@ -6,7 +6,7 @@ from email.mime.base import MIMEBase
 from email import encoders
 from email.mime.text import MIMEText
 
-def zip_markdown_files(outputFilename: str, folderPath: str) -> None:
+def zip_markdown_files(database_name: str, zip_name_file: str) -> None:
     '''
     Transforma os arquivos zips em markdowns para que possam ser enviados via email.
     
@@ -16,19 +16,31 @@ def zip_markdown_files(outputFilename: str, folderPath: str) -> None:
     :type: str
     '''
     try:
+        folderPath = f'./relatorio/markdowns/{database_name}'
+        
+        if not os.path.exists(folderPath):
+            raise Exception(f'Pasta {folderPath} não existe')
+        
+        output_dir = './relatorio/markdowns/zip_temp_files'
+        os.makedirs(output_dir, exist_ok=True)
+        
+        if not zip_name_file:
+            zip_name_file = f'{database_name}.zip'
+        
+        outputFilename = os.path.join(output_dir, zip_name_file)
+        
         with zipfile.ZipFile(outputFilename, 'w', zipfile.ZIP_DEFLATED) as zipf:
             root_name = os.path.basename(folderPath.rstrip(os.sep))  
-            for root, files in os.walk(folderPath):
+            for root, dirs, files in os.walk(folderPath):
                 for file in files:
                     file_path = os.path.join(root, file)
                     if file.endswith('.zip'):
-                        print('Zip ignorado')
                         continue
                     if not os.path.isfile(file_path):
-                        print(f"Arquivo ignorado: {file_path}")
                         continue
-                    arcname = os.path.join(root_name, os.path.relpath(file_path, folderPath ))
+                    arcname = os.path.relpath(file_path, os.path.dirname(folderPath))
                     zipf.write(file_path, arcname)
+                    
         print('Arquivos compactados com sucesso')
     except Exception as e:
         print(f'Erro ao compactar os arquivos: {e}')

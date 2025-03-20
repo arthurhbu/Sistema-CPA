@@ -1,9 +1,10 @@
-from flask import request, jsonify
+from flask import request, jsonify, send_file
 from api.utils_api import converteObjectIDToStr, removeKeys
-from src.main_controller import list_databases,get_etapas,atualiza_etapa,application_controller,get_progresso_insercao
+from src.main_controller import list_databases,get_etapas,atualiza_etapa,get_progresso_insercao,inserir_e_processar_csv,gerar_relatorios
 import os, csv
 import threading
 import time
+import uuid
 
 filename: str = ''
 processing: bool = False
@@ -13,6 +14,34 @@ if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
 
 def setup_routes(app, client): 
+    """
+    Configura as rotas para o backend.
+    
+    rotas e funções:
+    
+        - /api/importar: importCsv, importa o instrumento para o backend onde é retornado o header desse instrumento para poder ser feito uma comparação do header correto com o desse instrumento.
+        
+        - /api/confirmarImportacao: confirmImportation, confirma a importação do instrumento com a requisição vinda do usuário após ter sido conferido o header.
+        
+        - /progresso: getStatusCsvImport, confere o status do instrumento que está sendo processado.
+        
+        - /api/instrumentos: listInstrumentos, lista os instrumentos disponíveis no banco MongoDB para o usuário.
+        
+        - /api/gerarRelatorios: generateReports, gera os relatórios para certo instrumento com a requisição feita pelo usuário, sendo necessário informações como:
+            - ano do instrumento
+            - Introdução e Conclusão do modal do instrumento (EAD, DISCENTES, EGRESSOS, ETC)
+            - Nome do instrumento que o liga ao banco de dados com as informações dele
+            
+        - /api/download/<id_instrumento>: download_file_zip, baixa o arquivo zip com os relatórios gerados.
+        
+        - /api/limparArquvosZip: cleanup, limpa os arquivos zip temporários gerados.
+        
+        - /api/etapasInstrumento: getStepsInstrument, lista as etapas já finalizadas daquele instrumento de acordo com o usuário que o preenche.
+        
+        - /api/atualizarEtapa: updateStepInstrument, atualiza as etapas do instrumento escolhido.
+
+    """
+    
     
     @app.route('/api/importar', methods=["POST"])
     def importCsv():
@@ -105,19 +134,99 @@ def setup_routes(app, client):
             - ano do instrumento
             - Introdução e Conclusão do modal do instrumento (EAD, DISCENTES, EGRESSOS, ETC)
             - Nome do instrumento que o liga ao banco de dados com as informações dele
-            
         '''
-        ano = request.form.get('ano')
-        introConcl = request.form.get('introConcl')
-        instrumento = request.form.get('instrumento')
+        try: 
+            
+            if not request.form or 'introConcl' not in request.form:
+                return jsonify({'error': 'Está faltando o tipo modal do instrumento'}), 400
+            elif not request.form or 'ano' not in request.form:
+                return jsonify({'error': 'Está faltando o ano do instrumento'}), 400
+            elif not request.form or 'instrumento' not in request.form:
+                return jsonify({'error': 'Está faltando o nome do instrumento'}), 400
+            
+            ano = request.form.get('ano')
+            introConcl = request.form.get('introConcl')
+            instrumento = request.form.get('instrumento')
+            
+            id_instrumento = f'{instrumento}_id'
+            
+            gerar_relatorios(instrumento, client, int(ano), introConcl, id_instrumento)
+            
+            return jsonify({
+                'success': True, 
+                'id_instrumento': id_instrumento,
+                'download_url': f'/api/download/{id_instrumento}',
+            })
+            
         
-        if ano and introConcl and instrumento:
-            application_controller(int(ano), instrumento, introConcl, 'gerarRelatorio', client, introConcl)
-            return jsonify({'message': 'Relatórios gerados com sucesso!'}), 200
+        except Exception as e:
+            return jsonify({'error': f'Erro ao gerar relatórios (Internal Server Error): {e}'}), 400
+
+
+    @app.route('/api/relatorios/<string:id_instrumento>/download', methods=['GET'])
+    def download_file_zip(id_instrumento):
+        
+        try: 
+            filename_zip = f'{id_instrumento}.zip'
+            result_filepath = os.path.join('relatorio', 'markdowns', 'zip_temp_files', filename_zip)
+            print(result_filepath)
+            
+            if not os.path.exists(result_filepath):
+                return jsonify({'error': 'Arquivo não encontrado'}), 404
+            
+            return send_file(result_filepath, as_attachment=True, download_name=filename_zip, mimetype='application/zip')
+        except Exception as e: 
+            return jsonify({'message': f'Erro ao baixar arquivo (Internal Server Error): {e}'}), 400
+    
+    
+    @app.route('/api/limparArquvosZip', methods=['POST'])
+    def cleanup():
+        try:
+            now = time.time()
+            count = 0 
+            
+            path = './relatorio/markdown/arquivos_zipados_temporarios/'
+            if not os.path.exists(path):
+                return jsonify({'error': 'Diretório não encontrado'}), 404
+            
+            for filename in os.listdir('./relatorio/markdown/arquivos_zipados_temporarios/'):
+                filepath = os.path.join('./relatorio/markdown/arquivos_zipados_temporarios/', filename)
+                if os.path.isfile(filepath) and now - os.path.getmtime(filepath) > 24 * 3600:
+                    os.remove(filepath)
+                    count += 1
+            
+            return jsonify({'removed_files': count})
+        
+        except Exception as e:
+            return jsonify({'error': 'Erro na limpeza de arquivos'}), 500
+     
+        
+    @app.route('/api/relatorios/zips', methods=['GET'])
+    def getAvaliableZips():
+        try:
+            zip_directory = './relatorio/markdowns/zip_temp_files/'
+            
+            files = [f for f in os.listdir(zip_directory) if f.endswith('.zip')]
+            
+            zips = []
+            
+            for filename in files:
+                file_path = os.path.join(zip_directory, filename)
+                file_stats = os.stat(file_path)
                 
-        return jsonify({'message': 'Não foi possível gerar os relatórios'}), 400
-
-
+                file_id = filename.replace('.zip', '')
+                
+                zips.append({
+                    'id': file_id,
+                    'filename': filename,
+                    'size': file_stats.st_size,
+                })
+                
+            return jsonify({'zips': zips}), 200
+        except Exception as e:
+            return jsonify({'error': f'Erro ao listar arquivos: {e}'}), 500
+        
+        
     @app.route('/api/etapasInstrumento', methods=['POST'])
     def getStepsInstrument():
         '''
@@ -156,11 +265,12 @@ def setup_routes(app, client):
         
         return {'error': resultado}, 400
     
+    
     def processCsv(filename, ano, modalidade):
         global processing
         try:
             with app.app_context():
-                response = application_controller(int(ano), filename, '', 'inserir', client, modalidade)
+                response = inserir_e_processar_csv(int(ano), filename, modalidade, client)
                 print(f'Processamento concluido: {response}')
         except Exception as e:
             print(f'Erro no processamento: {e}')
