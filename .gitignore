@@ -1,2 +1,4 @@
 .env
 auth.json
+backend/api/gmail_api/token.json
+backend/api/gmail_api/credentials.json

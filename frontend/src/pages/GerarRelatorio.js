@@ -2,6 +2,7 @@ import styles from './GerarRelatorio.module.css';
 import StyledInput from '../components/StyledInput';
 import { useEffect, useState } from 'react';
 import SelectAutoWidth from '../components/selectAutoWidth';
+import delete_icon from '../img/trash.png'
 
 function GerarRelatorio(){
     const [ano, setAno] = useState('');
@@ -98,14 +99,14 @@ function GerarRelatorio(){
             }
 
             if(resData.error) {
-                setResponse(resData.error)
-                setPopupVisible(true)
-                throw new Error(resData.error)
+                setResponse(resData.error);
+                setPopupVisible(true);
+                throw new Error(resData.error);
             }
             
-            setPopupVisible(true)
-            setIdInstrumento(resData.id_instrumento)
-            setResponse('Relatórios gerados com sucesso!')
+            setPopupVisible(true);
+            setIdInstrumento(resData.id_instrumento);
+            setResponse('Relatórios gerados com sucesso!');
 
         } catch(e) { 
             console.log('Não foi possível realizar a requisição', e)
@@ -127,6 +128,38 @@ function GerarRelatorio(){
         document.body.removeChild(link);
     }
 
+    const deleteZip = async (idInstrumento) => {
+
+        if (!idInstrumento) {
+            console.error('ID do instrumento não foi passado');
+            return;
+        }
+        try {
+            const response = await fetch(`${process.env.REACT_APP_BACKEND}/api/relatorios/delete/${idInstrumento}`, {
+                method: 'DELETE',
+            });
+
+            if (!response.ok) {
+                console.error('Erro ao tentar deletar o ZIP');
+                return;
+            }
+
+            const resData = await response.json();
+
+            if (resData.error) {
+                setPopupVisible(true);
+                setResponse(resData.error);
+                return;
+            }
+
+            setPopupVisible(true);
+            setResponse('ZIP deletado com sucesso!');
+        } catch (e) {
+            console.error('Erro ao tentar deletar o ZIP', e);
+        }
+
+    }
+
     const handleSubmit = async () => { 
         if(!ano || !instrumento || !introConcl) { 
             setErrorMessage('Por Favor, preencha todos os campos antes de gerar o relatório!!!!')
@@ -142,7 +175,6 @@ function GerarRelatorio(){
         const fetchDatabase = async () => { 
             try { 
                 const res = await fetch(`${process.env.REACT_APP_BACKEND}/api/instrumentos`);
-
                 const instrumentosDisponiveis = await res.json();
                 setDatabases(instrumentosDisponiveis)
 
@@ -232,12 +264,20 @@ function GerarRelatorio(){
                                 <td className={styles.tuple_table}>{zip.filename}</td>
                                 <td className={styles.tuple_table}>{formatFileSize(zip.size)}</td>
                                 <td className={styles.tuple_table}>
-                                    <button
-                                        onClick={() => downloadZip(zip.id)}
-                                        className={styles.button_download}
-                                    >
-                                        Baixar
-                                    </button>
+                                    <div style={{display: 'flex'}}>
+                                        <button
+                                            onClick={() => downloadZip(zip.id)}
+                                            className={styles.button_download}
+                                        >
+                                            Baixar
+                                        </button>
+                                        <button 
+                                            className={styles.button_delete}
+                                            onClick={() => {deleteZip(zip.id)}}
+                                        >
+                                            <img style={{width: '1.5rem'}} src={delete_icon} alt='delete_icon'></img>
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
                             ))}
@@ -252,7 +292,10 @@ function GerarRelatorio(){
 
             {popupVisible && (
                 <div className={styles.popup}>
-                    <button className={styles.popup_buttonExit} onClick={() => setPopupVisible(false)}>
+                    <button className={styles.popup_buttonExit} onClick={() => {
+                        setPopupVisible(false)
+                        setResponse('')
+                        }}>
                         <p style={{color: 'currentColor', fontSize: '1.6rem', padding: '0', margin:'0'}}>X</p>
                     </button>
                     <p className={styles.popup_message}>{response}</p>

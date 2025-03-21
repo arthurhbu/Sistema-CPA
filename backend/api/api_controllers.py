@@ -1,10 +1,12 @@
 from flask import request, jsonify, send_file
 from api.utils_api import converteObjectIDToStr, removeKeys
 from src.main_controller import list_databases,get_etapas,atualiza_etapa,get_progresso_insercao,inserir_e_processar_csv,gerar_relatorios
+from api.gmail_api.gmail_api_controller import send_email_via_gmail_api
 import os, csv
 import threading
 import time
 import uuid
+
 
 filename: str = ''
 processing: bool = False
@@ -72,7 +74,6 @@ def setup_routes(app, client):
             
         return jsonify({'header': '', 'error': 'Não foi possível carregar o ano ou o arquivo CSV passado.'}), 400
 
-    
     
     @app.route('/api/confirmarImportacao', methods=['POST'])
     def confirmImportation():
@@ -152,13 +153,14 @@ def setup_routes(app, client):
             
             gerar_relatorios(instrumento, client, int(ano), introConcl, id_instrumento)
             
+            send_email_via_gmail_api('', 'sec-cpa@uem.br', 'Relatórios gerados', f'Os relatórios do instrumento {instrumento} foram gerados com sucesso.')
+                              
             return jsonify({
                 'success': True, 
                 'id_instrumento': id_instrumento,
                 'download_url': f'/api/download/{id_instrumento}',
             })
             
-        
         except Exception as e:
             return jsonify({'error': f'Erro ao gerar relatórios (Internal Server Error): {e}'}), 400
 
@@ -178,6 +180,22 @@ def setup_routes(app, client):
         except Exception as e: 
             return jsonify({'message': f'Erro ao baixar arquivo (Internal Server Error): {e}'}), 400
     
+    
+    @app.route('/api/relatorios/delete/<string:id_instrumento>', methods=['DELETE'])
+    def delete_zip(id_instrumento):
+        
+        try:
+            filename_zip = f'{id_instrumento}.zip'
+            result_filepath = os.path.join('relatorio', 'markdowns', 'zip_temp_files', filename_zip)
+            
+            if not os.path.exists(result_filepath):
+                return jsonify({'error': 'Arquivo não encontrado'}), 404
+            
+            os.remove(result_filepath)
+            
+            return jsonify({'message': 'Arquivo deletado com sucesso'}), 200
+        except Exception as e:
+            return jsonify({'error': f'Erro ao deletar arquivo (Internal Server Error): {e}'}), 400
     
     @app.route('/api/limparArquvosZip', methods=['POST'])
     def cleanup():
@@ -276,4 +294,5 @@ def setup_routes(app, client):
             print(f'Erro no processamento: {e}')
         finally: 
             time.sleep(2)
+            send_email_via_gmail_api('', 'sec-cpa@uem.br', 'Processamento de CSV concluído', f'O processamento do CSV {filename} foi concluído com sucesso, SISTEMA CPA.')
             processing = False
