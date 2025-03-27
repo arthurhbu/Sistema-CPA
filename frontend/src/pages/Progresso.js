@@ -13,7 +13,7 @@ const Processo = () => {
 
     const checkStatus = useCallback(async () => { 
         try {
-            const response = await fetch(`${process.env.REACT_APP_BACKEND}/progresso`);
+            const response = await fetch(`${process.env.REACT_APP_BACKEND}/csv/importacao/progresso`);
             if (!response.ok) {
                 throw new Error('Erro ao buscar o status do processo');
             }
@@ -34,7 +34,7 @@ const Processo = () => {
     }, [])
 
     useEffect(() => { 
-        const interval = setInterval(checkStatus, 5000);
+        const interval = setInterval(checkStatus, 5000); 
         return () => {
             clearInterval(interval);
         };

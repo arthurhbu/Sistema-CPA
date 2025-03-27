@@ -4,6 +4,9 @@ from database.pythonMongoConfig import readDBConfig
 from database.connectionDB import connection
 from api.api_controllers import setup_routes
 from pymongo import MongoClient
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = Flask(__name__)
 

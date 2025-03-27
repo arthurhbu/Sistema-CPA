@@ -23,7 +23,7 @@ function Home(){
         }));
 
         try { 
-            const res = await fetch(`${process.env.REACT_APP_BACKEND}/api/atualizarEtapa`, { 
+            const res = await fetch(`${process.env.REACT_APP_BACKEND}/api/instrumento/etapa/atualizar`, { 
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json'},
                 body: JSON.stringify({ instrumento, etapa, novoValor: !etapas[etapa] })
@@ -44,7 +44,7 @@ function Home(){
 
     const getStepsDatabase = async (instrumento) => { 
         try{
-            const res = await fetch(`${process.env.REACT_APP_BACKEND}/api/etapasInstrumento`, { 
+            const res = await fetch(`${process.env.REACT_APP_BACKEND}/api/instrumento/etapas`, { 
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({instrumento})

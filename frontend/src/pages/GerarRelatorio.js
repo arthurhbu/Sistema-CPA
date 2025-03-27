@@ -2,7 +2,7 @@ import styles from './GerarRelatorio.module.css';
 import StyledInput from '../components/StyledInput';
 import { useEffect, useState } from 'react';
 import SelectAutoWidth from '../components/selectAutoWidth';
-import delete_icon from '../img/trash.png'
+import delete_icon from '../img/trash.png';
 
 function GerarRelatorio(){
     const [ano, setAno] = useState('');
@@ -87,7 +87,7 @@ function GerarRelatorio(){
 
         try { 
             setIsProcessing(true);
-            const response = await fetch(`${process.env.REACT_APP_BACKEND}/api/gerarRelatorios`, {
+            const response = await fetch(`${process.env.REACT_APP_BACKEND}/api/relatorio/gerar`, {
                 method: 'POST',
                 body: formData
             })
@@ -135,7 +135,7 @@ function GerarRelatorio(){
             return;
         }
         try {
-            const response = await fetch(`${process.env.REACT_APP_BACKEND}/api/relatorios/delete/${idInstrumento}`, {
+            const response = await fetch(`${process.env.REACT_APP_BACKEND}/api/relatorios/${idInstrumento}/delete`, {
                 method: 'DELETE',
             });
 
@@ -306,7 +306,7 @@ function GerarRelatorio(){
     );
 }
 
-const formatFileSize = (bytes) => {
+export const formatFileSize = (bytes) => {
     if (bytes === 0) return '0 Bytes';
     
     const k = 1024;

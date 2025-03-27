@@ -92,15 +92,6 @@ function Importar(){
 
     console.log("API URL:", process.env.REACT_APP_BACKEND);
 
-    // useEffect(() => {
-    //     socket.on("importacao_concluida", (data) => { 
-    //         setIsProcessing(false)
-    //     }); 
-
-    //     return () => { 
-    //         socket.off("importacao_concluida");
-    //     };
-    // }, []);
 
     useEffect(() => { 
         const interval = setInterval(() => {
@@ -112,7 +103,7 @@ function Importar(){
 
     const checkProcessingStatus = async () => { 
         try {
-            const response = await fetch(`${process.env.REACT_APP_BACKEND}/progresso`);
+            const response = await fetch(`${process.env.REACT_APP_BACKEND}/csv/importacao/progresso`);
             const data = await response.json();
             setIsProcessing(data.processing);
         } catch (error) {
@@ -181,8 +172,8 @@ function Importar(){
         formData.append('file', file)
         formData.append('ano', ano)
         try{
-            console.log("Fetching from:", `${process.env.REACT_APP_BACKEND}/api/importar`); // Debugging line to check the fetch URL
-            const res = await fetch(`${process.env.REACT_APP_BACKEND}/api/importar`, {
+            console.log("Fetching from:", `${process.env.REACT_APP_BACKEND}/api/csv/importar`); // Debugging line to check the fetch URL
+            const res = await fetch(`${process.env.REACT_APP_BACKEND}/api/csv/importar`, {
                 method: 'POST',
                 body: formData,
                 headers: { 
@@ -216,7 +207,7 @@ function Importar(){
         formData.append('ano', ano);
         
         try {
-            const res = await fetch(`${process.env.REACT_APP_BACKEND}/api/importar`, {
+            const res = await fetch(`${process.env.REACT_APP_BACKEND}/api/csv/importar`, {
                 method: 'POST',
                 body: formData,
             });
@@ -251,7 +242,7 @@ function Importar(){
 
         setIsProcessing(true);
         try { 
-            const res = await fetch(`${process.env.REACT_APP_BACKEND}/api/confirmarImportacao`, {
+            const res = await fetch(`${process.env.REACT_APP_BACKEND}/api/csv/importar/confirmar`, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(data),

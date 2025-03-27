@@ -3,10 +3,9 @@ from api.utils_api import converteObjectIDToStr, removeKeys
 from src.main_controller import list_databases,get_etapas,atualiza_etapa,get_progresso_insercao,inserir_e_processar_csv,gerar_relatorios
 from api.gmail_api.gmail_api_controller import send_email_via_gmail_api
 import os, csv
-import threading
+from threading import Thread
 import time
-import uuid
-
+import requests
 
 filename: str = ''
 processing: bool = False
@@ -45,7 +44,147 @@ def setup_routes(app, client):
     """
     
     
-    @app.route('/api/importar', methods=["POST"])
+    def process_pdf_generation(file_path, id_instrumento_pdf: str):
+        try: 
+            url_api_pdf = os.getenv("URL_API_PDF")
+            
+            with open(file_path, 'rb') as zip_file_md:
+                response = requests.post(url_api_pdf, files={'file': zip_file_md}, timeout=1800)
+            
+            if response.status_code == 200:
+                
+                path = os.path.join('relatorio', 'pdfs', 'pdfs_zip_temp_files', f'{id_instrumento_pdf}.zip')
+                
+                with open(path, 'wb') as f:
+                    f.write(response.content)
+       
+                send_email_via_gmail_api(
+                    '', 
+                    'sec-cpa@uem.br', 
+                    'PDFs dos relatórios.', 
+                    f'Os PDFs dos relatórios foram gerados com sucesso e já estão disponíveis em nosso sistema para download. \n\nSistema CPA'
+                )
+                
+            else:
+                send_email_via_gmail_api(
+                    '', 'sec-cpa@uem.br', 
+                    'Ocorreu um erro ao tentar gerar os PDFs', 
+                    f'Ocorreu um erro ao tentar gerar os PDFs dos relatórios.\n\n Confira o erro que ocorreu na api para gerar os PDFs: \n\n {response.text} \n {response.status_code}'
+                )
+                
+        except requests.exceptions.Timeout:
+            send_email_via_gmail_api(
+                '', 
+                'sec-cpa@uem.br', 
+                'Ocorreu um erro ao tentar gerar os PDFs', 
+                f'Ocorreu uma exceção de timeout, ou seja, o tempo limite de requisição foi excedido. \n\n Confira o sistema para entender melhor o problema'
+            )          
+            
+        except requests.exceptions.RequestException as e:
+            send_email_via_gmail_api(
+                '', 'sec-cpa@uem.br', 
+                'Ocorreu um erro ao tentar gerar os PDFs', 
+                f'Ocorreu um erro na requisição, confira a exceção: \n\n {str(e)}'
+            )      
+        finally: 
+            if os.path.exists(file_path):
+                os.remove(file_path)
+
+    @app.route('/api/pdf/<string:id_instrumento_pdf>/delete', methods=['DELETE'])
+    def delete_pdf(id_instrumento_pdf):
+        '''
+        Delete o Zip contendo os PDFs de acordo com o id do instrumento.
+        '''
+        
+        try:
+            filename = f'{id_instrumento_pdf}.zip'
+            path = os.path.join('relatorio', 'pdfs', 'pdfs_zip_temp_files', filename)
+            
+            if not os.path.exists(path):
+                return jsonify({'error': 'Diretório ou arquivo não encontrado.', 'details': ''}), 404
+            
+            os.remove(path)
+            
+            return jsonify({'message': 'Arquivo deletado com sucesso.'}), 200
+        
+        except Exception as e:
+            return jsonify({'error': f'Erro ao tentar deletar(Internal Server Error)', 'details': f'Detalhes do erro: \n {e}'}), 400
+    
+    @app.route('/api/pdf/<string:id_instrumento_pdf>/download', methods=['GET'])
+    def download_pdf_zip(id_instrumento_pdf):
+        '''
+        Baixa o Zip contendo os PDFs gerado para o instrumento escolhido.
+        '''
+        
+        try:
+            filename = f'{id_instrumento_pdf}.zip'
+            path = os.path.join('relatorio', 'pdfs', 'pdfs_zip_temp_files', filename)
+            
+            if not os.path.exists(path): 
+                return jsonify({'error': 'Diretório não encontrado ou não existe', 'details': ''}), 404
+            
+            return send_file(path, as_attachment=True, download_name=filename, mimetype='application/zip')
+        except Exception as e: 
+            print({'error': 'Erro ao baixar o arquivo (Server Internal Errror)', 'details': f'Detalhes do erro: \n {e}'})
+            return jsonify({'error': 'Erro ao baixar o arquivo (Server Internal Errror)', 'details': f'Detalhes do erro: \n {e}'}), 400
+    
+    @app.route('/api/pdfs', methods=['GET'])
+    def listPdfs():
+        '''
+        Lista os PDFs temporarios disponíveis para download.
+        '''
+        
+        try:
+            pdfs_directory_path = os.path.join('relatorio', 'pdfs', 'pdfs_zip_temp_files')
+            
+            if not os.path.exists(pdfs_directory_path):
+                return jsonify({'error': 'Diretório que contém os PDFs não encontrado', 'details': ''}), 404
+
+            pdfs = []
+            
+            for filename in os.listdir(pdfs_directory_path):
+                filepath = os.path.join(pdfs_directory_path, filename)            
+                file_stats = os.stat(filepath)
+                
+                pdfs.append({
+                    'id': filename.replace('.zip', ''),
+                    'filename': filename,
+                    'size': file_stats.st_size,
+                })
+                
+            return jsonify({'pdfs': pdfs}), 200
+        except Exception as e: 
+            return jsonify({'error': 'Erro ao listar PDFs.', 'details': f'Detalhes do erro: \n {e}'}), 500
+
+    @app.route('/api/pdf/gerar', methods=['POST'])
+    def generatePdf():
+        '''
+        Recebe o arquivo Zip e manda para uma API feita em GO que realiza a geração do PDF dos relatórios.
+        '''
+        
+        zip_file_md = request.files['compressArchive']
+        if not zip_file_md:
+            return jsonify({'error': 'Arquivo não encontrado'}), 400
+        
+        temp_dir = 'temp_uploads'
+        os.makedirs(temp_dir, exist_ok=True)
+        
+        temp_file_path = os.path.join(temp_dir, zip_file_md.filename)
+        
+        zip_file_md.save(temp_file_path)
+        
+        id_instrumento_pdf = f'{zip_file_md.filename.replace(".zip", "")}_pdf'
+        
+        thread = Thread(target=process_pdf_generation, args=(temp_file_path, id_instrumento_pdf))     
+        thread.start()
+        
+        return jsonify({
+            'message': 'Processamento iniciado. Um email será enviado quando finalizar.',
+            'id_instrumento_pdf': id_instrumento_pdf
+        }), 200
+
+    
+    @app.route('/api/csv/importar', methods=["POST"])
     def importCsv():
         '''
         Importa o instrumento para o backend onde é retornado o header desse instrumento para poder ser feito uma comparação do header correto com o desse instrumento.
@@ -75,7 +214,7 @@ def setup_routes(app, client):
         return jsonify({'header': '', 'error': 'Não foi possível carregar o ano ou o arquivo CSV passado.'}), 400
 
     
-    @app.route('/api/confirmarImportacao', methods=['POST'])
+    @app.route('/api/csv/importar/confirmar', methods=['POST'])
     def confirmImportation():
         '''
         Confirma a importação do instrumento com a requisição vinda do usuário após ter sido conferido o header.
@@ -91,7 +230,7 @@ def setup_routes(app, client):
                 return jsonify({'message': 'Importação já em andamento'}), 400
             
             processing = True
-            thread = threading.Thread(target=processCsv, args=(filename, ano, modalidade))
+            thread = threading.Thread(target=process_csv, args=(filename, ano, modalidade))
             thread.start()
             
             print('Thread iniciada')
@@ -99,7 +238,7 @@ def setup_routes(app, client):
         return jsonify({'message': 'faltando nome do arquivo ou ano ou modalidade'}), 400
 
 
-    @app.route('/progresso', methods=['GET'])
+    @app.route('/csv/importacao/progresso', methods=['GET'])
     def getStatusCsvImport():
         '''
         Confere o status do instrumento que está sendo processado.
@@ -127,7 +266,7 @@ def setup_routes(app, client):
         return jsonify(dbs)
 
 
-    @app.route('/api/gerarRelatorios', methods=['POST'])
+    @app.route('/api/relatorio/gerar', methods=['POST'])
     def generateReports(): 
         '''
         Gera os relatórios para certo instrumento com a requisição feita pelo usuário, sendo necessário informações como:
@@ -171,7 +310,6 @@ def setup_routes(app, client):
         try: 
             filename_zip = f'{id_instrumento}.zip'
             result_filepath = os.path.join('relatorio', 'markdowns', 'zip_temp_files', filename_zip)
-            print(result_filepath)
             
             if not os.path.exists(result_filepath):
                 return jsonify({'error': 'Arquivo não encontrado'}), 404
@@ -181,7 +319,7 @@ def setup_routes(app, client):
             return jsonify({'message': f'Erro ao baixar arquivo (Internal Server Error): {e}'}), 400
     
     
-    @app.route('/api/relatorios/delete/<string:id_instrumento>', methods=['DELETE'])
+    @app.route('/api/relatorios/<string:id_instrumento>/delete', methods=['DELETE'])
     def delete_zip(id_instrumento):
         
         try:
@@ -196,6 +334,7 @@ def setup_routes(app, client):
             return jsonify({'message': 'Arquivo deletado com sucesso'}), 200
         except Exception as e:
             return jsonify({'error': f'Erro ao deletar arquivo (Internal Server Error): {e}'}), 400
+    
     
     @app.route('/api/limparArquvosZip', methods=['POST'])
     def cleanup():
@@ -220,7 +359,7 @@ def setup_routes(app, client):
      
         
     @app.route('/api/relatorios/zips', methods=['GET'])
-    def getAvaliableZips():
+    def get_avaliable_zips():
         try:
             zip_directory = './relatorio/markdowns/zip_temp_files/'
             
@@ -245,8 +384,8 @@ def setup_routes(app, client):
             return jsonify({'error': f'Erro ao listar arquivos: {e}'}), 500
         
         
-    @app.route('/api/etapasInstrumento', methods=['POST'])
-    def getStepsInstrument():
+    @app.route('/api/instrumento/etapas', methods=['POST'])
+    def get_steps_instrument():
         '''
         Lista as etapas já finalizadas daquele instrumento de acordo com o usuário que o preenche.
         '''
@@ -266,8 +405,8 @@ def setup_routes(app, client):
         return jsonify({'etapas': etapas}), 200
 
 
-    @app.route('/api/atualizarEtapa', methods=['POST'])
-    def updateStepInstrument():
+    @app.route('/api/instrumento/etapa/atualizar', methods=['POST'])
+    def update_step_instrument():
         '''
         Atualiza as etapas do instrumento escolhido.
         '''
@@ -284,7 +423,7 @@ def setup_routes(app, client):
         return {'error': resultado}, 400
     
     
-    def processCsv(filename, ano, modalidade):
+    def process_csv(filename, ano, modalidade):
         global processing
         try:
             with app.app_context():
@@ -296,3 +435,4 @@ def setup_routes(app, client):
             time.sleep(2)
             send_email_via_gmail_api('', 'sec-cpa@uem.br', 'Processamento de CSV concluído', f'O processamento do CSV {filename} foi concluído com sucesso, SISTEMA CPA.')
             processing = False
+            
