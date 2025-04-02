@@ -3,25 +3,36 @@ import pandas as pd
 from pymongo.collection import Collection
 from pymongo import MongoClient
 from pymongo.database import Database
+from pandas import DataFrame
 from src.utils.percentage_update_database import percentage_calculator,insert_dict_disciplina,insert_percentage_dict_into_database
 from pymongo.errors import PyMongoError
 from pandas.errors import EmptyDataError
 
 class CSVManagment:
 
-    def findPath() -> None:
+    def find_path() -> Path:
         """
         Função que retorna o caminho do diretório que está o arquivo csv
 
-        :return: Path para o arquivo onde está o arquivo CSV
-        :rtype: Path
+        Returns:
+            Path: Caminho para o diretório do arquivo csv.
         """
-        path = Path(__file__).parent.resolve()
+        path: Path = Path(__file__).parent.resolve()
         return path
     
-    def csv_filter_pos_graduacao(csvFileName) -> None:
-        columns_positions_toDrop_mainCsv = [0,1,2,3,5,6,7,22]
-        cabecalho = [   
+    def csv_filter_pos_graduacao(csv_file_name: str) -> None:
+        """
+        Função criada para filtragem de CSVs brutos da Pós Graduação provenientes do NPD. Isso é feito adicionando colunas para chegar ao padrão pre-definido pela CPA.
+        
+        No caso do csv da pos graduação, ele possui parâmetros a mais que não são necessários, por isso, é feito uma manipulação para remover essas colunas e mudar as posições delas, além de adicionar se for de mestrado ou doutorado.
+        
+        Args:
+            csv_file_name (str): Nome do arquivo CSV que será inserido no banco de dados.
+        Returns:
+            None: Não possui retorno, ele salva o arquivo csv filtrado diretamente no diretório.
+        """
+        columns_positions_toDrop_mainCsv: list = [0,1,2,3,5,6,7,22]
+        cabecalho: list = [   
             'cd_curso',
             'nm_curso',
             'centro_de_ensino',
@@ -40,18 +51,17 @@ class CSVManagment:
             'total_do_curso',
         ]
 
-        dir_arquivo = CSVManagment.findPath()
+        dir_arquivo: Path = CSVManagment.find_path()
 
-        df_principal = pd.read_csv(f'{dir_arquivo}/CSVs/{csvFileName}', sep=',', header = 0)
+        df_principal: DataFrame = pd.read_csv(f'{dir_arquivo}/CSVs/{csv_file_name}', sep=',', header = 0)
 
-
-        columns_to_drop_main_csv = df_principal.columns[columns_positions_toDrop_mainCsv]
+        columns_to_drop_main_csv: list = df_principal.columns[columns_positions_toDrop_mainCsv]
         df_principal = df_principal.drop(columns=columns_to_drop_main_csv)
 
 
         df_principal.iloc[:, 2] = df_principal.apply(lambda row: f"{row.iloc[3]} em {row.iloc[2]}", axis=1)
 
-        columns = df_principal.columns[3]
+        columns: int = df_principal.columns[3]
         df_principal = df_principal.drop(columns=[columns])
 
         colums_df = list(df_principal.columns)
@@ -68,8 +78,20 @@ class CSVManagment:
         df_principal.dropna(subset=['respostas'], inplace=True)
         df_principal.to_csv(f'{dir_arquivo}/CSVs/csvFiltrado.csv', index=False)
     
-    def csv_filter_docentes_and_tecnicos(csvFileName) -> None:
-        cabecalho = [   
+    def csv_filter_docentes_and_tecnicos(csv_file_name) -> None:
+        """
+        Função criada para filtragem de CSVs brutos dos docentes e técnicos/agentes provenientes do NPD. Isso é feito removendo e adicionando colunas para chegar ao padrão pre-definido pela CPA.
+        
+        No caso do instrumento dos docentes e tecnicos, é necessário remover alguams colunas e inserir algumas que não estão presentes.
+        
+        Args:
+            csv_file_name (str): Nome do arquivo CSV que será inserido no banco de dados.
+        Returns:
+            None: Não possui retorno, ele salva o arquivo csv filtrado diretamente no diretório.
+        """
+        
+        
+        cabecalho: list = [   
             'cd_grupo',
             'nm_grupo',
             'cd_subgrupo',
@@ -83,16 +105,15 @@ class CSVManagment:
             'total_do_curso'
         ]
 
-        indexColumnsToDrop = [0,1,2,3,4,14]
+        index_columns_to_drop: list = [0,1,2,3,4,14]
         
-        dirArquivo = CSVManagment.findPath()
-        df_principal = pd.read_csv(f'{dirArquivo}/CSVs/{csvFileName}', sep=',', header = 0)
+        dir_arquivo: Path = CSVManagment.find_path()
+        df_principal: DataFrame = pd.read_csv(f'{dir_arquivo}/CSVs/{csv_file_name}', sep=',', header = 0)
         
-        columnsToDrop = df_principal.columns[indexColumnsToDrop]
-        df_principal = df_principal.drop(columns=columnsToDrop)
+        columns_to_drop: list = df_principal.columns[index_columns_to_drop]
+        df_principal = df_principal.drop(columns=columns_to_drop)
 
-
-        index = 0
+        index: int = 0
         for coluna in cabecalho: 
             df_principal.rename(columns={df_principal.columns[index]: coluna}, inplace=True)
             index+=1 
@@ -104,17 +125,25 @@ class CSVManagment:
         df_principal.insert(7,'cd_disciplina', 0 )
         df_principal.insert(8, 'nm_disciplina', '-')
         print(df_principal)        
-        df_principal.to_csv(f'{dirArquivo}/CSVs/csvFiltrado.csv', index=False) 
+        df_principal.to_csv(f'{dir_arquivo}/CSVs/csvFiltrado.csv', index=False) 
         
-    def csv_filter_discentes_and_ead(csvFileName) -> None:
+    def csv_filter_discentes_and_ead(csv_file_name) -> None:
+        """
+        Função criada para filtragem de CSVs brutos dos discentes e EAD provenientes do NPD. Faz isso removendo e adicionando colunas para chegar ao padrão pre-definido pela CPA.
         
-        #USADO SOMENTE PARA OS CSV DE GRADUAÇÃO QUE POSSUEM SERIE, PARA OS OUTROS A FUNÇÃO ACABA NÃO SENDO NECESSÁRIA.
+        No caso dos discentes e ead, eles possuem o csv que mais precisa passar por modificações para que ele funcione da maneira correta, sendo a primeira e maior rotina criada.
+        
+        Args:
+            csv_file_name (str): Nome do arquivo CSV que será inserido no banco de dados.
+        Returns:
+            None: Não possui retorno, ele salva o arquivo csv filtrado diretamente no diretório.
+        """
 
-        header_graduacao = 22
-        posDropColumnCSVP = [0,1,2,3,5,12,13,19]
-        posDropColumnCSVP_SemSerie = [0,1,2,3,5,6,18]
-        posDropColumnCSVCC = [1,4,5]
-        cabecalho = [   
+        header_graduacao: int = 22
+        pos_drop_column_csvP: list = [0,1,2,3,5,12,13,19]
+        pos_drop_column_csvP_sem_serie: list = [0,1,2,3,5,6,18]
+        pos_drop_column_csv_cc: list = [1,4,5]
+        cabecalho: list = [   
             'cd_curso', 
             'cd_grupo',
             'nm_grupo',
@@ -131,24 +160,24 @@ class CSVManagment:
             'total_do_curso'
         ]
             
-        dirArquivo = CSVManagment.findPath()
+        dir_arquivo: Path = CSVManagment.find_path()
         
-        df_principal = pd.read_csv(f'{dirArquivo}/CSVs/{csvFileName}', sep=',', header = 0)
-        df_cursoCentro = pd.read_csv(f'{dirArquivo}/CSVs/cursos_e_centros.csv', sep=',', header = 0)
+        df_principal: DataFrame = pd.read_csv(f'{dir_arquivo}/CSVs/{csv_file_name}', sep=',', header = 0)
+        df_cursoCentro: DataFrame = pd.read_csv(f'{dir_arquivo}/CSVs/cursos_e_centros.csv', sep=',', header = 0)
         
         if len(df_principal.columns) < header_graduacao:
-            columnsToDrop_CSVP = df_principal.columns[posDropColumnCSVP_SemSerie]
-            df_principal = df_principal.drop(columns=columnsToDrop_CSVP)
+            columns_to_drop_csv_p: list = df_principal.columns[pos_drop_column_csvP_sem_serie]
+            df_principal = df_principal.drop(columns=columns_to_drop_csv_p)
         else:
-            columnsToDrop_CSVP = df_principal.columns[posDropColumnCSVP]
-            df_principal = df_principal.drop(columns=columnsToDrop_CSVP)
+            columns_to_drop_csv_p = df_principal.columns[pos_drop_column_csvP]
+            df_principal = df_principal.drop(columns=columns_to_drop_csv_p)
             header_graduacao = len(df_principal.columns)
 
-        columnsToDrop_CSVCC = df_cursoCentro.columns[posDropColumnCSVCC]
-        df_cursoCentro = df_cursoCentro.drop(columns=columnsToDrop_CSVCC)
+        columns_to_drop_csv_cc: list = df_cursoCentro.columns[pos_drop_column_csv_cc]
+        df_cursoCentro = df_cursoCentro.drop(columns=columns_to_drop_csv_cc)
 
         #Substituir nomes do header para evitar erros de nome
-        index = 0
+        index: int = 0
         for coluna in cabecalho:
             df_principal.rename(columns={df_principal.columns[index]: coluna}, inplace=True)
             index+=1 
@@ -165,13 +194,22 @@ class CSVManagment:
 
         print(df_final)
         df_final.dropna(subset=['respostas'], inplace=True)
-        df_final.to_csv(f'{dirArquivo}/CSVs/csvFiltrado.csv', index=False) 
+        df_final.to_csv(f'{dir_arquivo}/CSVs/csvFiltrado.csv', index=False) 
 
-    def csv_filter_egressos(csvFileName) -> None:
-
-        columns_positions_toDrop_csv_cursoEcentro = [1,4,5]
-        columns_positions_toDrop_mainCsv = [0,1,2,3,5,15]
-        cabecalho = [   
+    def csv_filter_egressos(csv_file_name) -> None:
+        """
+        Função criada para filtragem de CSVs brutos dos Egressos provenientes do NPD. Faz isso removendo e adicionando colunas para chegar ao padrão pre-definido pela CPA.
+        
+        No caso dos Egresso, é necessário realizar mudanças simples, mas ele é extremamente semelhante com a dos Discentes. 
+        
+        Args:
+            csv_file_name (str): Nome do arquivo CSV que será inserido no banco de dados.
+        Returns:
+            None: Não possui retorno, ele salva o arquivo csv filtrado diretamente no diretório.
+        """
+        columns_positions_toDrop_csv_cursoEcentro: list = [1,4,5]
+        columns_positions_toDrop_mainCsv: list = [0,1,2,3,5,15]
+        cabecalho: list = [   
             'cd_curso', 
             'cd_grupo',
             'nm_grupo',
@@ -188,21 +226,21 @@ class CSVManagment:
             'total_do_curso'
         ]
 
-        dirArquivo = CSVManagment.findPath()
+        dir_arquivo: Path = CSVManagment.find_path()
         
-        df_principal = pd.read_csv(f'{dirArquivo}/CSVs/{csvFileName}', sep=',', header = 0)
-        df_cursoCentro = pd.read_csv(f'{dirArquivo}/CSVs/cursos_e_centros.csv', sep=',', header = 0)
+        df_principal: DataFrame = pd.read_csv(f'{dir_arquivo}/CSVs/{csv_file_name}', sep=',', header = 0)
+        df_cursoCentro: DataFrame = pd.read_csv(f'{dir_arquivo}/CSVs/cursos_e_centros.csv', sep=',', header = 0)
 
-        columns_to_drop_main_csv = df_principal.columns[columns_positions_toDrop_mainCsv]
+        columns_to_drop_main_csv: list = df_principal.columns[columns_positions_toDrop_mainCsv]
         df_principal = df_principal.drop(columns=columns_to_drop_main_csv)
 
-        columns_to_drop_centroEcurso_csv = df_cursoCentro.columns[columns_positions_toDrop_csv_cursoEcentro]
+        columns_to_drop_centroEcurso_csv: list = df_cursoCentro.columns[columns_positions_toDrop_csv_cursoEcentro]
         df_cursoCentro = df_cursoCentro.drop(columns=columns_to_drop_centroEcurso_csv)
 
         df_principal.insert(5, 'cd_disciplina', 0)
         df_principal.insert(6, 'nm_disciplina', '-')
 
-        index = 0
+        index: int = 0
         for coluna in cabecalho:
             df_principal.rename(columns={df_principal.columns[index]: coluna}, inplace=True)
             index+=1 
@@ -217,32 +255,35 @@ class CSVManagment:
         df_final = df_final[cabecalho]
 
         df_final.dropna(subset=['respostas'], inplace=True)
-        df_final.to_csv(f'{dirArquivo}/CSVs/csvFiltrado.csv', index=False)
+        df_final.to_csv(f'{dir_arquivo}/CSVs/csvFiltrado.csv', index=False)
     
-    def insert_main_csv_to_database(collectionName: Collection, csvFileName: str, modalidade: str) -> str:
+    def insert_main_csv_to_database(collection_name: Collection, csv_file_name: str, modalidade: str) -> str | Exception:
         """
-        Realiza a leitura do arquivo csv transformando ele em um dataframe temporário (OBS: Futuramente talvez seja interessante dropar esse dataframe)
+        Realiza a inserção dos dados provenientes do CSV do instrumento no banco de dados utilizando data frames, além de realizar a filtragem do csv.
         
-        :param database: O banco de dados que será feito as inserções
-        :type database: Database
-        :param collectionName: Coleção que será feito as insertions e updates
-        :type: Collection 
-        :return: Resultado da inserção do CSV
-        :type: str
+        Args:
+            collection_name (Collection): Collection do instrumento principal.
+            csv_file_name (str): String contendo o nome do arquivo csv.
+            modalidade (str): Modalidade/tipo do instrumento.
+        Returns:
+            String | Exception: Ele retorna ou uma string sinalizando que foi finalizado, ou uma exceção que pode vir acontecer na função.
+        Raises:
+            raise: Não há raises, apenas returns com as Exceptions geradas.
+        
         """
         try:
             
             if modalidade == 'Discente' or modalidade == 'EAD':
-                CSVManagment.csv_filter_discentes_and_ead(csvFileName)
+                CSVManagment.csv_filter_discentes_and_ead(csv_file_name)
             elif modalidade == 'Docente' or modalidade == 'Agente':
-                CSVManagment.csv_filter_docentes_and_tecnicos(csvFileName)
+                CSVManagment.csv_filter_docentes_and_tecnicos(csv_file_name)
             elif modalidade == 'Egresso':
-                CSVManagment.csv_filter_egressos(csvFileName)
+                CSVManagment.csv_filter_egressos(csv_file_name)
             else: 
                 return 'Modalidade não encontrada'
             
             filterCsv = 'csvFiltrado.csv'
-            dirArquivo = CSVManagment.findPath()
+            dirArquivo = CSVManagment.find_path()
             df = pd.read_csv(f'{dirArquivo}/CSVs/{filterCsv}', sep=',', header = 0)
 
             cabecalho = [
@@ -268,12 +309,7 @@ class CSVManagment:
             temp_pctdict = {}
             for i in range(len(df)):
                 print(f"        %{round(100*i/len(df), 0)}")
-            
-                disciplina_anterior = df.iloc[i-1, 7] if i > 0 else None
-                disciplina_atual = df.iloc[i, 7]
-                proxima_disciplina = df.iloc[i+1, 7] if i < len(df)-1 else None
 
-                pergunta_anterior = df.iloc[i-1,11] if i > 0 else None
                 pergunta_atual = df.iloc[i,11]
                 proxima_pergunta = df.iloc[i+1,11] if i < len(df)-1 else None
 
@@ -286,7 +322,7 @@ class CSVManagment:
                     
                     opcao_e_pct = percentage_calculator(temp_pctdict, int(df.iloc[i,15]))
 
-                    collectionName.insert_one(
+                    collection_name.insert_one(
                         {
                         cabecalho[0]: int(df.iloc[i,0]),    #codigo_curso
                         cabecalho[1]:f'{df.iloc[i,1]}',     #nome_do_curso
@@ -307,13 +343,13 @@ class CSVManagment:
 
                     if nm_disciplina == '-' and (cd_disciplina == 0.0 or cd_disciplina == 0):
                         insert_percentage_dict_into_database(
-                            collectionName, 'pct_por_opcao', opcao_e_pct, 
+                            collection_name, 'pct_por_opcao', opcao_e_pct, 
                             'cd_curso', int(df.iloc[i,0]), 
                             'cd_pergunta', int(df.iloc[i,10])
                         )
                     else:
                         insert_dict_disciplina(
-                            collectionName, 'pct_por_opcao', opcao_e_pct, 
+                            collection_name, 'pct_por_opcao', opcao_e_pct, 
                             'cd_curso', int(df.iloc[i,0]), 
                             'cd_pergunta', int(df.iloc[i,10]), 
                             'cd_disciplina', int(df.iloc[i,7])
@@ -341,16 +377,20 @@ class CSVManagment:
         except Exception as e:
             return f"Erro inesperado: {e}"
 
-    def insert_curso_e_centro_csv_to_database(collectionName: Collection) -> print:
+    def insert_curso_e_centro_csv_to_database(collection_name: Collection) -> str | Exception:
         '''
-        Realiza a leitura do csv cursos e centros e faz a inserção dos dados no banco de dados
+        Realiza a inserção do CSV curso e centro no database. 
         
-        :param collectionName: Coleção que será feito as insertions e updates
-        :type: Collection 
+        Args:
+            collection_name (Collection): Collection do csv do instrumento.
+        Returns:
+            String | Exception: Ele retorna ou uma string sinalizando que foi finalizado, ou uma exceção que pode vir acontecer na função.
+        Raises:
+            raise: Não há raises, apenas returns com as Exceptions geradas.
         '''
         try: 
             csvArchive = 'cursos_e_centros.csv'
-            dirArquivo = CSVManagment.findPath()
+            dirArquivo = CSVManagment.find_path()
             df = pd.read_csv(f'{dirArquivo}/CSVs/{csvArchive}', sep=',', header = 0)
 
             print(df)
@@ -365,7 +405,7 @@ class CSVManagment:
             ]
 
             for i in range(len(df)):
-                collectionName.insert_one(
+                collection_name.insert_one(
                     {
                         cabecalho[0]: int(df.iloc[i,0]),
                         cabecalho[1]: float(df.iloc[i,1]),
@@ -395,16 +435,20 @@ class CSVManagment:
         except Exception as e:
             return f"Erro inesperado: {e}"
 
-    def insert_centro_diretor_csv_database(collectionName: Collection) -> print:
+    def insert_centro_diretor_csv_database(collection_name: Collection) -> str | Exception:
         '''
-        Realiza a leitura do csv centro e diretor e faz a inserção dos dados no banco de dados
+        Realiza a inserção do csv centro_diretor no banco de dados.
         
-        :param collectionName: Coleção que será feito as insertions e updates
-        :type: Collection 
+        Args:
+            collection_name (Collection): Collection do csv do instrumento.
+        Returns:
+            String | Exception: Ele retorna ou uma string sinalizando que foi finalizado, ou uma exceção que pode vir acontecer na função.
+        Raises:
+            raise: Não há raises, apenas returns com as Exceptions geradas.
         '''
         try:
             csvArchive = 'centros_e_diretores.csv'
-            dirArquivo = CSVManagment.findPath()
+            dirArquivo = CSVManagment.find_path()
             df = pd.read_csv(f'{dirArquivo}/CSVs/{csvArchive}', sep=',', header = 0)
             print(df)
             cabecalho = [
@@ -415,7 +459,7 @@ class CSVManagment:
                 'ano_da_direcao'
             ]
             for i in range(len(df)):
-                collectionName.insert_one(
+                collection_name.insert_one(
                     {
                         cabecalho[0]: str(df.iloc[i,0]),
                         cabecalho[1]: str(df.iloc[i,1]),

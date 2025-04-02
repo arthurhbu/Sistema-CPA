@@ -41,9 +41,9 @@ def zip_markdown_files(database_name: str, zip_name_file: str) -> None:
                     arcname = os.path.relpath(file_path, os.path.dirname(folderPath))
                     zipf.write(file_path, arcname)
                     
-        print('Arquivos compactados com sucesso')
+        return {'Success': True}
     except Exception as e:
-        print(f'Erro ao compactar os arquivos: {e}')
+        return {'Success': False, 'Error': f'Ocorreu um erro ao tentar compactar a pasta contendo os relatórios markdown: {e}' }
 
 
 def send_email_zip(arquivo_zip, destinatario_email, remetente_email, senha_remetente):

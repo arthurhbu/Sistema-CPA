@@ -5,14 +5,15 @@ sys.stdout.reconfigure(encoding="utf-8")
 
 def table_interpretation_text_generator(pergunta: str, option_and_percentage: dict) -> str:
     """
-    Função que cria um texto contendo uma pergunta, as opções e as porentagens
+    Função que cria um texto que facilite o prompt para a LLM, fazendo assim com que a resposta dela seja mais precisa.
 
-    :param pergunta: Será utilizado como título para o texto formado
-    :type pergunta: String
-    :param optAndPercentage: Contém as opções e suas respectivas porcentagens em um dicionário
-    :type optAndPercentage: Dict
-    :return: Texto que contendo tudo de maneira formatada para que uma IA possa interpretar de maneira correta
-    :rtype: String
+    Args:
+        pergunta (str): Uma das perguntas do instrumento.
+        option_and_percentage (dict): É um dict que conté as opções e porcentagens dessa pergunta.
+    Returns:
+        text (str): Retorna uma String contendo o prompt que será consumido pela LLM.
+    Raises: 
+        None: Não há raises na função.
     """
 
     pergunta_formatada = re.sub("^\d+\.\d+\s*-\s*",'',pergunta)
@@ -26,30 +27,32 @@ def table_interpretation_text_generator(pergunta: str, option_and_percentage: di
 
 def compose_table(pergunta: str, option_and_percentage: dict, respondentes: int) -> str:
     """
-    Função que realiza a composição de uma tabela contendo as opções e porcentagens
+    Função que realiza a composição da tabela contendo as opções, porcentagens e respondentes.
 
-    :param pergunta: Utilizado para identificação da tabela que foi criada
-    :type pergunta: String
-    :param optAndPercentage: Contém as opções e suas respectivas porcentagens em um dicionário
-    :type optAndPercentage: Dict
-    :return: Uma tabela formada em markdown
-    :rtype: String
+    Args:
+        pergunta (str): Uma pergunta do instrumento.
+        option_and_percentage (dict): Dict contendo as opções e porcentagens da pergunta.
+        respondentes (int): A quantidade de pessoas que responderam à pergunta.
+    Responses:
+        table (str): Uma tabela markdown em uma String.
+    Raises:
+        None: Não há raises.
     """
     pergunta_formatada = re.sub("^\d+\.\d+\s*-\s*",'',pergunta)
-    s = "| Indicador |"
+    table = "| Indicador |"
     for tuple in option_and_percentage.items():
-        s = f'{s} {tuple[0].capitalize()} |'
+        table = f'{table} {tuple[0].capitalize()} |'
 
-    s = f"{s} Respondentes |"
-    s = f'{s} \n|---|'
+    table = f"{table} Respondentes |"
+    table = f'{table} \n|---|'
     for tuple in option_and_percentage.items():
-        s =  f'{s}---|'
-    s = f'{s}---|'
+        table =  f'{table}---|'
+    table = f'{table}---|'
 
-    s = f'{s} \n| {pergunta_formatada} |'
+    table = f'{table} \n| {pergunta_formatada} |'
     for tuple in option_and_percentage.items():
         pct = str(tuple[1]).replace('.', ',')
-        s = f'{s} {pct}% | '         
-    s = f'{s}{respondentes} | '
-    return s
+        table = f'{table} {pct}% | '         
+    table = f'{table}{respondentes} | '
+    return table
 

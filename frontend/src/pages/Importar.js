@@ -7,7 +7,6 @@ import { FaFileCsv } from "react-icons/fa6";
 import StyledInput from '../components/StyledInput';
 import UploadButton from '../components/uploadButton';
 import { Link } from 'react-router-dom';
-import { io } from 'socket.io-client'
 import SelectAutoWidth from '../components/selectAutoWidth';
 import HeaderPopup from '../components/PopupHeader';
 
@@ -268,8 +267,13 @@ return (
             <div className={styles.intro}>
                 <p className={styles.titulo}>Inserir Arquivo</p>
                 <p className={styles.infos}>
-                    Insira o CSV do instrumento para que comece o processamento dos dados, nessa etapa é feito o uso de Inteligência Artificial por isso pode demorar um certo tempo para finalizar. Enquanto um instrumento está sendo processado não é possível inserir outro, pois o precesso é feito de maneira unitária. Mas é possível visualizar o progresso aqui: Acompanhe o progresso de seu csv.
+                    A etapa de inserção é feito com o uso de Inteligência Artificial por isso pode demorar um certo tempo para finalizar. Enquanto um instrumento está sendo processado não é possível inserir outro, pois o precesso é feito de maneira unitária. Mas é possível visualizar o progresso aqui:  <Link to='/progresso'>Progresso de inserção</Link>
                 </p>
+                <p className={styles.infos}>
+                    É necessário inserir o arquivo CSV e um arquivo ZIP contendo a introdução e conclusão do instrumento que será processado. Para isso, siga os templates de introdução e conclusão: </p>    
+                    <div className={styles.containerButton}>
+                        <button className={styles.button_templates}> Templates </button>
+                    </div>
                 <div style={{display:'flex', justifyContent:'center'}}>
                     <div style={{backgroundColor:'#E8E8E8', borderRadius:'10px', padding:'3.5vh', marginTop:'5vh', width:'40%',display:'flex', justifyContent:'center', flexDirection: 'column'}} >
                         <p style={{marginTop: '0', fontFamily:'Inter', fontSize:'1.4rem', fontWeight:'500', alignItems: 'center'}}>Primeiro insira a modalidade do instrumento que será processado: </p>

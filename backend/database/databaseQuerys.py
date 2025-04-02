@@ -2,66 +2,68 @@ from pymongo.database import Database
 
 def df_cursos_por_centro(collection_cursos_e_centros,ano,centro_de_ensino):
 
-    # Realizar a agregação de dados
-    results = list(collection_cursos_e_centros.aggregate([
-    {
-        "$lookup": {
-            "from": "instrumento",
-            "localField": "cd_curso",
-            "foreignField": "cd_curso",
-            "as": "curso"
-        }
-    },
-    {
-        "$unwind": "$curso"
-    },
-    {
-        "$match": {
-            "ano_referencia": ano,
-            "centro_de_ensino": centro_de_ensino
-        }
-    },
-    {
-        "$group": {
-            "_id": "$cd_curso",
-            "nm_curso": {"$first": "$nm_curso"},
-            "centro_de_ensino": {"$first": "$centro_de_ensino"},
-            "matriculados": {"$first": "$matriculados"},
-            "total_do_curso": {"$max": "$curso.total_do_curso"}
-        }
-    },
-    {
-        "$project": {
-            "_id": 0,
-            "nm_curso": 1,
-            "centro_de_ensino": 1,
-            "respondentes": "$total_do_curso",
-            "matriculados": 1,
-            "porcentagem": {
-                "$cond": {
-                    "if": {"$eq": ["$matriculados", 0]},
-                    "then": 0,
-                    "else": {
-                        "$round": [
-                            {
-                                "$multiply": [
-                                    {"$divide": ["$total_do_curso", "$matriculados"]},
-                                    100
-                                ]
-                            },
-                            2
-                        ]
+    try:
+        results = list(collection_cursos_e_centros.aggregate([
+        {
+            "$lookup": {
+                "from": "instrumento",
+                "localField": "cd_curso",
+                "foreignField": "cd_curso",
+                "as": "curso"
+            }
+        },
+        {
+            "$unwind": "$curso"
+        },
+        {
+            "$match": {
+                "ano_referencia": ano,
+                "centro_de_ensino": centro_de_ensino
+            }
+        },
+        {
+            "$group": {
+                "_id": "$cd_curso",
+                "nm_curso": {"$first": "$nm_curso"},
+                "centro_de_ensino": {"$first": "$centro_de_ensino"},
+                "matriculados": {"$first": "$matriculados"},
+                "total_do_curso": {"$max": "$curso.total_do_curso"}
+            }
+        },
+        {
+            "$project": {
+                "_id": 0,
+                "nm_curso": 1,
+                "centro_de_ensino": 1,
+                "respondentes": "$total_do_curso",
+                "matriculados": 1,
+                "porcentagem": {
+                    "$cond": {
+                        "if": {"$eq": ["$matriculados", 0]},
+                        "then": 0,
+                        "else": {
+                            "$round": [
+                                {
+                                    "$multiply": [
+                                        {"$divide": ["$total_do_curso", "$matriculados"]},
+                                        100
+                                    ]
+                                },
+                                2
+                            ]
+                        }
                     }
                 }
             }
+        },
+        {
+            "$sort": {"nm_curso": 1}
         }
-    },
-    {
-        "$sort": {"nm_curso": 1}
-    }
-    ]))
+        ]))
+        return {'Success': True, 'resultado': results}
+    except Exception as e:
+        return {'Success': False, 'error': f'Ocorreu um erro ao tentar criar Collection cursos_por_centro. Erro: {e}'}
 
-    return results
 
 def df_centro_por_ano(collection_instrumento,database, ano, modal):
     centro_por_ano_temp = database['centro_por_ano_temp']
@@ -174,9 +176,9 @@ def df_centro_por_ano(collection_instrumento,database, ano, modal):
             ]
         )
         centro_por_ano_temp.drop()
-        return 'Finalizado'
-    except:
-        return 'Ocorreu um erro na criaçao do dataframe centro por ano'
+        return {'Success': True, 'message': 'Finalizado'}
+    except Exception as e: 
+        return {'Success': False, 'error': f'Ocorreu um erro ao tentar criar Collection centro_por_ano: {e}'}
     
 def update_progresso(progresso: Database, etapa: str, resposta: str):
     if resposta == 'Finalizado':

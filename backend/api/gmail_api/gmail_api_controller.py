@@ -17,7 +17,11 @@ CREDENTIALS_PATH = os.path.join(BASE_DIR, 'credentials.json')
 
 SCOPES = ["https://www.googleapis.com/auth/gmail.send"]
 
-def get_credentials():
+def get_credentials() -> Credentials:
+    '''
+    Função para validar ou criar as credencias token.json para poder utilizar a API do gmail.
+    
+    '''
     
     creds = None
     
@@ -46,7 +50,20 @@ def get_credentials():
             
     return creds
 
-def send_email_via_gmail_api(sender_email: str, receiver_email: str, subject: str, message: str):
+def send_email_via_gmail_api(sender_email: str, receiver_email: str, subject: str, message: str) -> None:
+    '''
+    Função para enviar um email via API gmail.
+    
+    Args:
+        sender (str): Email do remetente, mas atualmente não é necessário.
+        receiver_email (str): Email do destinatário.
+        subject (str): Assunto referente do email.
+        message (str): Mensagem que será enviada no email.
+    Returns:
+        None: A função não retorna nenhum valor.
+    Raises:
+        Exception: Lança uma exceção se ocorrer algum erro durante a execução.    
+    '''
     
     try:
         creds = get_credentials()
@@ -62,7 +79,6 @@ def send_email_via_gmail_api(sender_email: str, receiver_email: str, subject: st
             userId='me',
             body={'raw': raw_msg}
         ).execute()
-        
         
     except Exception as e:
         raise Exception(f"Error sending email: {str(e)}")

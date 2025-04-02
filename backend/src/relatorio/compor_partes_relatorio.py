@@ -23,77 +23,82 @@ def compor_introducao(collection_centro_por_ano: Collection,collection_cursos_po
     :type centro_de_ensino: String
 
     """
-    
-    #FALTA MEXER PARA TER O PARTICIPACAO_CURSO TAMBEM
-    
-    if modal == 'discente':	
-        with open(f'relatorioComponentes/{arquivo_intro}','r',encoding='utf-8') as f:
-            template = f.read()
-        renderer = pystache.Renderer()
-        respondentes_total = 0
-        matriculas_totais = 0
-        
-        tabela_centros = "| Sigla | Centro   | Matr. | Resp.   |  %   |\n |------|:----:|:-----:|:---:|:---:| \n"
-        for document in collection_centro_por_ano.find():
-            respondentes_total += document['respondentes']  
-            matriculas_totais += document['matriculados']
-            tabela_centros += f'| {document["centro_de_ensino"]}'
-            tabela_centros += f'| {document["centro_descricao"]}'    
-            tabela_centros += f'| {document["matriculados"]}'
-            tabela_centros += f'| {document["respondentes"]}'    
-            tabela_centros += f'| {document["porcentagem"]}'    
-            tabela_centros += '| \n'    
+    try:
+        if modal == 'discente':	
+            with open(f'relatorioComponentes/{arquivo_intro}','r',encoding='utf-8') as f:
+                template = f.read()
+            renderer = pystache.Renderer()
+            respondentes_total = 0
+            matriculas_totais = 0
             
-        participacao_uem = round(100 * (respondentes_total/matriculas_totais), 2)
-        
-        tabela_cursos = df_2_tabela_cursos = "| Curso |  Resp. |Matr.|   %   | \n |------|:-----:|:-----:|:---:| \n "
-        for document in collection_cursos_por_centro.find({'centro_de_ensino': centro_de_ensino}):
-            tabela_cursos += f'| {document["nm_curso"]}'
-            tabela_cursos += f'| {document["respondentes"]}'
-            tabela_cursos += f'| {document["matriculados"]}'
-            tabela_cursos += f'| {document["porcentagem"]}'
-            tabela_cursos += '| \n'
+            tabela_centros = "| Sigla | Centro   | Matr. | Resp.   |  %   |\n |------|:----:|:-----:|:---:|:---:| \n"
+            for document in collection_centro_por_ano.find():
+                respondentes_total += document['respondentes']  
+                matriculas_totais += document['matriculados']
+                tabela_centros += f'| {document["centro_de_ensino"]}'
+                tabela_centros += f'| {document["centro_descricao"]}'    
+                tabela_centros += f'| {document["matriculados"]}'
+                tabela_centros += f'| {document["respondentes"]}'    
+                tabela_centros += f'| {document["porcentagem"]}'    
+                tabela_centros += '| \n'    
+                
+            participacao_uem = round(100 * (respondentes_total/matriculas_totais), 2)
+            
+            tabela_cursos = df_2_tabela_cursos = "| Curso |  Resp. |Matr.|   %   | \n |------|:-----:|:-----:|:---:| \n "
+            for document in collection_cursos_por_centro.find({'centro_de_ensino': centro_de_ensino}):
+                tabela_cursos += f'| {document["nm_curso"]}'
+                tabela_cursos += f'| {document["respondentes"]}'
+                tabela_cursos += f'| {document["matriculados"]}'
+                tabela_cursos += f'| {document["porcentagem"]}'
+                tabela_cursos += '| \n'
 
-        intro = renderer.render(template, {'tabela_centros': tabela_centros, 'tabela_cursos_por_centro': tabela_cursos, 'ano': ano, 'curso': '{{curso}}', 'participacao_uem': ponto_2_virgula(participacao_uem), 'participacao_curso': '{{participacao_curso}}'})
+            intro = renderer.render(template, {'tabela_centros': tabela_centros, 'tabela_cursos_por_centro': tabela_cursos, 'ano': ano, 'curso': '{{curso}}', 'participacao_uem': ponto_2_virgula(participacao_uem), 'participacao_curso': '{{participacao_curso}}'})
+            
+            with open("relatorio/info_introducao.md", "w", encoding='utf-8') as arquivo:
+                arquivo.write(f'{intro} \n')
+                
+        elif modal == 'ead':
+            with open(f'relatorioComponentes/{arquivo_intro}','r',encoding='utf-8') as f:
+                template = f.read()
+            renderer = pystache.Renderer()
+            respondentes_total = 0
+            matriculas_totais = 0
+            
+            for document in collection_centro_por_ano.find():
+                respondentes_total += document['respondentes']
+                matriculas_totais += document['matriculados']
+            
+            #Implementar o participacao_curso
+            
+            intro = renderer.render(template, {'ano': ano, 'curso': '{{curso}}', 'participacao_curso': '{{participacao_curso}}'})
+            
+            with open("relatorio/info_introducao.md", "w", encoding='utf-8') as arquivo:
+                arquivo.write(f'{intro} \n')
+                
+        elif modal == 'egresso':
+            with open(f'relatorioComponentes/{arquivo_intro}','r',encoding='utf-8') as f:
+                template = f.read()
+            renderer = pystache.Renderer()
+            
+            intro = renderer.render(template, {'ano': ano, 'curso': '{{curso}}'})
+            
+            with open("relatorio/info_introducao.md", "w", encoding='utf-8') as arquivo:
+                arquivo.write(f'{intro} \n')
+                
+        else:
+            with open(f'relatorioComponentes/{arquivo_intro}','r',encoding='utf-8') as f:
+                template = f.read()
+            renderer = pystache.Renderer()
+            
+            intro = renderer.render(template)
+            
+            with open("relatorio/info_introducao.md", "w", encoding='utf-8') as arquivo:
+                arquivo.write(f'{intro} \n')
         
-        with open("relatorio/info_introducao.md", "w", encoding='utf-8') as arquivo:
-            arquivo.write(f'{intro} \n')
-    elif modal == 'ead':
-        with open(f'relatorioComponentes/{arquivo_intro}','r',encoding='utf-8') as f:
-            template = f.read()
-        renderer = pystache.Renderer()
-        respondentes_total = 0
-        matriculas_totais = 0
+        return {'Success': True}
+    except Exception as e:
+        return {'Success': False, 'Error': f'Ocorreu um erro ao tentar compor introdução: {e}'}
         
-        for document in collection_centro_por_ano.find():
-            respondentes_total += document['respondentes']
-            matriculas_totais += document['matriculados']
-        
-        #Implementar o participacao_curso
-        
-        intro = renderer.render(template, {'ano': ano, 'curso': '{{curso}}', 'participacao_curso': '{{participacao_curso}}'})
-        
-        with open("relatorio/info_introducao.md", "w", encoding='utf-8') as arquivo:
-            arquivo.write(f'{intro} \n')
-    elif modal == 'egresso':
-        with open(f'relatorioComponentes/{arquivo_intro}','r',encoding='utf-8') as f:
-            template = f.read()
-        renderer = pystache.Renderer()
-        
-        intro = renderer.render(template, {'ano': ano, 'curso': '{{curso}}'})
-        
-        with open("relatorio/info_introducao.md", "w", encoding='utf-8') as arquivo:
-            arquivo.write(f'{intro} \n')
-    else:
-        with open(f'relatorioComponentes/{arquivo_intro}','r',encoding='utf-8') as f:
-            template = f.read()
-        renderer = pystache.Renderer()
-        
-        intro = renderer.render(template)
-        
-        with open("relatorio/info_introducao.md", "w", encoding='utf-8') as arquivo:
-            arquivo.write(f'{intro} \n')
-    
 
 def compor_conclusao(collection_name_cursos_por_centro: Collection, arquivo_conclusao: str, ano: int, curso: str, modal: str) -> None:
     """
@@ -107,59 +112,64 @@ def compor_conclusao(collection_name_cursos_por_centro: Collection, arquivo_conc
     :type ano: Integer
     """
     
-    if modal == 'discente':
-        with open(f'relatorioComponentes/{arquivo_conclusao}', 'r', encoding='utf-8') as f:
-            template = f.read()
-        renderer = pystache.Renderer()
-        for document in collection_name_cursos_por_centro.find():
-            respondentes_total = document['respondentes']
-            matriculas_totais = document['matriculados']
+    try:
+        if modal == 'discente':
+            with open(f'relatorioComponentes/{arquivo_conclusao}', 'r', encoding='utf-8') as f:
+                template = f.read()
+            renderer = pystache.Renderer()
+            for document in collection_name_cursos_por_centro.find():
+                respondentes_total = document['respondentes']
+                matriculas_totais = document['matriculados']
 
-        participacao_curso = collection_name_cursos_por_centro.find_one({'nm_curso': curso})['porcentagem']
-        
-        participacao_uem = round(100 * (respondentes_total/matriculas_totais), 2)
-        conclusao = renderer.render(template, {'ano': ano, 'curso': '{{curso}}', 'participacao_uem': ponto_2_virgula(participacao_uem), 'participacao_curso': ponto_2_virgula(participacao_curso)})
-        with open("relatorio/info_conclusao.md","w", encoding='utf-8') as arquivo:
-            arquivo.write(f'{conclusao} \n')
+            participacao_curso = collection_name_cursos_por_centro.find_one({'nm_curso': curso})['porcentagem']
             
-    elif modal == 'ead':
-        with open(f'relatorioComponentes/{arquivo_conclusao}', 'r', encoding='utf-8') as f:
-            template = f.read()
-        renderer = pystache.Renderer()
-        for document in collection_name_cursos_por_centro.find():
-            respondentes_total = document['respondentes']
-            matriculas_totais = document['matriculados']
+            participacao_uem = round(100 * (respondentes_total/matriculas_totais), 2)
+            conclusao = renderer.render(template, {'ano': ano, 'curso': '{{curso}}', 'participacao_uem': ponto_2_virgula(participacao_uem), 'participacao_curso': ponto_2_virgula(participacao_curso)})
+            with open("relatorio/info_conclusao.md","w", encoding='utf-8') as arquivo:
+                arquivo.write(f'{conclusao} \n')
+                
+        elif modal == 'ead':
+            with open(f'relatorioComponentes/{arquivo_conclusao}', 'r', encoding='utf-8') as f:
+                template = f.read()
+            renderer = pystache.Renderer()
+            for document in collection_name_cursos_por_centro.find():
+                respondentes_total = document['respondentes']
+                matriculas_totais = document['matriculados']
 
-        participacao_uem = round(100 * (respondentes_total/matriculas_totais), 2)
-        
-        conclusao = renderer.render(template, {'ano': ano, 'participacao_uem': ponto_2_virgula(participacao_uem)})
-        with open("relatorio/info_conclusao.md","w", encoding='utf-8') as arquivo:
-            arquivo.write(f'{conclusao} \n')
+            participacao_uem = round(100 * (respondentes_total/matriculas_totais), 2)
             
-    elif modal == 'egresso':
-        with open(f'relatorioComponentes/{arquivo_conclusao}', 'r', encoding='utf-8') as f:
-            template = f.read()
-        renderer = pystache.Renderer()
-        for document in collection_name_cursos_por_centro.find():
-            respondentes_total = document['respondentes']
-            matriculas_totais = document['matriculados']
+            conclusao = renderer.render(template, {'ano': ano, 'participacao_uem': ponto_2_virgula(participacao_uem)})
+            with open("relatorio/info_conclusao.md","w", encoding='utf-8') as arquivo:
+                arquivo.write(f'{conclusao} \n')
+                
+        elif modal == 'egresso':
+            with open(f'relatorioComponentes/{arquivo_conclusao}', 'r', encoding='utf-8') as f:
+                template = f.read()
+            renderer = pystache.Renderer()
+            for document in collection_name_cursos_por_centro.find():
+                respondentes_total = document['respondentes']
+                matriculas_totais = document['matriculados']
 
-        participacao_uem = round(100 * (respondentes_total/matriculas_totais), 2)
+            participacao_uem = round(100 * (respondentes_total/matriculas_totais), 2)
+            
+            conclusao = renderer.render(template, {'ano': ano, 'participacao_uem': ponto_2_virgula(participacao_uem)})
+            with open("relatorio/info_conclusao.md","w", encoding='utf-8') as arquivo:
+                arquivo.write(f'{conclusao} \n')
+        else: 
+            with open(f'relatorioComponentes/{arquivo_conclusao}', 'r', encoding='utf-8') as f:
+                template = f.read()
+            renderer = pystache.Renderer()
+            
+            conclusao = renderer.render(template)
+            with open("relatorio/info_conclusao.md","w", encoding='utf-8') as arquivo:
+                arquivo.write(f'{conclusao} \n')
+        return {'Success': True}
         
-        conclusao = renderer.render(template, {'ano': ano, 'participacao_uem': ponto_2_virgula(participacao_uem)})
-        with open("relatorio/info_conclusao.md","w", encoding='utf-8') as arquivo:
-            arquivo.write(f'{conclusao} \n')
-    else: 
-        with open(f'relatorioComponentes/{arquivo_conclusao}', 'r', encoding='utf-8') as f:
-            template = f.read()
-        renderer = pystache.Renderer()
-        
-        conclusao = renderer.render(template)
-        with open("relatorio/info_conclusao.md","w", encoding='utf-8') as arquivo:
-            arquivo.write(f'{conclusao} \n')
-    
+    except Exception as e:
+        return {'Success': False, 'Error': f'Ocorreu um erro ao tentar compor conclusão: {e}'}
 
 def substituirIdentificadores(filename: str, dbName: str):
+
     directory = Path('relatorio')
     file = f'{directory}/{filename}'
 

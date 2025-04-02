@@ -1,11 +1,12 @@
 from flask import request, jsonify, send_file
 from api.utils_api import converteObjectIDToStr, removeKeys
-from src.main_controller import list_databases,get_etapas,atualiza_etapa,get_progresso_insercao,inserir_e_processar_csv,gerar_relatorios
+from src.main_controller import *
 from api.gmail_api.gmail_api_controller import send_email_via_gmail_api
 import os, csv
 from threading import Thread
 import time
 import requests
+from flask import Flask
 
 filename: str = ''
 processing: bool = False
@@ -14,7 +15,7 @@ UPLOAD_FOLDER = 'src/csv/CSVs'
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
 
-def setup_routes(app, client): 
+def setup_routes(app: Flask, client: MongoClient): 
     """
     Configura as rotas para o backend.
     
@@ -42,7 +43,6 @@ def setup_routes(app, client):
         - /api/atualizarEtapa: updateStepInstrument, atualiza as etapas do instrumento escolhido.
 
     """
-    
     
     def process_pdf_generation(file_path, id_instrumento_pdf: str):
         try: 
@@ -290,14 +290,19 @@ def setup_routes(app, client):
             
             id_instrumento = f'{instrumento}_id'
             
-            gerar_relatorios(instrumento, client, int(ano), introConcl, id_instrumento)
+            res: dict = setup_to_generate_reports(instrumento, client, int(ano), introConcl, id_instrumento)
             
-            send_email_via_gmail_api('', 'sec-cpa@uem.br', 'Relatórios gerados', f'Os relatórios do instrumento {instrumento} foram gerados com sucesso.')
-                              
+            if res['Success'] == True:
+                send_email_via_gmail_api('', 'sec-cpa@uem.br', 'Relatórios gerados', f'Os relatórios do instrumento {instrumento} foram gerados com sucesso.')
+                                
+                return jsonify({
+                    'success': True, 
+                    'id_instrumento': id_instrumento,
+                    'download_url': f'/api/download/{id_instrumento}',
+                })
+            
             return jsonify({
-                'success': True, 
-                'id_instrumento': id_instrumento,
-                'download_url': f'/api/download/{id_instrumento}',
+                'error': f'Erro ao tentar gerar relatórios.'
             })
             
         except Exception as e:
@@ -433,6 +438,6 @@ def setup_routes(app, client):
             print(f'Erro no processamento: {e}')
         finally: 
             time.sleep(2)
-            send_email_via_gmail_api('', 'sec-cpa@uem.br', 'Processamento de CSV concluído', f'O processamento do CSV {filename} foi concluído com sucesso, SISTEMA CPA.')
+            send_email_via_gmail_api('', 'sec-cpa@uem.br', 'Processamento de CSV concluído', f'O processamento do CSV {filename} foi concluído com sucesso. \nO instrumento estará disponível para ser gerado os relatórios markdowns \n\nSISTEMA CPA.')
             processing = False
             

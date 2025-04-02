@@ -1,60 +1,100 @@
-# Projeto Relatórios CPA
+# Sistema de Geração de Relatórios CPA
 
-Sistema de automação dos relatórios da UEM CPA. 
+  
 
-Para iniciar, sugiro que configure as variáveis de ambiente.
+Sistema de automação dos relatórios da UEM CPA com o auxílio de uma LLM.
 
-[Variáveis environment][compose/exemplo.md]
+Um sistema desenvolvido com o intuito de agilizar e automatizar processos que envolvem a geração de relatórios provenientes do departamento da CPA (Comissão Própria de Avaliação).
+
+# Tecnologias Utilizadas
+
+- Flask
+- React.js
+- MongoDB
+- Pandas
+- Ollama
+- GoogleAPI
+- Docker
+	
+	
+
+		
+
+ 
+# Status do projeto: 
+
+O projeto atualmente já está em produção mas certar partes ainda estão sendo desenvolvidas.
+
+# Requisitos
+
+Os requisitos para se rodar o Sistema é ter o Podman instalado em sua máquina e no caso de usar Windows, tenha Podman Desktop instalado.
+
+# Documentação
+
+O Sistema possui um diretório somente para documentação do código contendo detalhadamente os principais fluxos do sistema e sobre cada função.
+
+Em caso de futura refatoração ou mudança de alguma parte do sistema, confira a documentação pois tudo que for necessário para realizar tal tarefa estará nesse diretório.
+
+
+  
+
+
+
+
+  
 
 # Uso com Podman-Compose
 
+ Para iniciar, sugiro que configure as variáveis de ambiente. [Variáveis environment][compose/exemplo.md]
+
+
+
 Na pasta Compose você pode executar os composes em dois níveis:
 
-Backend
+  
+
+- Backend
+
+  
 
 ```
+
 podman-compose -f backend.yaml pull
 
+  
+
 podman-compose -f backend.yaml up -d
+
 ```
+
+  
 
 Tomar cuidado para importar o banco de dados original, caso haja necessidade.
 
-Frontend
+  
+
+- Frontend
+
+  
 
 ```
+
 podman-compose -f frontend.yaml pull
 
+  
+
 podman-compose -f frontend.yaml up -d
+
 ```
 
-## Portas que devem ser abertas
+  
 
+## Portas que devem ser abertas
+  
 - Acesso ao FrontEnd - 3000
+
 - Acesso ao Mongo Express - 8081
 
-# Pendências
+  
 
-    PRIORIDADE:
-        - Tela home adicionar o passo a passo do que fazer (PROXIMO A FAZER). Parte das etapas foi adicionado, mas o Tutotrial pode ficar melhor eu acho.
-        - Melhorar a tela Home
-        - Tentar aprimorar o cabeçalho futuramente
-        - Terminar o backend Gerar Relatórios, com a parte de enviar no email os relatórios gerados(Falta testar no servidor da uem para ver se realmente está enviando.)
-
-    PARA FAZER:
-    - Melhorar o footer
-    - Criar a tela Gerar PDFs e o backend 
-    - Autenticação para Login de funcionários da CPA    
-    
-    - Pagina para alterar arquivos de introdução e conclusao
-    - Página para correção de possíveis problemas envolvendo formatação e afins.
-    - Realizar um teste completo, onde faça cada etapa necessária.
-    - Talvez ter que criar uma slidebar para escolher qual csv estara sendo importado para que não haja problemas na hora da importação. Mas isso podemos esperar a próxima leva de CSVs
-
-# Finalizados
-
-    - Confirmação se o cabeçalho está correto com o padrão (POPUP DE IMPORTAÇAO FINALIZADO, ACREDITO QUE SEJA ISSO NO MOMENTO PARA A PAGINA)
-    - Tela de progresso, adicionar logs (ACREDITO ESTAR FINALIZADO, CONFIRMAR PARA VER O QUE O PROFESSOR ACHA COMO FICOU)
-
-    
 

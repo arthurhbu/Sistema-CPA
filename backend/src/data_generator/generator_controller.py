@@ -8,27 +8,33 @@ from pymongo.database import Database
 from pymongo.mongo_client import MongoClient
 from pymongo.errors import OperationFailure, CursorNotFound, ConnectionFailure, InvalidOperation, DuplicateKeyError
 import random as rand
+from pymongo import CursorType
 import sys
 import re
 sys.stdout.reconfigure(encoding="utf-8")
 
 
 
-def generate_graph_table_report(client: MongoClient, database_name: Database, collection_name: Collection) -> None:
+def generate_graph_table_report(client: MongoClient, database_name: Database, collection_name: Collection) -> str | Exception:
     """ 
-    Função controller que chama as outras funções para gerar o gráfico, a tabela e as legendas e reports para o relatório
+    Função para gerar gráfico, tabela e legenda para cada pergunta do instrumento. No caso de a pergunta pertencer a uma disciplina, somente a tabela é gerada.
 
-    :param CollectionName: Paramêtro que chama a collection na qual estamos trabalhando
-    :type CollectionName: Collection
+    Args:
+        client (MongoClient): Client do mongo.
+        database_name (Database): Database/instrumento que a função vai inserir os dados.
+        collection_name (Collection): Collection do csv do instrumento.
+    Returns:
+        String | Exception: Ele retorna ou uma string sinalizando que foi finalizado, ou uma exceção que pode vir acontecer na função.
+    Raises:
+        raise: Não há raises, apenas returns com as Exceptions geradas.
     """
     try:
         with client.start_session() as session:
             session_id = session.session_id
 
-            cursor = collection_name.find({'tabela': {'$exists': False}}, no_cursor_timeout = True, session=session).batch_size(10)
+            cursor: CursorType = collection_name.find({'tabela': {'$exists': False}}, no_cursor_timeout = True, session=session).batch_size(10)
             
-            
-            refresh_timeStamp = datetime.now()
+            refresh_timeStamp: datetime = datetime.now()
             
             try:
                 for document in cursor:
@@ -37,15 +43,15 @@ def generate_graph_table_report(client: MongoClient, database_name: Database, co
                         refresh_timeStamp = datetime.now()
                     pergunta_formatada = re.sub(r"^\d+\.\d+-\s*",'',document["nm_pergunta"])
                     try:
-                        sorted_pctOptDict = dict(sorted(document["pct_por_opcao"].items(), key=lambda x: x[1], reverse=True))
+                        sorted_pctOptDict: dict = dict(sorted(document["pct_por_opcao"].items(), key=lambda x: x[1], reverse=True))
                         opcoes, pct = dict_to_list(sorted_pctOptDict)
-                        table = compose_table(pergunta_formatada, document['pct_por_opcao'], document['total_do_curso'])
+                        table: str = compose_table(pergunta_formatada, document['pct_por_opcao'], document['total_do_curso'])
                     except KeyError as key_error:
                         return f'Erro de chave: {key_error}'
                     
-                    path = '-'
-                    caption_graph = '-'
-                    report_graph = '-'
+                    path: str = '-'
+                    caption_graph: str = '-'
+                    report_graph: str = '-'
 
                     if document['nm_disciplina'] == '-':
                         try:
@@ -95,7 +101,7 @@ def generate_graph_table_report(client: MongoClient, database_name: Database, co
                     
                 return 'Finalizado'
             except Exception as e:
-                print(f'Erro: {e}')
+                return f'Ocorreu um erro ao tentar gerar os dados: {e}'
             finally:
                 cursor.close()
                 

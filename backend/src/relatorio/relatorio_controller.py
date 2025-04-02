@@ -24,12 +24,13 @@ def gerar_todos_relatorios(collection_instrumento: Collection, collection_centro
     :type dbName: str
     """
     centros = collection_instrumento.distinct('centro_de_ensino')
-    print(centros)
     for centro in centros:
         if centro == 'nan':
-            break
-        print(centro)
-        gerar_relatorios_por_centro(collection_instrumento, collection_centro_por_ano, collection_cursos_por_centro, arquivo_intro, arquivo_conclusao, ano, centro, database_name, modal)
+            print('Centro nan não existe, por favor, confira o CSV ou alguma das etapas anteriores')
+        res: dict = gerar_relatorios_por_centro(collection_instrumento, collection_centro_por_ano, collection_cursos_por_centro, arquivo_intro, arquivo_conclusao, ano, centro, database_name, modal)
+        if res['Success'] == False:
+            return {'Success': False, 'Error': res['Error']}
+    return {'Success': True}
         
 
 def gerar_relatorios_por_centro(collection_instrumento: Collection, collectionCentroPorAno: Collection, collectionCursosPorCentro: Collection, arquivo_intro: str, arquivo_conclusao: str, ano: int, centro_de_ensino: str, database_name: str, modal: str) -> None:
@@ -55,8 +56,17 @@ def gerar_relatorios_por_centro(collection_instrumento: Collection, collectionCe
 
     cursos = collection_instrumento.distinct('nm_curso', {'centro_de_ensino': centro_de_ensino})
     for curso in cursos:
-        compor_introducao(collectionCentroPorAno, collectionCursosPorCentro, arquivo_intro, ano, centro_de_ensino, modal)
-        compor_conclusao(collectionCursosPorCentro, arquivo_conclusao, ano, curso, modal)
-        gerar_relatorio_por_curso(curso, collection_instrumento, collectionCursosPorCentro, database_name)
-        cursoArquivo = f'{curso}.md'
-        substituirIdentificadores(cursoArquivo, database_name)
+        
+        res_compor_intro: dict = compor_introducao(collectionCentroPorAno, collectionCursosPorCentro, arquivo_intro, ano, centro_de_ensino, modal)
+        if res_compor_intro['Success'] == False: 
+            return {'Success': False, 'Error': res_compor_intro['Error']}
+        
+        res_compor_conclusao: dict = compor_conclusao(collectionCursosPorCentro, arquivo_conclusao, ano, curso, modal)
+        if res_compor_conclusao['Success'] == False:
+            return {'Success': False, 'Error': res_compor_conclusao['Error']} 
+        
+        res_gerar_relatorios: dict = gerar_relatorio_por_curso(curso, collection_instrumento, collectionCursosPorCentro, database_name)
+        if res_gerar_relatorios['Success'] == False:
+            return {'Success': False, 'Error': res_gerar_relatorios['Error']} 
+        
+        return {'Success': True}
