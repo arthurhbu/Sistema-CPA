@@ -15,6 +15,9 @@ ul {
 
 /*--Session contendo a introdução da importação*/
 .intro { 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     width: 70%; 
     margin: auto;
     margin-bottom: 5%;
@@ -36,14 +39,33 @@ ul {
     color: #828282;
 }
 
+.tutorial_container { 
+    margin-top: 5vh;
+    margin-bottom: 5vh;
+    width: 100%;
+    background-color: #E8E8E8;
+    padding: 1rem;
+    padding-left: 4rem;
+    padding-right: 4rem;
+    border-radius: 10px;
+}
+
+.etapas_ul { 
+    margin: 0;
+    margin-left: 5vw;
+    /* margin-right: 4vw; */
+    font-size: 1.2rem;
+}
+
 .containerButton { 
+    margin-top: 6vh;
     width: 100%;
     height: 6vh;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    margin-bottom: 6vh;
+    margin-bottom: 4vh;
 
 }
 
@@ -102,12 +124,13 @@ ul {
     padding: 5em;
     background-color: #E8E8E8;
     margin-bottom: 10%;
-    display: grid;
+    display: flex;
+    /* display: grid;
     grid-template-columns: repeat(2, 50%);
     grid-template-rows: repeat(2, 1fr);
     grid-column-gap: 30px;
-    grid-row-gap: 0px;
-    justify-content: center;
+    grid-row-gap: 0px; */
+    justify-content: space-around;
 }
 
 .overlay_blocked_section {
@@ -125,105 +148,123 @@ ul {
     color: white;
   }
 
-/*---Div que contém Drag'n Drop*/
-
-.session_grid__arqInputBox {
-    grid-area: 1 / 1 / 3 / 2;
-    
-}
-
-.session_flex_arqInputBox { 
-    display: flex;
-    justify-content: center;
-}
-
-.responsiveLogo { 
-    max-width: 200px;
-    width: 100%;
-    height: auto;
-}
-
-.procurarArquivos__text{
-    font-family: 'Inter';
-    font-weight: 700;
-    font-size: 1.9rem;
-    margin-top: 0;
-    margin-bottom: 0;
-}
-
-
-.procurarButton {
-    color: white;
-    background-color: #2ef092;
-    width: 100%;
-    margin-top: 1.2em;
-    font-weight: 600;
-    padding-right: 1.8em;
-    padding-left: 1.8em;
-    padding-top: 0.5em;
-    padding-bottom: 0.5em;
-    border-radius: 10px;
-    align-items: center;
-    font-family: 'Inter';
-    font-size: 1.5rem;
-    border: 0;
-}
-
-.procurarButton:hover { 
-    background-color: #169156;
-    cursor: pointer;
-}
-
-
-.procurarArquivos_arqSuportados{
-    font-family: 'Inter';
-    font-weight: 700;
-    font-size: 1.2rem;
-    margin-top: 0;
-    color: #9A9A9A;
-    margin: 2em;
-}
 
 /*---Div que contém arquivos importados e input para inserir ano*/
 
-.grid_arqEsc { 
+.inputsArquivosImportacao { 
     display: flex;
+    flex-direction: column;
+    height: 100%;
     justify-content: center;
-    grid-area: 1 / 2 / 2 / 3;
-    /* max-height: 60%; */
+    width: 30%;
 }
 
-.session_arqEscolhido { 
-    min-width: 50%;
-
-}
-
-.arquivosImportados {
-    /* padding-left: 3em; */
-    /* margin-left: 2.5em; */
+.inputArquivoBox {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
     padding: 20px;
+    height: 12vh;
     max-width: 35em;
     width: 100%;
     background-color: #ffffff;
-    border-radius: 15px;
+    border-radius: 10px;
 }
 
-.arquivosImportados_text { 
+.inputArquivoBox_text { 
     font-family: 'Inter';
-    font-weight: 600;
-    font-size: 1.3vw;
+    font-weight: 700;
+    color: #484eff;
+    font-size: 1.4rem;
     margin: 0;
     margin-top: 10px;
     margin-left: 15px;
 }
 
-.grid_inputInfos { 
-    grid-area: 2 / 2 / 3 / 3;
+.buttonImportArquivoCsv { 
+    border: 0;
+    background-color: #2ef092;
+    border-radius: 10px;
+    font-family: 'Inter';
+    font-weight: 700;
+    font-size: 1rem;
+    color: rgb(0, 0, 0);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s ease-in-out, background-color 0.2s ease-in-out; 
+}
+
+.buttonImportArquivoCsv::after { 
+    background-color: #54ff8a;
+    border-radius: 10px;
+    content: '';
+    display: block;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    transform: translate(-100%, 0) rotate(10deg);
+    transform-origin: top left;
+    transition: transform 0.2s ease-out; 
+    z-index: -1; 
+}
+
+.buttonImportArquivoCsv:hover { 
+    cursor: pointer;
+    background-color: #32cd82; 
+    transform: scale(1.05); 
+}
+
+.buttonImportArquivoCsv:hover::after {
+    transform: translate(0, 0); 
+}
+
+.buttonImportArquivoMD { 
+    border: 0;
+    background-color: #61d7fb;
+    border-radius: 10px;
+    font-family: 'Inter';
+    font-weight: 700;
+    font-size: 1rem;
+    color: rgb(0, 0, 0);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s ease-in-out, background-color 0.2s ease-in-out; 
+}
+
+.buttonImportArquivoMD::after { 
+    background-color: #53d4fc;
+    border-radius: 10px;
+    content: '';
+    display: block;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    transform: translate(-100%, 0) rotate(10deg);
+    transform-origin: top left;
+    transition: transform 0.2s ease-out; 
+    z-index: -1; 
+}
+
+.buttonImportArquivoMD:hover { 
+    cursor: pointer;
+    background-color: #3cc1cd; 
+    transform: scale(1.05); 
+}
+
+.buttonImportArquivoMD:hover::after {
+    transform: translate(0, 0); 
+}
+
+/*-------------------------------- Div para input ano e botao import ------------------------------*/
+.container_inputAno_button { 
     display: flex;
-    justify-content: center;
+    justify-content: space-evenly;
     flex-direction: column;
     align-items: center;
-    
 }
 .session_inputInfos{
     max-width: 40vw;
@@ -459,7 +500,7 @@ ul {
     width: 35%;
     height: 25%;
     border-radius: 8px; 
-    text-align: right;
+    text-align: justify;
     justify-content: center;
     align-items: center;
     flex-direction: column;

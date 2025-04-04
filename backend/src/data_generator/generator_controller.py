@@ -9,13 +9,14 @@ from pymongo.mongo_client import MongoClient
 from pymongo.errors import OperationFailure, CursorNotFound, ConnectionFailure, InvalidOperation, DuplicateKeyError
 import random as rand
 from pymongo import CursorType
+from typing import Union
 import sys
 import re
 sys.stdout.reconfigure(encoding="utf-8")
 
 
 
-def generate_graph_table_report(client: MongoClient, database_name: Database, collection_name: Collection) -> str | Exception:
+def generate_graph_table_report(client: MongoClient, database_name: Database, collection_name: Collection) -> Union[str, Exception]:
     """ 
     Função para gerar gráfico, tabela e legenda para cada pergunta do instrumento. No caso de a pergunta pertencer a uma disciplina, somente a tabela é gerada.
 

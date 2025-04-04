@@ -66,6 +66,7 @@ export default function GerarPdf(){
     const [avaliablePdfs, setAvaliablePdfs] = useState([]);
     const [isLoadingZips, setIsLoadingZips] = useState(false);
 
+    //Dropzone
     const {
         getRootProps,
         getInputProps,
@@ -143,7 +144,6 @@ export default function GerarPdf(){
             throw new Error('Erro ao tentar se conectar com o banco.', e)
         }
     }
-
 
     const downloadPdfZip = (idInstrumento) => { 
 
@@ -247,13 +247,17 @@ export default function GerarPdf(){
 
     return (
         <div className={styles.containerGerarPdfs}>
+            {/* Container contendo introdução da página */}
             <div className={styles.intro}>
                 <p className={styles.intro_titulo}>Gerar PDFs dos relatórios</p>
                 <p className={styles.intro_infos}>
                     Envie o arquivo zip contendo os relatórios markdowns e as figuras do mesmo para que possa ser gerado os PDFs para serem entregues. O arquivo será entregue via email.
                 </p>
             </div>
+            {/* Sessão principal da página */}
             <div className={styles.mainSession}>
+
+                {/* Área do Dropzone para inserir arquivos */}
                 <div {...getRootProps({style})}>
                     <input {...getInputProps()}/>
                     <img src={zip_upload_logo} alt='zip_upload_logo' className={styles.responsiveLogo} />
@@ -261,19 +265,26 @@ export default function GerarPdf(){
                     <UploadButtonZip/>
                     <p className={styles.procurarArquivos_arqSuportados}>Apenas arquivos compactados</p>  
                 </div>
+
                 <div className={styles.display_flex_session}>
+                    {/* Área onde o arquivo escolhido será mostrado ao usuário */}
                     <div className={styles.session_filebox}>
                         <p className={styles.arquivosImportados_text}> Arquivo Escolhido:</p>
                         <p>{thumbs}</p>
                     </div>
+                    {/* Botão para gerar os relatórios PDFs */}
                     <div className={styles.containerButton}>
                         <button onClick={handleGeneratePDF} className={styles.gerarPDFButton}>Gerar PDFs</button>
                         {error && <p className={styles.errorMessage}>{error}</p>}
                     </div>
                 </div>
             </div>
+
+            {/* Container onde os arquivos PDFs gerados ficarão */}
             <div className={styles.containerRelatoriosZip}>
                 <div className={styles.downloaded_zip_box}>
+
+                    {/* Parte superior desse Container onde tem infos e botão para atualizar os PDFs */}
                     <div style={{display: 'flex', justifyContent: 'space-between'}}>    
                         <div style={{marginBottom: '20px'}}>             
                             <p className={styles.downloaded_zip_box_title}>Relatórios Gerados</p>
@@ -286,7 +297,6 @@ export default function GerarPdf(){
                             className={styles.button_refresh}
                             title='Atualizar lista de ZIPs'
                         >
-                            
                             <svg style={{width:'2vw', color: '#fff'}} xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                             </svg>
@@ -294,7 +304,7 @@ export default function GerarPdf(){
                         </div>
                     </div>
 
-
+                {/* Área de tabela dos arquivos gerados */}
                 {isLoadingZips ? (
                     <p className="text-gray-500">Carregando lista de ZIPs...</p>
                     ) : (
@@ -336,7 +346,8 @@ export default function GerarPdf(){
                     )}
                 </div>
             </div>
-
+            
+            {/* Popups para mostrar logs para o usuário */}
             {popupVisible &&  <div className={styles.overlay}/>}
 
             {popupVisible && (

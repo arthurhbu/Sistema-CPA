@@ -1,19 +1,22 @@
 from configparser import ConfigParser
 import os
 
-def readDBConfig(filename='config.ini', section='Mongodb'):
-    """ Read database configuration file and return a dictionary object
-    :param filenae: name of the configuration file
-    :param section: section of database configuration
-
-    :return: a dictionary of database parameters
+def readDBConfig(filename: str='config.ini', section: str='Mongodb') -> dict:
+    """ 
+    Captura o arquivo contendo as configurações iniciais para conexão com o mongoDB.
+    
+    Args: 
+        filename (str): Nome do arquivo .ini que contém a conexão.
+        section (str): Seção do arquivo .ini que contém informações de conexão do mongoDB.
+    Returns:
+        db_config (dict): Dict contendo as informações para conexão.
+    Raises:
+        None:
     """
 
-    #Finding the path to the config.ini archive
     thisfolder = os.path.dirname(os.path.abspath(__file__))
     initfile = os.path.join(thisfolder, 'config.ini')
 
-    #Reading the filename and creating the parser
     parser = ConfigParser()
     parser.read(initfile)
 

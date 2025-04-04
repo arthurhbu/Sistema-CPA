@@ -1,11 +1,14 @@
 
-def dict_to_list(dictionary) -> tuple[str, int]:
+def dict_to_list(dictionary: dict) -> tuple[list[str], list[int]]:
     """
     Função que transforma um dict em uma list
 
-    :param dictionary: um dict
-    :type dictionary: Dict
-    return: Duas listas, uma contendo a key e outra contendo o valor
+    Args:
+        dictionary (str): Um dict do python.
+    Returns:
+        keyList, valueList (tuple[list[str], list[int]]): Retorna duas lists que contém as chaves e seus respectivos valores no dict.
+    Raises:
+        None: 
     """
     keyList = []
     valueList = []

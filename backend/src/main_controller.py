@@ -107,7 +107,7 @@ def prepare_side_dataframes(database: Database, ano: int, modal: str, collection
     for centro in centros:
         resultado_cursos_por_centro: dict = df_cursos_por_centro(collection_cursos_e_centros, ano, centro)
         if resultado_cursos_por_centro['Success'] == False:
-            return {'Success': False, 'Error': f'{resultado_cursos_por_centro['error']}'}
+            return {'Success': False, 'Error': f"{resultado_cursos_por_centro['error']}"}
         document_to_insert.extend(resultado_cursos_por_centro['resultado'])
         
     database['cursos_por_centro'].insert_many(document_to_insert)   
@@ -117,7 +117,7 @@ def prepare_side_dataframes(database: Database, ano: int, modal: str, collection
     resultado_df_centro_por_ano: dict  = df_centro_por_ano(collection_instrumento, database, ano, modal)
 
     if resultado_df_centro_por_ano['Success'] == False: 
-        return {'Success': False, 'Error': f'{resultado_cursos_por_centro['error']}'}
+        return {'Success': False, 'Error': f"{resultado_cursos_por_centro['error']}"}
     
     progresso_etapa6 = resultado_df_centro_por_ano['message']
     update_progresso(progresso, 'Criacao_Centro_por_Ano_Database', progresso_etapa6)
@@ -149,13 +149,13 @@ def generate_reports(collection_instrumento: Collection, collection_centro_por_a
     res_gerar_todos_relatorios: dict = gerar_todos_relatorios(collection_instrumento, collection_centro_por_ano, collection_cursos_por_centro, arquivo_intro_esc, arquivo_conclusao_esc, ano, database_name, modal)
     
     if res_gerar_todos_relatorios['Success'] == False:
-        send_email_via_gmail_api('', 'sec-cpa@uem.br', 'Ocorreu um erro ao tentar gerar os relatórios', f'Uma exceção inesperada ocorreu durante a geração de relatórios, confira a seguir: \n\n {res_gerar_todos_relatorios['Error']} ')
+        send_email_via_gmail_api('', 'sec-cpa@uem.br', 'Ocorreu um erro ao tentar gerar os relatórios', f"Uma exceção inesperada ocorreu durante a geração de relatórios, confira a seguir: \n\n {res_gerar_todos_relatorios['Error']} ")
         return {'Success': False}
     
     res_zip_files: dict = zip_markdown_files(database_name, f'{id_instrumento}.zip')
     
     if res_zip_files['Success'] == False: 
-        send_email_via_gmail_api('', 'sec-cpa@uem.br', 'Um erro ocorreu ao tentar compactar relatorios', f'Uma exceção inesperada ocorreu durante a compactação de arquivos, confira a seguir: \n\n {res_zip_files['Error']} ')
+        send_email_via_gmail_api('', 'sec-cpa@uem.br', 'Um erro ocorreu ao tentar compactar relatorios', f"Uma exceção inesperada ocorreu durante a compactação de arquivos, confira a seguir: \n\n {res_zip_files['Error']} ")
         return {'Success': False}
         
     return {'Success': True}
@@ -191,7 +191,7 @@ def inserir_e_processar_csv(ano: int, csv_Filename: str, modalidade: str, client
             )
         
         if response_initalize_database_inserts['Success'] == False: 
-            send_email_via_gmail_api('', 'sec-cpa@uem.br', f'{response_initalize_database_inserts['Message']}', f'{response_initalize_database_inserts['Error']}')
+            send_email_via_gmail_api('', 'sec-cpa@uem.br', f"{response_initalize_database_inserts['Message']}", f"{response_initalize_database_inserts['Error']}")
             return
         
         response_prepare_side_dataframes: dict = prepare_side_dataframes(
@@ -204,7 +204,7 @@ def inserir_e_processar_csv(ano: int, csv_Filename: str, modalidade: str, client
             )
         
         if response_prepare_side_dataframes['Success'] == False:
-            send_email_via_gmail_api('', 'sec-cpa@uem.br', 'Ocorreu um erro ao tentar gerar as collections de apoio', f'{response_prepare_side_dataframes['Error']}')
+            send_email_via_gmail_api('', 'sec-cpa@uem.br', 'Ocorreu um erro ao tentar gerar as collections de apoio', f"{response_prepare_side_dataframes['Error']}")
             return
         
         return 'Inserção finalizada com sucesso'

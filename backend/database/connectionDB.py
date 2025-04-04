@@ -1,16 +1,18 @@
 from pymongo import (
     MongoClient,
     errors)
+from pymongo.database import Database
 from database.pythonMongoConfig import readDBConfig
 
-def connection(db_config):
-    """
-    Realiza a conexão com o banco de dados
 
-    :param db_config: contém informações do host e usuário para realizar a conexão
-    :type db_config: Dict
-    :return: Retorna o MongoClient 
-    :rtype: MongoClient
+def connection(db_config: dict) -> MongoClient:
+    """
+    Realiza a conexão com o client do MongoDB.
+
+    Args:
+        db_config (dict): Dict contendo informações para incializar conexão com o banco MongoDB.
+    Returns:
+        Mclient (MongoClient): Conexão/Cliente com o MongoDB.
     """
     try:
         print("Connecting to mongoDB database...")
@@ -33,7 +35,18 @@ def connection(db_config):
     print("Connected successfully!")
     return Mclient
 
-def connectToDatabase(database_name, client):
+def connectToDatabase(database_name: str, client: MongoClient) -> tuple[str, Database]:
+    """
+    Realiza os passos para a conexão ser estabelecida com o banco.
+    
+    Args:
+        database_name (str): Nome do database/instrumento que será utilizado.
+        client (MongoClient): Client que se conecta com o MongoDB.
+    Returns:
+        filterDBName, database (tuple[str, Database]): Retorna nome do database e a Entidade de conexão com esse database.
+    Raises:
+        None:
+    """
     print("Connection Established with MongoDB")
     filterDBName = database_name.replace(" ", "")
     filterDBName = filterDBName.replace(".csv", "")
@@ -41,9 +54,16 @@ def connectToDatabase(database_name, client):
     print(filterDBName)
     return filterDBName, database
 
-def initialize_all_collections(database: str):
+def initialize_all_collections(database: str) -> dict:
     """
     Inicializa todos as coleções pertencentes ao banco que foi escolhido.
+
+    Args:
+        database (str): Conexão estabelecida com o database/instrumento selecionado.
+    Returns:
+        dict_collections (dict): Retorna um dict contendo todas as conexões estabelecidas com as Collections daquele database.
+    Raises:
+        None:
     
     """
 

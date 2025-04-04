@@ -8,12 +8,15 @@ from email.mime.text import MIMEText
 
 def zip_markdown_files(database_name: str, zip_name_file: str) -> None:
     '''
-    Transforma os arquivos zips em markdowns para que possam ser enviados via email.
+    Transforma um conjunto de arqvuios, que estão em um mesmo diretório, em um arquivo zip e guardado em um diretório de arquivos zips temporários.
     
-    :param outputFilename: Nome do arquivo zip que será gerado
-    :type: str
-    :param folderPath: Nome do caminho para os arquivos markdowns
-    :type: str
+    Args:
+        database_name (str): Nome do banco de dados/instrumento que está em uso.
+        zip_name_file (str): Nome que será dado para o arquivo zip.
+    Returns:
+        dict: Retorna um dict informando a falha e o erro ou sucesso.
+    Raises:
+        None: Não possui Raises, Exceptions passadas via return.
     '''
     try:
         folderPath = f'./relatorio/markdowns/{database_name}'
@@ -46,7 +49,7 @@ def zip_markdown_files(database_name: str, zip_name_file: str) -> None:
         return {'Success': False, 'Error': f'Ocorreu um erro ao tentar compactar a pasta contendo os relatórios markdown: {e}' }
 
 
-def send_email_zip(arquivo_zip, destinatario_email, remetente_email, senha_remetente):
+def send_email_zip(arquivo_zip, destinatario_email, remetente_email, senha_remetente):  
     # Configuração do email
     msg = MIMEMultipart()
     msg['From'] = remetente_email

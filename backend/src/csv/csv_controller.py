@@ -7,6 +7,7 @@ from pandas import DataFrame
 from src.utils.percentage_update_database import percentage_calculator,insert_dict_disciplina,insert_percentage_dict_into_database
 from pymongo.errors import PyMongoError
 from pandas.errors import EmptyDataError
+from typing import Union
 
 class CSVManagment:
 
@@ -257,7 +258,7 @@ class CSVManagment:
         df_final.dropna(subset=['respostas'], inplace=True)
         df_final.to_csv(f'{dir_arquivo}/CSVs/csvFiltrado.csv', index=False)
     
-    def insert_main_csv_to_database(collection_name: Collection, csv_file_name: str, modalidade: str) -> str | Exception:
+    def insert_main_csv_to_database(collection_name: Collection, csv_file_name: str, modalidade: str) -> Union[str, Exception]:
         """
         Realiza a inserção dos dados provenientes do CSV do instrumento no banco de dados utilizando data frames, além de realizar a filtragem do csv.
         
@@ -279,6 +280,8 @@ class CSVManagment:
                 CSVManagment.csv_filter_docentes_and_tecnicos(csv_file_name)
             elif modalidade == 'Egresso':
                 CSVManagment.csv_filter_egressos(csv_file_name)
+            elif modalidade == 'Pos':
+                CSVManagment.csv_filter_pos_graduacao(csv_file_name)
             else: 
                 return 'Modalidade não encontrada'
             
@@ -377,7 +380,7 @@ class CSVManagment:
         except Exception as e:
             return f"Erro inesperado: {e}"
 
-    def insert_curso_e_centro_csv_to_database(collection_name: Collection) -> str | Exception:
+    def insert_curso_e_centro_csv_to_database(collection_name: Collection) -> Union[str, Exception]:
         '''
         Realiza a inserção do CSV curso e centro no database. 
         
@@ -435,7 +438,7 @@ class CSVManagment:
         except Exception as e:
             return f"Erro inesperado: {e}"
 
-    def insert_centro_diretor_csv_database(collection_name: Collection) -> str | Exception:
+    def insert_centro_diretor_csv_database(collection_name: Collection) -> Union[str, Exception]:
         '''
         Realiza a inserção do csv centro_diretor no banco de dados.
         

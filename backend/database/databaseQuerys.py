@@ -1,7 +1,19 @@
 from pymongo.database import Database
+from pymongo.collection import Collection
 
-def df_cursos_por_centro(collection_cursos_e_centros,ano,centro_de_ensino):
-
+def df_cursos_por_centro(collection_cursos_e_centros: Collection, ano: int, centro_de_ensino: str) -> dict:
+    """
+    Realiza uma Query no padrão do mongoDB para criar o database cursos_por_centro que possui informações em relação aos cursos e seus centros.
+    
+    Args:
+        collection_cursos_e_centros (Collection): Collection que possui informações que serão usadas para gerar esse novo database.
+        ano (int): Ano do instrumento que está sendo gerado.
+        centro_de_ensino (str): Nome do Centro de Ensino da UEM que gerará as informações.
+    Returns:
+        dict: A função retorna um dict contendo se a etapa foi bem sucedida, caso não tenha sido, ele retorna a Exception gerada.
+    Raises:
+        Raise: A função não levanta nenhuma exceção, apenas repassa as exceções que ocorreram antes.
+    """
     try:
         results = list(collection_cursos_e_centros.aggregate([
         {
@@ -65,7 +77,20 @@ def df_cursos_por_centro(collection_cursos_e_centros,ano,centro_de_ensino):
         return {'Success': False, 'error': f'Ocorreu um erro ao tentar criar Collection cursos_por_centro. Erro: {e}'}
 
 
-def df_centro_por_ano(collection_instrumento,database, ano, modal):
+def df_centro_por_ano(collection_instrumento: Collection, database: Database, ano: int):
+    """
+    Realiza uma Query no padrão do mongoDB para criar o database centro_por_ano que possui informações em relação ao centro e o ano do instrumento.
+    
+    Args:
+        collection_instrumento (Collection): Collection principal do instrumento.
+        database (Database): Conexão do database/instrumento que está sendo utilizado.
+        ano (int): Ano do instrumento que está sendo gerado.
+    Returns:
+        dict: A função retorna um dict contendo se a etapa foi bem sucedida, caso não tenha sido, ele retorna a Exception gerada.
+    Raises:
+        Raise: A função não levanta nenhuma exceção, apenas repassa as exceções que ocorreram antes.
+    """    
+
     centro_por_ano_temp = database['centro_por_ano_temp']
 
     try:

@@ -17,6 +17,16 @@ function GerarRelatorio(){
     const [isLoadingZips, setIsLoadingZips] = useState(false);
     const [avaliableZips, setAvaliableZips] = useState([]);
 
+    const tipoIntroConlc = [
+        {label: 'Nenhum', value: ''},
+        {label: 'Discente', value: 'Discente'},
+        {label: 'Egresso', value: 'Egresso'},
+        {label: 'EAD', value: 'EAD'},
+        {label: 'Docente', value: 'Docente'},
+        {label: 'Agente', value: 'Agente'},
+        {label: 'Pos', value: 'Pos'},
+    ];
+
     const handleSelectIntroConlcChange = (value) => { 
         setIntroConcl(value);
     }
@@ -29,15 +39,6 @@ function GerarRelatorio(){
         setAno(e.target.value);
     }
 
-    const tipoIntroConlc = [
-        {label: 'Nenhum', value: ''},
-        {label: 'Discente', value: 'Discente'},
-        {label: 'Egresso', value: 'Egresso'},
-        {label: 'EAD', value: 'EAD'},
-        {label: 'Docente', value: 'Docente'},
-        {label: 'Agente', value: 'Agente'},
-        {label: 'Pos', value: 'Pos'},
-    ];
 
     const listDatabases = []
     {databases.map((database) => { 
@@ -47,6 +48,7 @@ function GerarRelatorio(){
     }
     )}
 
+    
     const fetchZipsDisponiveis = async () => {
         setIsLoadingZips(true);
 
@@ -189,12 +191,15 @@ function GerarRelatorio(){
 
     return(
         <div className={styles.containerGerarRelatorio}>
+            {/* Container contendo infos inicias da página */}
             <div className={styles.containerIntro}>
                 <p className={styles.containerIntro_tituloPagina}>Gerar relatório</p>
                 <p className={styles.containerIntro_infos}>
                     Os relatórios gerados do instrumento serão enviados para o email da secretaria da CPA, será uma arquivo ZIP contendo todos os relatórios em PDF, Markdown e as figuras dos relatórios. Para gerar os relatórios, primeiramente o instrumento precisa ter passado pelo processamento de dados. Outro ponto, quando for gerar os relatórios, conferir se nenhum outro instrumento está sendo processado, para que não haja problemas.
                 </p>
             </div>
+
+            {/* Área para escolher o instrumento que será gerado os relatórios */}
             <div className={styles.containerInstrumento}>
                 {/* <p style={{fontSize: '1.3rem', fontFamily: 'Inter', fontWeight: '600', marginTop:'40px', backgroundColor: '#80dfff', padding: '15px', borderRadius: '5px', border: '2px solid #000'}}>Instrumento</p> */}
                 <SelectAutoWidth
@@ -204,6 +209,8 @@ function GerarRelatorio(){
                     >
                 </SelectAutoWidth>
             </div>
+
+            {/* Container para escolher introdução e conclusão que será usada nos relatórios e input para inserir ano do instrumento */}
             <div className={styles.containerRelatorioEsp}>
                 <div className={styles.containerRelatorioEsp_escolhaComponentesRelatorio_IntroConcl}>
                     <p style={{fontSize: '1.6rem', fontFamily: 'Inter', fontWeight: '600', marginTop:'0'}}> Escolha a Introdução e Conclusão </p>
@@ -219,12 +226,16 @@ function GerarRelatorio(){
                     <StyledInput type='number' value={ano} onChange={handleAnoChange}></StyledInput>
                 </div>
             </div>
+
             <div className={styles.containerButton}>
                 <button onClick={handleSubmit} className={styles.buttonGerarRelatorio}> Gerar relatórios </button>
                 {errorMessage && <p className={styles.errorMessage}>{errorMessage}</p>}
             </div>
+
+            {/* Área para mostrar os zips dos relatórios que estão disponíveis */}
             <div className={styles.containerRelatoriosZip}>
                 <div className={styles.downloaded_zip_box}>
+                    {/* Infos iniciais e botão para atualizar os relatórios gerados */}
                     <div style={{display: 'flex', justifyContent: 'space-between'}}>    
                         <div style={{marginBottom: '20px'}}>             
                             <p className={styles.downloaded_zip_box_title}>Relatórios Gerados</p>
@@ -245,7 +256,7 @@ function GerarRelatorio(){
                         </div>
                     </div>
 
-
+                {/* Tabela contendo informações gerais dos relatórios e botões para download e exclusão */}
                 {isLoadingZips ? (
                     <p className="text-gray-500">Carregando lista de ZIPs...</p>
                     ) : (
@@ -288,6 +299,7 @@ function GerarRelatorio(){
                 </div>
             </div>
 
+            {/* Popups de logs das responses para o usuário */}
             {popupVisible && <div className={styles.overlay}/>}
 
             {popupVisible && (

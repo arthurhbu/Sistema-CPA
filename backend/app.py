@@ -18,4 +18,4 @@ client: MongoClient = connection(dbConfig)
 setup_routes(app, client)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=False)
+    app.run(host='0.0.0.0', port=4500, debug=False)

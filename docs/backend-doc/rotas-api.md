@@ -14,6 +14,7 @@ Com base no código fornecido, aqui está a tabela atualizada com as rotas, fun�
 | `/api/pdf/gerar` | `generatePdf` | POST | Recebe um arquivo zip e envia para uma API em GO que realiza a geração de PDFs dos relatórios. |
 | `/api/csv/importar` | `importCsv` | POST | Importa o instrumento para o backend, retornando o header do instrumento para comparação com o header correto. |
 | `/api/csv/importar/confirmar` | `confirmImportation` | POST | Confirma a importação do instrumento após a verificação do header pelo usuário. |
+| `/api/csv/cancel/<nome_instrumento>` | `cancelImportation` | DELETE | Cancela a importação removendo os arquivos que foram alocados em nosso sistema. |
 | `/csv/importacao/progresso` | `getStatusCsvImport` | GET | Verifica o status do instrumento que está sendo processado. |
 | `/api/instrumentos` | `listInstrumentos` | GET | Lista os instrumentos disponíveis no banco MongoDB para o usuário. |
 | `/api/relatorio/gerar` | `generateReports` | POST | Gera relatórios para um instrumento específico, requerendo: ano do instrumento, introdução e conclusão do modal, e nome do instrumento. |

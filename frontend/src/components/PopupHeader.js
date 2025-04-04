@@ -1,7 +1,7 @@
 import { useState } from "react";
 import styles from "./PopupHeader.module.css"; // Você pode criar um CSS específico para estilizar
 
-function HeaderPopup({ headerOptions, currentHeader, onClose, header, handleImportSubmit, setPopupHeaderVisible }) {
+function HeaderPopup({ headerOptions, currentHeader, onClose, header, handleImportSubmit, handleCancelAndRemove }) {
     const [selectedHeader, setSelectedHeader] = useState(currentHeader);
 
     return (
@@ -42,7 +42,7 @@ function HeaderPopup({ headerOptions, currentHeader, onClose, header, handleImpo
 
             {/* Botões fixos no canto inferior direito */}
             <div className={styles.popup_buttons}>
-                <button className={styles.popup_cancel_button} onClick={() => setPopupHeaderVisible(false)}>Cancelar</button>
+                <button className={styles.popup_cancel_button} onClick={handleCancelAndRemove}>Cancelar</button>
                 <button className={styles.popup_confirm_button} onClick={handleImportSubmit}>Confirmar</button>
             </div>
         </div>

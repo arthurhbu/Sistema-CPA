@@ -7,25 +7,24 @@ from pymongo.collection import Collection
 sys.stdout.reconfigure(encoding="utf-8")
 
 
-def compor_introducao(collection_centro_por_ano: Collection,collection_cursos_por_centro: Collection, arquivo_intro: str, ano: int, centro_de_ensino: str, modal: str) -> None:
+def compor_introducao(collection_centro_por_ano: Collection,collection_cursos_por_centro: Collection, arquivo_intro: str, ano: int, centro_de_ensino: str, modal: str) -> dict:
     """
     Gera um arquivo markdown contendo as informações da introdução do relatório baseado no tipo de instrumento, levando em conta que cada template possui suas próprias informações a serem passadas.
 
-    :param collectionCentroPorAno: Nome da collection que contém as informações sobre os centros.
-    :type: Collection (MongoDB)
-    :param CollectionCursosPorCentro: Nome da collection que contém informações sobre os cursos de um centro.
-    :type: Collection (MongoDB)
-    :param arquivo_intro: Nome do arquivo que contém o template da introdução do relatório
-    :type: String
-    :param ano: O ano de que será feito o relatório.
-    :type ano: Integer
-    :param centro_de_ensino: Nome do centro de ensino escolhido para a geração da tabela contendo os seus cursos
-    :type centro_de_ensino: String
-
+    Args:
+        collection_centro_por_ano (Collection): Collection contendo informações do dataset criado centro_por_ano. 
+        collection_cursos_por_centro (Collection): Collection contendo informações do dataset centro_por_curso.
+        arquivo_intro (str): Nome do arquivo de introdução que foi escolhido.
+        centro_de_ensino (str): Nome do centro de ensino da UEM.
+        modal (str): Modalidade/Tipo do instrumento que será gerado a introdução.
+    Returns:
+        dict: Retorna um dict informando a falha e o erro ou sucesso.
+    Raises:
+        None: Não possui Raises, Exceptions passadas via return.
     """
     try:
         if modal == 'discente':	
-            with open(f'relatorioComponentes/{arquivo_intro}','r',encoding='utf-8') as f:
+            with open(f'relatorio_componentes/{arquivo_intro}','r',encoding='utf-8') as f:
                 template = f.read()
             renderer = pystache.Renderer()
             respondentes_total = 0
@@ -58,7 +57,7 @@ def compor_introducao(collection_centro_por_ano: Collection,collection_cursos_po
                 arquivo.write(f'{intro} \n')
                 
         elif modal == 'ead':
-            with open(f'relatorioComponentes/{arquivo_intro}','r',encoding='utf-8') as f:
+            with open(f'relatorio_componentes/{arquivo_intro}','r',encoding='utf-8') as f:
                 template = f.read()
             renderer = pystache.Renderer()
             respondentes_total = 0
@@ -76,7 +75,7 @@ def compor_introducao(collection_centro_por_ano: Collection,collection_cursos_po
                 arquivo.write(f'{intro} \n')
                 
         elif modal == 'egresso':
-            with open(f'relatorioComponentes/{arquivo_intro}','r',encoding='utf-8') as f:
+            with open(f'relatorio_componentes/{arquivo_intro}','r',encoding='utf-8') as f:
                 template = f.read()
             renderer = pystache.Renderer()
             
@@ -86,7 +85,7 @@ def compor_introducao(collection_centro_por_ano: Collection,collection_cursos_po
                 arquivo.write(f'{intro} \n')
                 
         else:
-            with open(f'relatorioComponentes/{arquivo_intro}','r',encoding='utf-8') as f:
+            with open(f'relatorio_componentes/{arquivo_intro}','r',encoding='utf-8') as f:
                 template = f.read()
             renderer = pystache.Renderer()
             
@@ -104,17 +103,21 @@ def compor_conclusao(collection_name_cursos_por_centro: Collection, arquivo_conc
     """
     Compõe o arquivo de conclusão do relatório, baseado no tipo de instrumento que está sendo passado, sendo classificados em: Egresso, EAD, Discente, Docente e Tecnico. Cada um deles tem um template de conclusão diferente por isso o uso de um "Switch case" para escolher o template correto.
 
-    :param CollectionCursosPorCentro: Nome da collection que contém informações sobre os cursos de um centro.
-    :type: Collection (MongoDB)
-    :param arquivo_conclusao: Nome do arquivo que contém o template de conclusão do relatório 
-    :type arquivo_conclusao: String
-    :param ano: O ano de que será feito o relatório.
-    :type ano: Integer
+    Args:
+        collection_name_cursos_por_centro (Collection): Collection que contém as informações do dataset cursos_por_centro.
+        arquivo_conclusao (str): Nome do arquivo markdown de conclusão selecionado.
+        ano (int): Inteiro contendo o ano do relatório.
+        curso (str): Nome do curso que está sendo gerado a conclusão.
+        modal (str): Modalidade/Tipo do instrumento que será gerado a introdução.
+    Returns:
+        dict: Retorna um dict informando a falha e o erro ou sucesso.
+    Raises:
+        None: Não possui Raises, Exceptions passadas via return.
     """
     
     try:
         if modal == 'discente':
-            with open(f'relatorioComponentes/{arquivo_conclusao}', 'r', encoding='utf-8') as f:
+            with open(f'relatorio_componentes/{arquivo_conclusao}', 'r', encoding='utf-8') as f:
                 template = f.read()
             renderer = pystache.Renderer()
             for document in collection_name_cursos_por_centro.find():
@@ -129,7 +132,7 @@ def compor_conclusao(collection_name_cursos_por_centro: Collection, arquivo_conc
                 arquivo.write(f'{conclusao} \n')
                 
         elif modal == 'ead':
-            with open(f'relatorioComponentes/{arquivo_conclusao}', 'r', encoding='utf-8') as f:
+            with open(f'relatorio_componentes/{arquivo_conclusao}', 'r', encoding='utf-8') as f:
                 template = f.read()
             renderer = pystache.Renderer()
             for document in collection_name_cursos_por_centro.find():
@@ -143,7 +146,7 @@ def compor_conclusao(collection_name_cursos_por_centro: Collection, arquivo_conc
                 arquivo.write(f'{conclusao} \n')
                 
         elif modal == 'egresso':
-            with open(f'relatorioComponentes/{arquivo_conclusao}', 'r', encoding='utf-8') as f:
+            with open(f'relatorio_componentes/{arquivo_conclusao}', 'r', encoding='utf-8') as f:
                 template = f.read()
             renderer = pystache.Renderer()
             for document in collection_name_cursos_por_centro.find():
@@ -156,7 +159,7 @@ def compor_conclusao(collection_name_cursos_por_centro: Collection, arquivo_conc
             with open("relatorio/info_conclusao.md","w", encoding='utf-8') as arquivo:
                 arquivo.write(f'{conclusao} \n')
         else: 
-            with open(f'relatorioComponentes/{arquivo_conclusao}', 'r', encoding='utf-8') as f:
+            with open(f'relatorio_componentes/{arquivo_conclusao}', 'r', encoding='utf-8') as f:
                 template = f.read()
             renderer = pystache.Renderer()
             
@@ -205,6 +208,14 @@ def substituirIdentificadores(filename: str, dbName: str):
 def replace_reference_in_caption(caption_from_ai: str, index: int) -> str:
     """
     Substitui a referência index_ da legenda gerada pela AI por um valor que será usada na geração de PDF utilizando o pandoc.
+    
+    Args:
+        caption_from_ai (str): Texto que foi gerado pela LLM e que agora será modificada com as referências necessárias.
+        index (int): Índice da pergunta que possui tal texto.
+    Returns:
+        formated_caption (str): Retorna o texto modificado.
+    Raises:
+        None: Não possui Raises, Exceptions passadas via return.
     """
 
     substitions = { 

@@ -1,3 +1,4 @@
+from pymongo.collection import Collection
 import pystache
 import re
 import sys
@@ -7,27 +8,28 @@ from src.relatorio.compor_partes_relatorio import replace_reference_in_caption
 
 sys.stdout.reconfigure(encoding="utf-8")
 
-def gerar_relatorio_por_curso(curso_escolhido, collectionCurso, collectionCursosPorCentro, dbName: str):
+def gerar_relatorio_por_curso(curso_escolhido: str, collection_curso: Collection, collection_cursos_por_centro: Collection, db_name: str):
     """
-    Gerar um relatório de apenas um curso.
+    Gera o relatório completo de somente um curso. Função reutilizada para assim gerar todos os relatórios do instrumento.
 
-    :param curso_escolhido: Nome do curso que você quer gerar o relatório md
-    :type curso_escolhido: String
-    :param collectionCurso: Nome da collection que tem as informações do csv principal
-    :type collectionCurso: Collection
-    :param collectionCursosPorCentro: Nome da collection que tem as informações para gerar a 
-    introdução do relatório.
-    :type collectionCursosPorCentro: Collection
-    :param dbName: Nome do banco de dados que está sendo manipulado
-    :type dbName: str
+    Args:
+        curso_escolhido: Nome do curso que você quer gerar o relatório md
+        collection_curso: Nome da collection que tem as informações do csv principal
+        collection_cursos_por_centro: Nome da collection que tem as informações para gerar a 
+        introdução do relatório.
+        db_name: Nome do banco de dados que está sendo manipulado
+    Returns:
+        dict: Retorna um dict informando a falha e o erro ou sucesso.
+    Raises:
+        None: Não possui Raises, Exceptions passadas via return.
     """
     
     try:
-        directory = Path(f'relatorio/markdowns/{dbName}')
+        directory = Path(f'relatorio/markdowns/{db_name}')
         directory.mkdir(parents=True, exist_ok=True)
         file = f'{directory}/{curso_escolhido}.md'
 
-        dir_pdfs = Path(f'relatorio/pdfs/{dbName}')
+        dir_pdfs = Path(f'relatorio/pdfs/{db_name}')
         dir_pdfs.mkdir(parents=True, exist_ok=True)
 
         with open(file, 'w', buffering=-1,encoding='utf-8') as arquivo:
@@ -42,7 +44,7 @@ def gerar_relatorio_por_curso(curso_escolhido, collectionCurso, collectionCursos
             renderer = pystache.Renderer()
             participacao_curso = 0.0
             
-            for document in collectionCursosPorCentro.find({'nm_curso': curso_escolhido}):
+            for document in collection_cursos_por_centro.find({'nm_curso': curso_escolhido}):
                 participacao_curso = document['porcentagem']
                 
             intro = renderer.render(template_introducao, {'curso': curso_escolhido, 'participacao_curso': participacao_curso})
@@ -55,7 +57,7 @@ def gerar_relatorio_por_curso(curso_escolhido, collectionCurso, collectionCursos
             contador: int = 0
             print(f'Curso que está sendo gerado o relatório: {curso_escolhido}')
 
-            for document in collectionCurso.find({'nm_curso': curso_escolhido}).sort({'cd_grupo': 1, 'cd_subgrupo': 1, 'ordem_pergunta': 1}):
+            for document in collection_curso.find({'nm_curso': curso_escolhido}).sort({'cd_grupo': 1, 'cd_subgrupo': 1, 'ordem_pergunta': 1}):
 
                     captionToPandoc = replace_reference_in_caption(document['relatorioGraficoAI'], contador)
 

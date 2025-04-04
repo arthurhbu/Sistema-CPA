@@ -94,6 +94,8 @@ function Home(){
 
     return(
         <div className={styles.home}>
+
+            {/* Container para verificação de cada database por meio de uma checklist */}
             <div style={{display:'flex', justifyContent:'center', backgroundColor:'#000b1f', width:'100%', paddingBottom:'150px', borderTop:'1px solid #292828'}}>
                 <div className={styles.inicio}>
                     <p style={{fontSize:'1.5rem', }}>Bem vindo ao sistema da CPA!</p>
@@ -124,9 +126,10 @@ function Home(){
                             ))}
                         </ul>
                     </div>
-                    
                 </div>
             </div>
+
+            {/* Container contendo um tutorial passo a passo de funcionamento do sistema */}
             <p style={{marginBottom:'3vh',textAlign:'center', marginTop:'10vh', fontSize:'2.5rem', fontWeight:'500'}}>Tutorial Passo a Passo</p>
             <p style={{textAlign:'center', marginTop:'1vh', fontSize:'2rem', color:'#828282'}}>Siga esses passos para conseguir gerar os relatórios dos instrumentos.</p>
             <p> </p>
@@ -161,6 +164,8 @@ function Home(){
                     </Link>
                 </div>
             </div>
+
+            {/* Container com informações sobre a CPA e o Projeto */}
             <div className={styles.session_infos}>
                 <p style={{marginTop:'10vh',fontSize: '2.5rem', fontWeight:'600'}}>Sobre a CPA: </p>
                 <div className={styles.session_infos_cpa}>

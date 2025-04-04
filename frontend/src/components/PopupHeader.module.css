@@ -73,7 +73,7 @@
 
 .popup_header {
     position: fixed;
-    height: 35%;
+    height: fit-content;
     width: 50%;
     top: -22.5%;
     left: 50%;
