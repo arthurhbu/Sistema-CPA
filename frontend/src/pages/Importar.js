@@ -31,7 +31,7 @@ function Importar(){
     const [ano, setAno] = useState('');
     const [popupHeaderVisible, setPopupHeaderVisible] = useState(false);
     const [popupImportVisible, setPopupImportVisible] = useState(false);
-    const [popupImportMessage, setPopupImportMessage] = useState('');
+    const [popupImportMessage, setPopupImportMessage] = useState('Importacao feita com sucesso');
     const [importStatus, setImportStatus] = useState(null);
     const [popupErrorVisible, setPopupErrorVisible] = useState(false);
     const [header, setHeader] = useState([]);
@@ -89,6 +89,16 @@ function Importar(){
             console.error('Erro ao verificar status de processamento', error);
         }
     };
+
+    const handleDownloadTemplate = async () => {
+
+        const link = document.createElement('a');
+        link.href = `${process.env.REACT_APP_BACKEND}/api/templates/download`;
+        link.setAttribute('download', `templates_intro_e_concl.md`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
 
     const handleCsvChange = (e) => { 
         if (e.target.files.length > 0) { 
@@ -177,7 +187,7 @@ function Importar(){
             
             const resData = await response.json()
             
-            if(resData.error != '') { 
+            if(resData.error !== '') { 
                 setPopupErrorMessage(resData.error);
                 setPopupErrorVisible(true);
                 return
@@ -237,7 +247,7 @@ return (
                         </ul>
                     </p>
                     <div className={styles.containerButton}>
-                        <button className={styles.button_templates}> Baixar Templates </button>
+                        <button onClick={handleDownloadTemplate} className={styles.button_templates}> Baixar Templates </button>
                     </div>
                 </div>
                 <div style={{display:'flex', justifyContent:'center'}}>

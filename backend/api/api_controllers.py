@@ -91,6 +91,7 @@ def setup_routes(app: Flask, client: MongoClient):
             if os.path.exists(file_path):
                 os.remove(file_path)
 
+
     @app.route('/api/pdf/<string:id_instrumento_pdf>/delete', methods=['DELETE'])
     def delete_pdf(id_instrumento_pdf):
         '''
@@ -111,6 +112,7 @@ def setup_routes(app: Flask, client: MongoClient):
         except Exception as e:
             return jsonify({'error': f'Erro ao tentar deletar(Internal Server Error)', 'details': f'Detalhes do erro: \n {e}'}), 400
     
+    
     @app.route('/api/pdf/<string:id_instrumento_pdf>/download', methods=['GET'])
     def download_pdf_zip(id_instrumento_pdf):
         '''
@@ -129,8 +131,9 @@ def setup_routes(app: Flask, client: MongoClient):
             print({'error': 'Erro ao baixar o arquivo (Server Internal Errror)', 'details': f'Detalhes do erro: \n {e}'})
             return jsonify({'error': 'Erro ao baixar o arquivo (Server Internal Errror)', 'details': f'Detalhes do erro: \n {e}'}), 400
     
+    
     @app.route('/api/pdfs', methods=['GET'])
-    def listPdfs():
+    def list_pdfs():
         '''
         Lista os PDFs temporarios disponíveis para download.
         '''
@@ -157,8 +160,9 @@ def setup_routes(app: Flask, client: MongoClient):
         except Exception as e: 
             return jsonify({'error': 'Erro ao listar PDFs.', 'details': f'Detalhes do erro: \n {e}'}), 500
 
+
     @app.route('/api/pdf/gerar', methods=['POST'])
-    def generatePdf():
+    def generate_pdf():
         '''
         Recebe o arquivo Zip e manda para uma API feita em GO que realiza a geração do PDF dos relatórios.
         '''
@@ -184,8 +188,24 @@ def setup_routes(app: Flask, client: MongoClient):
             'id_instrumento_pdf': id_instrumento_pdf
         }), 200
 
+
+    @app.route('/api/templates/download', methods=['GET'])
+    def download_templates_intro_concl():
+        '''
+        Faz download de um arquivo .md contendo os templates de introdução e conclusão dos tipos de instrumentos.
+        '''
+        try:
+            template_path = os.path.join('relatorio_componentes', 'templates_intro_e_concl.md')
+            if not os.path.exists(template_path):
+                return jsonify({'error': 'Arquivo template não encontrado'}), 404
+            
+            return send_file(template_path, as_attachment=True, download_name='templats_intro_e_concl.md', mimetype='text/markdown')
+        except Exception as e: 
+            return jsonify({'error': f'Erro ao tentar baixar o arquivo template: \n {e}'}), 400
+        
+        
     @app.route('/api/csv/importar', methods=["POST"])
-    def importCsv():
+    def import_csv():
         '''
         Importa o instrumento para o backend onde é retornado o header desse instrumento para poder ser feito uma comparação do header correto com o desse instrumento.
         
@@ -236,9 +256,10 @@ def setup_routes(app: Flask, client: MongoClient):
         
         except Exception as e:
             return jsonify({'header': '', 'error': f'Erro ao tentar salvar os arquivos: {e}'}),400
+              
                 
     @app.route('/api/csv/importar/confirmar', methods=['POST'])
-    def confirmImportation():
+    def confirm_csv_importation():
         '''
         Confirma a importação do instrumento com a requisição vinda do usuário após ter sido conferido o header.
         
@@ -260,8 +281,9 @@ def setup_routes(app: Flask, client: MongoClient):
             return jsonify({'message': 'Importação iniciada com sucesso'}), 200
         return jsonify({'message': 'faltando nome do arquivo ou ano ou modalidade'}), 400
 
+
     @app.route('/api/csv/cancel/<string:nome_instrumento>', methods=['DELETE'])
-    def cancelImportation(nome_instrumento):
+    def cancel_csv_importation(nome_instrumento):
         try:
             csv_file_name = f'{nome_instrumento}.csv';
             csv_file_path: Path = os.path.join(CSV_UPLOAD_FOLDER, csv_file_name);
@@ -274,9 +296,9 @@ def setup_routes(app: Flask, client: MongoClient):
         except Exception as e: 
             return jsonify({'error': f'Não foi possível cancelar importação: {e}'})
         
-
+        
     @app.route('/api/csv/importacao/progresso', methods=['GET'])
-    def getStatusCsvImport():
+    def get_status_csv_import():
         '''
         Confere o status do instrumento que está sendo processado.
         
@@ -294,7 +316,7 @@ def setup_routes(app: Flask, client: MongoClient):
 
 
     @app.route('/api/instrumentos', methods=['GET'])
-    def listInstrumentos():
+    def list_instrumentos():
         '''
         Lista os instrumentos disponíveis no banco MongoDB para o usuário.
         
@@ -304,7 +326,7 @@ def setup_routes(app: Flask, client: MongoClient):
 
 
     @app.route('/api/relatorio/gerar', methods=['POST'])
-    def generateReports(): 
+    def generate_reports(): 
         '''
         Gera os relatórios para certo instrumento com a requisição feita pelo usuário, sendo necessário informações como:
         
@@ -424,6 +446,111 @@ def setup_routes(app: Flask, client: MongoClient):
             return jsonify({'zips': zips}), 200
         except Exception as e:
             return jsonify({'error': f'Erro ao listar arquivos: {e}'}), 500
+        
+    
+    @app.route('/api/<string:instrumento>/introducao/download', methods=['GET'])
+    def download_introducao_instrumento(instrumento):
+        '''
+        Faz download do arquivo markdown contendo a introdução do instrumento escolhido.
+        '''
+        
+        try:
+            introducao_path: Path = os.path.join('relatorio_componentes', instrumento, 'introducao')
+            
+            if not os.path.exists(introducao_path):
+                return jsonify({'error': 'Diretório não encontrado'}), 404
+            
+            arquivos: list = os.listdir(introducao_path)
+            
+            if not arquivos:
+                return jsonify({'error': 'Diretório vazio'}), 404
+            
+            nome_arquivo = arquivos[0]
+            full_path_intro = os.path.join(introducao_path, nome_arquivo)
+            
+            return send_file(full_path_intro, as_attachment=True, download_name=nome_arquivo, mimetype='text/markdown')
+            
+        except Exception as e: 
+            return jsonify({'error': f'Erro ao baixar arquivo: {e}'}), 400
+    
+    
+    @app.route('/api/<string:instrumento>/conclusao/download', methods=['GET'])
+    def download_conclusao_instrumento(instrumento):
+        '''
+        Faz download do arquivo markdown contendo a introdução do instrumento escolhido.
+        '''
+        
+        try:
+            conclusao_path: Path = os.path.join('relatorio_componentes', instrumento, 'conclusao')
+            
+            if not os.path.exists(conclusao_path):
+                return jsonify({'error': 'Diretório não encontrado'}), 404
+            
+            arquivos: list = os.listdir(conclusao_path)
+            
+            if not arquivos:
+                return jsonify({'error': 'Diretório vazio'}), 404
+            
+            nome_arquivo = arquivos[0]
+            full_path_concl = os.path.join(conclusao_path, nome_arquivo)
+            
+            return send_file(full_path_concl, as_attachment=True, download_name=nome_arquivo, mimetype='text/markdown')
+            
+        except Exception as e: 
+            return jsonify({'error': f'Erro ao baixar arquivo: {e}'}), 400
+    
+    
+    @app.route('/api/<string:instrumento>/introducao/substituir', methods=['POST'])
+    def replace_introducao_instrumento(instrumento):
+        try: 
+            intro_file = request.files['arquivo_introducao']
+            intro_filename = intro_file.filename
+            
+            introducao_path = os.path.join('relatorio_componentes', instrumento, 'introducao')
+            
+            if not os.path.exists(introducao_path):
+                return jsonify({'error': 'Diretório não encontrado'}), 404
+            
+            arquivos: list = os.listdir(introducao_path)
+            full_path_intro = os.path.join(introducao_path, intro_filename)
+            
+            if not arquivos:
+                intro_file.save(full_path_intro)
+                return jsonify({'message': 'Introdução substituida com sucesso.'}), 200
+            
+            os.remove(os.path.join(introducao_path, arquivos[0]))
+            intro_file.save(full_path_intro)
+            
+            return jsonify({'message': 'Introdução substituída com sucesso.'}), 200
+        except Exception as e: 
+            return jsonify({'error': f'Erro ao substituir arquivo: {e}'}), 400
+        
+        
+    @app.route('/api/<string:instrumento>/conclusao/substituir', methods=['POST'])
+    def replace_conclusao_instrumento(instrumento):
+        try: 
+            concl_file = request.files['arquivo_conclusao']
+            concl_filename = concl_file.filename
+            
+            conclusao_path: Path = os.path.join('relatorio_componentes', instrumento, 'conclusao')
+            
+            if not os.path.exists(conclusao_path):
+                return jsonify({'error': 'Diretório não encontrado'}), 404
+            
+            arquivos: list = os.listdir(conclusao_path)
+            
+            full_path_concl = os.path.join(conclusao_path, concl_filename)
+            
+            if not arquivos:
+                concl_file.save(full_path_concl)
+                return jsonify({'message': 'Conclusão substituida com sucesso.'}), 200
+            
+            os.remove(os.path.join(conclusao_path, arquivos[0]))
+            concl_file.save(full_path_concl)
+            
+            return jsonify({'message': 'Conclusão substituída com sucesso.'}), 200
+        except Exception as e: 
+            return jsonify({'error': f'Erro ao substituir arquivo: {e}'}), 400
         
         
     @app.route('/api/instrumento/etapas', methods=['POST'])

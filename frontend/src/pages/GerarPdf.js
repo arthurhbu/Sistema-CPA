@@ -251,7 +251,7 @@ export default function GerarPdf(){
             <div className={styles.intro}>
                 <p className={styles.intro_titulo}>Gerar PDFs dos relatórios</p>
                 <p className={styles.intro_infos}>
-                    Envie o arquivo zip contendo os relatórios markdowns e as figuras do mesmo para que possa ser gerado os PDFs para serem entregues. O arquivo será entregue via email.
+                    Envie o arquivo zip contendo os relatórios markdowns e as figuras do mesmo para que possa ser gerado os PDFs para serem entregues. Um aviso sobre a finalização da geração dos PDFs será enviada via email. Completada a geração dos PDFs confira na aba de arquivos gerados para baixá-los. Assim que não for mais utilizar o arquivo dos PDFs por favor exclua o mesmo, para poupar armazenamento do nosso servidor.
                 </p>
             </div>
             {/* Sessão principal da página */}
@@ -355,8 +355,8 @@ export default function GerarPdf(){
                     <button className={styles.popup_buttonExit} onClick={() => {
                         setPopupVisible(false)
                         setPopupMessage('')
-                        }}>
-                        <p style={{color: 'currentColor', fontSize: '1.6rem', padding: '0', margin:'0'}}>X</p>
+                    }}>
+                        X
                     </button>
                     <p className={styles.popup_message}>{popupMessage}</p>
                 </div>

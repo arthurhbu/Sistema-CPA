@@ -1,21 +1,37 @@
+import { CiImport } from "react-icons/ci";
 import styles from './GerarRelatorio.module.css';
 import StyledInput from '../components/StyledInput';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import SelectAutoWidth from '../components/selectAutoWidth';
 import delete_icon from '../img/trash.png';
 
 function GerarRelatorio(){
+
+    /*
+        FALTA CRIAR LÓGICA PARA INSERIR NOVA INTRODUÇÃO E NOVA CONCLUSÃO, ALÉM DE CRIAR ALGUNS BLOQUEIOS PARA QUE PESSOA NÃO POSSA TENTAR ENVIAR COISAS SEM TER PREENCHIDO OU ALGO DO GENERO. 
+    */
+
+    const introducaoInputRef = useRef(null);
+    const conclusaoInputRef = useRef(null);
+
+    const [introducaoFile, setIntroducaoFile] = useState([]);
+    const [conclusaoFile, setConclusaoFile] = useState([]);
     const [ano, setAno] = useState('');
     const [introConcl, setIntroConcl] = useState('');
     const [databases, setDatabases] = useState([]);
     const [instrumento, setInstrumento] = useState('');
-    const [response, setResponse] = useState('');
+    const [popupConfirmReplaceIntroVisible, setPopupConfirmReplaceIntroVisible] = useState(false);
+    const [popupConfirmReplaceConclVisible, setPopupConfirmReplaceConclVisible] = useState(false);
     const [popupVisible, setPopupVisible] = useState(false);
+    const [popupMessage, setPopupMessage] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const [isProcessing, setIsProcessing] = useState(false);
     const [idInstrumento, setIdInstrumento] = useState('');
     const [isLoadingZips, setIsLoadingZips] = useState(false);
     const [avaliableZips, setAvaliableZips] = useState([]);
+
+    const triggerIntroducaoInput = () => introducaoInputRef.current.click();
+    const triggerConclusaoInput = () => conclusaoInputRef.current.click();
 
     const tipoIntroConlc = [
         {label: 'Nenhum', value: ''},
@@ -39,6 +55,23 @@ function GerarRelatorio(){
         setAno(e.target.value);
     }
 
+    const handleIntroducaoChange = (e) => { 
+        if (e.target.files.length > 0) { 
+            setIntroducaoFile(Array.from(e.target.files));
+        }
+    }
+
+    const handleConclusaoChange = (e) => { 
+        if (e.target.files.length > 0) { 
+            setConclusaoFile(Array.from(e.target.files));
+        }
+    }
+
+    const renderFileList = (files) => { 
+        return files.map((file, index) => (
+            <p style={{margin: '0', fontSize: '1.3rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', width: '70%', marginLeft: '15px', alignSelf: 'center'}}>{file.name}</p>
+        ))
+    }
 
     const listDatabases = []
     {databases.map((database) => { 
@@ -47,7 +80,6 @@ function GerarRelatorio(){
         })
     }
     )}
-
     
     const fetchZipsDisponiveis = async () => {
         setIsLoadingZips(true);
@@ -80,6 +112,124 @@ function GerarRelatorio(){
         fetchZipsDisponiveis();
     }, [isProcessing]);
 
+    const handleConfirmationReplaceArchive = (type) => { 
+        if (type === 'introducao') {
+            if (!introducaoFile || introducaoFile.length === 0) {
+                setErrorMessage('Selecione um arquivo para substituir a introdução!');
+                return;
+            }
+            if(!instrumento) {
+                setPopupMessage('Primeiro escolha o instrumento!');
+                setPopupVisible(true);
+                return;
+            }
+            setErrorMessage('');
+            setPopupMessage('Você tem certeza que deseja substituir a introdução?'); 
+            setPopupConfirmReplaceIntroVisible(true);
+        } else if (type === 'conclusao') { 
+            if (!conclusaoFile || conclusaoFile.length === 0) {
+                setErrorMessage('Selecione um arquivo para substituir a conclusão!');
+                return;
+            }
+            setErrorMessage('');
+            setPopupMessage('Você tem certeza que deseja substituir a conclusão?'); 
+            setPopupConfirmReplaceConclVisible(true);
+        }
+    }
+
+    const handleConfirmReplaceIntroduction = async (arquivo) => {
+        try { 
+            const formData = new FormData();
+            formData.append('arquivo_introducao', arquivo[0]);
+            const response = await fetch(`${process.env.REACT_APP_BACKEND}/api/${instrumento}/introducao/substituir`, {
+                method: 'POST',
+                body: formData,
+            })
+
+            if(!response.ok) {
+                setPopupMessage('Erro na resposta do servidor');
+                setPopupVisible(true);
+                return;
+            }
+
+            const resData = await response.json();
+
+            if(resData.error) {
+                setPopupMessage(resData.error);
+                setPopupVisible(true);
+                return;
+            }
+
+            setPopupMessage(resData.message)
+            setPopupVisible(true);
+            setIntroducaoFile([]);
+
+        } catch(e) { 
+            console.log('Não foi possível realizar a requisição', e)
+        }
+    }
+
+    const handleConfirmReplaceConclusion = async (arquivo) => {
+        try { 
+            const formData = new FormData();
+            formData.append('arquivo_conclusao', arquivo[0]);
+            console.log(arquivo[0])
+            const response = await fetch(`${process.env.REACT_APP_BACKEND}/api/${instrumento}/conclusao/substituir`, {
+                method: 'POST',
+                body: formData,
+            })
+
+            if(!response.ok) {
+                setPopupMessage('Erro na resposta do servidor');
+                setPopupVisible(true);
+                return;
+            }
+            
+            const resData = await response.json();
+
+            if(resData.error) {
+                setPopupMessage(resData.error);
+                setPopupVisible(true);
+                return;
+            }
+
+            setPopupMessage(resData.message)
+            setPopupVisible(true);
+            setIntroducaoFile([]);
+
+        } catch(e) { 
+            console.log('Não foi possível realizar a requisição', e)
+        }
+    }
+
+    const handleDownloadIntroducao = () => { 
+        if (!instrumento) { 
+            setErrorMessage('Primeiro escolha o instrumento!');
+            return;
+        }
+        setErrorMessage('');
+        const link = document.createElement('a');
+        link.href = `${process.env.REACT_APP_BACKEND}/api/${instrumento}/introducao/download`;
+        link.setAttribute('download', `introducao_${instrumento}.md`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+    const handleDownloadConclusao = () => { 
+        if (!instrumento) { 
+            setErrorMessage('Primeiro escolha o instrumento!');
+            return;
+        }
+        setErrorMessage('');
+        const link = document.createElement('a');
+        link.href = `${process.env.REACT_APP_BACKEND}/api/${instrumento}/conclusao/download`;
+        link.setAttribute('download', `introducao_${instrumento}.md`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
     const handleGenerate = async (ano, introConcl, instrumento) => { 
         const formData = new FormData();
 
@@ -101,14 +251,15 @@ function GerarRelatorio(){
             }
 
             if(resData.error) {
-                setResponse(resData.error);
+                setPopupMessage(resData.error);
                 setPopupVisible(true);
                 throw new Error(resData.error);
             }
             
             setPopupVisible(true);
             setIdInstrumento(resData.id_instrumento);
-            setResponse('Relatórios gerados com sucesso!');
+            setPopupMessage('Relatórios gerados com sucesso!');
+            setPopupVisible(true);
 
         } catch(e) { 
             console.log('Não foi possível realizar a requisição', e)
@@ -149,13 +300,13 @@ function GerarRelatorio(){
             const resData = await response.json();
 
             if (resData.error) {
+                setPopupMessage(resData.error);
                 setPopupVisible(true);
-                setResponse(resData.error);
                 return;
             }
 
+            setPopupMessage('ZIP deletado com sucesso!');
             setPopupVisible(true);
-            setResponse('ZIP deletado com sucesso!');
         } catch (e) {
             console.error('Erro ao tentar deletar o ZIP', e);
         }
@@ -195,35 +346,118 @@ function GerarRelatorio(){
             <div className={styles.containerIntro}>
                 <p className={styles.containerIntro_tituloPagina}>Gerar relatório</p>
                 <p className={styles.containerIntro_infos}>
-                    Os relatórios gerados do instrumento serão enviados para o email da secretaria da CPA, será uma arquivo ZIP contendo todos os relatórios em PDF, Markdown e as figuras dos relatórios. Para gerar os relatórios, primeiramente o instrumento precisa ter passado pelo processamento de dados. Outro ponto, quando for gerar os relatórios, conferir se nenhum outro instrumento está sendo processado, para que não haja problemas.
+                    Para gerar os relatórios sem alterar a introdução e a conclusão do instrumento, apenas preencha os campos e clique para gerar. Os relatórios gerados ficarão temporariamente armazenados em nosso site, podendo baixar a hora que precisar. Delete os arquivos ZIPs antigos para não ocupar tanto o armazenamento do servidor, quando precisar, somente gere os relatórios novamente. Caso queira alterar a introdução ou a conclusão, faça download dos mesmos e altere o que for necessário, apenas os inserindo e substituindo no servidor novamente.
                 </p>
             </div>
 
             {/* Área para escolher o instrumento que será gerado os relatórios */}
             <div className={styles.containerInstrumento}>
                 {/* <p style={{fontSize: '1.3rem', fontFamily: 'Inter', fontWeight: '600', marginTop:'40px', backgroundColor: '#80dfff', padding: '15px', borderRadius: '5px', border: '2px solid #000'}}>Instrumento</p> */}
-                <SelectAutoWidth
-                    onSelectChange={handleSelectDatabaseChange}
-                    label='Instrumento'
-                    options={listDatabases}
-                    >
-                </SelectAutoWidth>
+
             </div>
 
-            {/* Container para escolher introdução e conclusão que será usada nos relatórios e input para inserir ano do instrumento */}
+            {/* Container para escolher o instrumento e input para inserir ano do instrumento */}
             <div className={styles.containerRelatorioEsp}>
-                <div className={styles.containerRelatorioEsp_escolhaComponentesRelatorio_IntroConcl}>
-                    <p style={{fontSize: '1.6rem', fontFamily: 'Inter', fontWeight: '600', marginTop:'0'}}> Escolha a Introdução e Conclusão </p>
-                    <p>Escolha a introdução e conclusão para ser inserida no relatório, de acordo com o instrumento</p>
-                    <SelectAutoWidth 
-                        onSelectChange={handleSelectIntroConlcChange} 
-                        label='Tipo'
-                        options={tipoIntroConlc}  
-                    />
+                <div className={styles.containerRelatorioEsp_escolhaComponentesRelatorio_instrumento}>
+                    <p style={{fontSize: '1.3rem', fontFamily: 'Inter', fontWeight: '400', marginTop:'0'}}>Selecione o instrumento</p>
+                    <SelectAutoWidth
+                        onSelectChange={handleSelectDatabaseChange}
+                        label='Instrumento'
+                        options={listDatabases}
+                        >
+                    </SelectAutoWidth>
                 </div>
                 <div className={styles.containerRelatorioEsp_escolhaComponentesRelatorio_Ano}>
-                    <p style={{fontSize: '1.6rem', fontFamily: 'Inter', fontWeight: '600', marginTop:'0', marginBottom: '50px'}}>Escolha o Ano para ser inserido no relatório</p>
+                    <p style={{fontSize: '1.3rem', fontFamily: 'Inter', fontWeight: '400', marginTop:'0'}}>Insira o ano do instrumento</p>
                     <StyledInput type='number' value={ano} onChange={handleAnoChange}></StyledInput>
+                </div>
+            </div>
+
+            {/* Container para conter aba de visualizacao e mudanca de introducao e conclusao daquele instrumento*/}
+            <div className={styles.containerTrocaIntroConcl}>
+                <div className={styles.containerTrocaIntroConcl_MaxWidth}>
+                <p style={{fontSize: '1.6rem', fontFamily: 'Inter', fontWeight: '500', marginLeft: '5vw', marginTop: '3vh', marginBottom: '0'}}>Templates: </p>
+                <div style={{display: 'flex', flexDirection: 'column',height: '100%'}}>
+                    {/* Container para parte de alterar introducao */}
+                    <div className={styles.containerIntroducao}> 
+                        <p style={{fontSize: '1.3em', fontFamily: 'Inter', fontWeight: '500', marginTop: '1vh'}}>Introdução do relatório</p>
+                        <div className={styles.containerOpcoesIntroEConcl}>
+                            <button
+                                onClick={handleDownloadIntroducao}
+                                className={styles.button_download_introConcl}
+                            >
+                                Baixar introdução
+                            </button>
+                            <div className={styles.containerSubstituirIntroducao}>
+                                <p style={{width:'15%'}}>Deseja substituir introdução?</p>
+                                <div className={styles.containerImportNewIntroducao}>
+                                    <input
+                                        type='file'
+                                        ref={introducaoInputRef}
+                                        onChange={handleIntroducaoChange}
+                                        accept='.md'
+                                        style={{display: 'none'}}
+                                    />
+                                    <button 
+                                        className={styles.buttonImportArquivoMD}
+                                        onClick={triggerIntroducaoInput}
+                                        type='button'
+                                    >
+                                    <CiImport style={{fontSize: '3em'}}/>
+                                    </button>
+                                    {renderFileList(introducaoFile)}
+                                    <button 
+                                        className={styles.buttonSubstituir}
+                                        onClick={() => handleConfirmationReplaceArchive('introducao')}
+                                        type="button"
+                                    >
+                                        Substituir
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Container para alterar conclusao */}
+                    <div className={styles.containerIntroducao}> 
+                        <p style={{fontSize: '1.3em', fontFamily: 'Inter', fontWeight: '500', marginTop: '1vh'}}>Conclusão do relatório</p>
+                        <div className={styles.containerOpcoesIntroEConcl}>
+                            <button
+                                onClick={handleDownloadConclusao}
+                                className={styles.button_download_introConcl}
+                            >
+                                Baixar conclusão
+                            </button>
+                            <div className={styles.containerSubstituirIntroducao}>
+                                <p style={{width:'15%'}}>Deseja substituir conclusão?</p>
+                                <div className={styles.containerImportNewIntroducao}>
+                                    <input
+                                        type='file'
+                                        ref={conclusaoInputRef}
+                                        onChange={handleConclusaoChange}
+                                        accept='.md'
+                                        style={{display: 'none'}}
+                                    />
+                                    <button 
+                                        className={styles.buttonImportArquivoMD}
+                                        onClick={triggerConclusaoInput}
+                                        type='button'
+                                    >
+                                    <CiImport style={{fontSize: '3em'}}/>
+                                    </button>
+                                    {renderFileList(conclusaoFile)}
+                                    <button 
+                                        className={styles.buttonSubstituir}
+                                        onClick={() => handleConfirmationReplaceArchive('conclusao')}
+                                        type="button"
+                                    >
+                                        Substituir
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 </div>
             </div>
 
@@ -306,11 +540,59 @@ function GerarRelatorio(){
                 <div className={styles.popup}>
                     <button className={styles.popup_buttonExit} onClick={() => {
                         setPopupVisible(false)
-                        setResponse('')
+                        setPopupMessage('')
                         }}>
-                        <p style={{color: 'currentColor', fontSize: '1.6rem', padding: '0', margin:'0'}}>X</p>
+                        X
                     </button>
-                    <p className={styles.popup_message}>{response}</p>
+                    <p className={styles.popup_message}>{popupMessage}</p>
+                </div>
+            )}
+
+            {/* Popup de confirmação de substituição de introducao */}
+            {popupConfirmReplaceIntroVisible && <div className={styles.overlay}/>}
+
+            {popupConfirmReplaceIntroVisible && (
+                <div className={styles.popup}>
+                    <button className={styles.popup_buttonExit} onClick={() => {
+                        setPopupConfirmReplaceIntroVisible(false)
+                        setPopupMessage('')
+                    }}>
+                    X
+                    </button>
+                    <p className={styles.popup_message}>{popupMessage}</p>
+                    <div style={{display: 'flex', marginTop: '2vh'}}>
+                        <button className={styles.popup_cancel_button} onClick={() => {setPopupConfirmReplaceIntroVisible(false); setPopupMessage('')}}>Cancelar</button>
+                        <button 
+                            className={styles.popup_confirm_button} 
+                            onClick={() => {handleConfirmReplaceIntroduction(introducaoFile); setPopupConfirmReplaceIntroVisible(false); setPopupMessage('')}}
+                        >
+                            Confirmar
+                        </button>
+                    </div>
+                </div>
+            )}
+
+            {/* Popup de confirmação de substituição de conclusao */}
+            {popupConfirmReplaceConclVisible && <div className={styles.overlay}/>}
+
+            {popupConfirmReplaceConclVisible && (
+                <div className={styles.popup}>
+                    <button className={styles.popup_buttonExit} onClick={() => {
+                        setPopupConfirmReplaceConclVisible(false)
+                        setPopupMessage('')
+                    }}>
+                    X
+                    </button>
+                    <p className={styles.popup_message}>{popupMessage}</p>
+                    <div style={{display: 'flex', marginTop: '2vh'}}>
+                        <button className={styles.popup_cancel_button} onClick={() => {setPopupConfirmReplaceConclVisible(false); setPopupMessage('')}}>Cancelar</button>
+                        <button 
+                            className={styles.popup_confirm_button} 
+                            onClick={() => {handleConfirmReplaceConclusion(conclusaoFile); setPopupConfirmReplaceConclVisible(false); setPopupMessage('')}}
+                        >
+                            Confirmar
+                        </button>
+                    </div>
                 </div>
             )}
         </div>
