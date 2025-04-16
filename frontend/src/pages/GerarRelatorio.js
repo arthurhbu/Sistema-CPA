@@ -97,7 +97,8 @@ function GerarRelatorio(){
             const resData = await response.json();
 
             if(resData.error) {
-                throw new Error(resData.error)
+                // throw new Error(resData.error)
+                console.log(resData.error)
             }
             
             setAvaliableZips(resData.zips || []);
@@ -131,6 +132,11 @@ function GerarRelatorio(){
                 setErrorMessage('Selecione um arquivo para substituir a conclusão!');
                 return;
             }
+            if(!instrumento) {
+                setPopupMessage('Primeiro escolha o instrumento!');
+                setPopupVisible(true);
+                return;
+            }
             setErrorMessage('');
             setPopupMessage('Você tem certeza que deseja substituir a conclusão?'); 
             setPopupConfirmReplaceConclVisible(true);
@@ -141,7 +147,7 @@ function GerarRelatorio(){
         try { 
             const formData = new FormData();
             formData.append('arquivo_introducao', arquivo[0]);
-            const response = await fetch(`${process.env.REACT_APP_BACKEND}/api/${instrumento}/introducao/substituir`, {
+            const response = await fetch(`${process.env.REACT_APP_BACKEND}/api/instrumento/${instrumento}/introducao/substituir`, {
                 method: 'POST',
                 body: formData,
             })
@@ -155,7 +161,7 @@ function GerarRelatorio(){
             const resData = await response.json();
 
             if(resData.error) {
-                setPopupMessage(resData.error);
+                setPopupMessage(resData.error + resData.details);
                 setPopupVisible(true);
                 return;
             }
@@ -174,7 +180,7 @@ function GerarRelatorio(){
             const formData = new FormData();
             formData.append('arquivo_conclusao', arquivo[0]);
             console.log(arquivo[0])
-            const response = await fetch(`${process.env.REACT_APP_BACKEND}/api/${instrumento}/conclusao/substituir`, {
+            const response = await fetch(`${process.env.REACT_APP_BACKEND}/api/instrumento/${instrumento}/conclusao/substituir`, {
                 method: 'POST',
                 body: formData,
             })
@@ -188,7 +194,7 @@ function GerarRelatorio(){
             const resData = await response.json();
 
             if(resData.error) {
-                setPopupMessage(resData.error);
+                setPopupMessage(resData.error + resData.details);
                 setPopupVisible(true);
                 return;
             }
@@ -209,7 +215,7 @@ function GerarRelatorio(){
         }
         setErrorMessage('');
         const link = document.createElement('a');
-        link.href = `${process.env.REACT_APP_BACKEND}/api/${instrumento}/introducao/download`;
+        link.href = `${process.env.REACT_APP_BACKEND}/api/instrumento/${instrumento}/introducao/download`;
         link.setAttribute('download', `introducao_${instrumento}.md`);
         document.body.appendChild(link);
         link.click();
@@ -223,7 +229,7 @@ function GerarRelatorio(){
         }
         setErrorMessage('');
         const link = document.createElement('a');
-        link.href = `${process.env.REACT_APP_BACKEND}/api/${instrumento}/conclusao/download`;
+        link.href = `${process.env.REACT_APP_BACKEND}/api/instrumento/${instrumento}/conclusao/download`;
         link.setAttribute('download', `introducao_${instrumento}.md`);
         document.body.appendChild(link);
         link.click();
@@ -239,7 +245,7 @@ function GerarRelatorio(){
 
         try { 
             setIsProcessing(true);
-            const response = await fetch(`${process.env.REACT_APP_BACKEND}/api/relatorio/gerar`, {
+            const response = await fetch(`${process.env.REACT_APP_BACKEND}/api/relatorios/gerar`, {
                 method: 'POST',
                 body: formData
             })
@@ -327,7 +333,7 @@ function GerarRelatorio(){
     useEffect(() => {
         const fetchDatabase = async () => { 
             try { 
-                const res = await fetch(`${process.env.REACT_APP_BACKEND}/api/instrumentos`);
+                const res = await fetch(`${process.env.REACT_APP_BACKEND}/api/instrumento/listar`);
                 const instrumentosDisponiveis = await res.json();
                 setDatabases(instrumentosDisponiveis)
 

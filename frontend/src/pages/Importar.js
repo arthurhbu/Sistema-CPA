@@ -93,7 +93,7 @@ function Importar(){
     const handleDownloadTemplate = async () => {
 
         const link = document.createElement('a');
-        link.href = `${process.env.REACT_APP_BACKEND}/api/templates/download`;
+        link.href = `${process.env.REACT_APP_BACKEND}/api/relatorios/templates/download`;
         link.setAttribute('download', `templates_intro_e_concl.md`);
         document.body.appendChild(link);
         link.click();
@@ -203,17 +203,16 @@ function Importar(){
     }
 
     const confirmImportCSV = async () => { 
-        const data = { 
-            ano: ano, 
-            modalidade: selectedCsvType,
-        };
+
+        const formData = new FormData()
+        formData.append('ano', ano)
+        formData.append('modalidade', selectedCsvType)
 
         setIsProcessing(true);
         try { 
             const res = await fetch(`${process.env.REACT_APP_BACKEND}/api/csv/importar/confirmar`, {
                 method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(data),
+                body: formData,
             });
             const result = await res.json();
             setPopupHeaderVisible(false);

@@ -170,7 +170,7 @@ export default function GerarPdf(){
     const fetchPdfsAvaliable = async () => {
         setIsLoadingZips(true);
         try {
-            const response = await fetch(`${process.env.REACT_APP_BACKEND}/api/pdfs`, {
+            const response = await fetch(`${process.env.REACT_APP_BACKEND}/api/pdf/listar`, {
                 method: 'GET',
             });
 

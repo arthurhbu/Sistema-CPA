@@ -17,7 +17,7 @@ Com base no código fornecido, aqui está a tabela atualizada com as rotas, fun�
 | `/api/csv/importar/confirmar` | `confirm_csv_importation` | POST | Confirma a importação do instrumento após a verificação do header pelo usuário. |
 | `/api/csv/cancel/<nome_instrumento>` | `cancel_csv_importation` | DELETE | Cancela a importação removendo os arquivos que foram alocados em nosso sistema. |
 | `/csv/importacao/progresso` | `get_status_csv_import` | GET | Verifica o status do instrumento que está sendo processado. |
-| `/api/instrumentos` | `list_instrumentos` | GET | Lista os instrumentos disponíveis no banco MongoDB para o usuário. |
+| `/api/instrumento/listar` | `list_instrumentos` | GET | Lista os instrumentos disponíveis no banco MongoDB para o usuário. |
 | `/api/relatorio/gerar` | `generate_reports` | POST | Gera relatórios para um instrumento específico, requerendo: ano do instrumento, introdução e conclusão do modal, e nome do instrumento. |
 | `/api/relatorios/<id_instrumento>/download` | `download_file_zip` | GET | Realiza o download do arquivo zip contendo os relatórios gerados. |
 | `/api/relatorios/<id_instrumento>/delete` | `delete_zip` | DELETE | Deleta o arquivo zip de relatórios com base no ID do instrumento. |

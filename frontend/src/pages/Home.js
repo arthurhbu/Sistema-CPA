@@ -73,7 +73,7 @@ function Home(){
     useEffect(() => {
         const fetchDatabase = async () => { 
             try { 
-                const res = await fetch(`${process.env.REACT_APP_BACKEND}/api/instrumentos`);
+                const res = await fetch(`${process.env.REACT_APP_BACKEND}/api/instrumento/listar`);
 
                 const instrumentosDisponiveis = await res.json();
                 setDatabases(instrumentosDisponiveis)

@@ -10,6 +10,7 @@ from database.databaseQuerys import df_centro_por_ano,df_cursos_por_centro
 from database.databaseQuerys import update_progresso
 from src.utils.compact_and_send_zip import zip_markdown_files
 from api.gmail_api.gmail_api_controller import send_email_via_gmail_api
+from api.utils.error_handlers import *
 
 '''
 Controller principal onde funciona como um controlador de um repositório de funções que é usada pela api.
@@ -150,13 +151,13 @@ def generate_reports(collection_instrumento: Collection, collection_centro_por_a
     
     if res_gerar_todos_relatorios['Success'] == False:
         send_email_via_gmail_api('', 'sec-cpa@uem.br', 'Ocorreu um erro ao tentar gerar os relatórios', f"Uma exceção inesperada ocorreu durante a geração de relatórios, confira a seguir: \n\n {res_gerar_todos_relatorios['Error']} ")
-        return {'Success': False}
+        return {'Success': False, 'error': res_gerar_todos_relatorios['Error']}
     
     res_zip_files: dict = zip_markdown_files(database_name, f'{id_instrumento}.zip')
     
     if res_zip_files['Success'] == False: 
         send_email_via_gmail_api('', 'sec-cpa@uem.br', 'Um erro ocorreu ao tentar compactar relatorios', f"Uma exceção inesperada ocorreu durante a compactação de arquivos, confira a seguir: \n\n {res_zip_files['Error']} ")
-        return {'Success': False}
+        return {'Success': False, 'error': res_zip_files['Error']}
         
     return {'Success': True}
     
@@ -306,4 +307,4 @@ def atualiza_etapa(instrumento: str, etapa: str, novoValor: bool, client: MongoC
         )
         return 'Sucesso'
     except (DuplicateKeyError, OperationFailure) as db_error:
-        return f'Erro no banco de dados: {db_error}'
+        return error_response('Erro ao atualizar etapa', details=db_error)
