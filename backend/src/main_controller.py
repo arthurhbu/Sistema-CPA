@@ -6,8 +6,7 @@ from database.connectionDB import connectToDatabase, initialize_all_collections
 from src.csv.csv_controller import *
 from src.data_generator.generator_controller import *
 from src.relatorio.relatorio_controller import gerar_todos_relatorios
-from database.databaseQuerys import df_centro_por_ano,df_cursos_por_centro
-from database.databaseQuerys import update_progresso
+from database.databaseQuerys import *
 from src.utils.compact_and_send_zip import zip_markdown_files
 from api.gmail_api.gmail_api_controller import send_email_via_gmail_api
 from api.utils.error_handlers import *
@@ -115,10 +114,12 @@ def prepare_side_dataframes(database: Database, ano: int, modal: str, collection
     progresso_etapa5 = 'Finalizado'
     update_progresso(progresso,'Criacao_Cursos_por_Centro_Database',progresso_etapa5)
 
-    resultado_df_centro_por_ano: dict  = df_centro_por_ano(collection_instrumento, database, ano, modal)
+    resultado_df_centro_por_ano: dict  = df_centro_por_ano(collection_instrumento, database, ano)
 
     if resultado_df_centro_por_ano['Success'] == False: 
-        return {'Success': False, 'Error': f"{resultado_cursos_por_centro['error']}"}
+        progresso_etapa6 = resultado_df_centro_por_ano['error']
+        update_progresso(progresso, 'Criacao_Centro_por_Ano_Database', progresso_etapa6)
+        return {'Success': False, 'Error': f"{resultado_df_centro_por_ano['error']}"}
     
     progresso_etapa6 = resultado_df_centro_por_ano['message']
     update_progresso(progresso, 'Criacao_Centro_por_Ano_Database', progresso_etapa6)
@@ -126,7 +127,7 @@ def prepare_side_dataframes(database: Database, ano: int, modal: str, collection
     return {'Success': True, 'Message': 'Etapa finalizada com sucesso'}
 
 
-def generate_reports(collection_instrumento: Collection, collection_centro_por_ano: Collection, collection_cursos_por_centro: Collection, ano: int, database_name: str, modal: str, id_instrumento: str) -> dict:
+def generate_reports(collection_instrumento: Collection, collection_centro_por_ano: Collection, collection_cursos_por_centro: Collection, ano: int, database_name: str, modal: str, id_instrumento: str, nome_instrumento: str) -> dict:
     """
     Realiza a geração dos relatórios markdowns.
 
@@ -143,11 +144,8 @@ def generate_reports(collection_instrumento: Collection, collection_centro_por_a
     Raises:
         Raise: A função não levanta nenhuma exceção, apenas repassa as exceções que ocorreram antes.
     """
-    modal = modal.lower()
-    arquivo_intro_esc = f'introducao_{modal}.md'
-    arquivo_conclusao_esc = f'conclusao_{modal}.md'
     
-    res_gerar_todos_relatorios: dict = gerar_todos_relatorios(collection_instrumento, collection_centro_por_ano, collection_cursos_por_centro, arquivo_intro_esc, arquivo_conclusao_esc, ano, database_name, modal)
+    res_gerar_todos_relatorios: dict = gerar_todos_relatorios(collection_instrumento, collection_centro_por_ano, collection_cursos_por_centro, ano, database_name, modal, nome_instrumento)
     
     if res_gerar_todos_relatorios['Success'] == False:
         send_email_via_gmail_api('', 'sec-cpa@uem.br', 'Ocorreu um erro ao tentar gerar os relatórios', f"Uma exceção inesperada ocorreu durante a geração de relatórios, confira a seguir: \n\n {res_gerar_todos_relatorios['Error']} ")
@@ -214,7 +212,7 @@ def inserir_e_processar_csv(ano: int, csv_Filename: str, modalidade: str, client
         return f'Ocorreu um erro: {e}'
   
     
-def setup_to_generate_reports(csv_filename: str, client: MongoClient, ano: int, modal: str, id_instrumento: str) -> dict:
+def setup_to_generate_reports(nome_instrumento: str, client: MongoClient, ano: int, modal: str, id_instrumento: str) -> dict:
     """
     Realiza a geração dos relatórios markdowns.
 
@@ -229,10 +227,10 @@ def setup_to_generate_reports(csv_filename: str, client: MongoClient, ano: int, 
     Raises:
         Raise: A função não levanta nenhuma exceção, apenas repassa as exceções que ocorreram antes.
     """
-    dbName, database = connectToDatabase(csv_filename, client)
+    dbName, database = connectToDatabase(nome_instrumento, client)
     collections = initialize_all_collections(database)
     
-    res: dict = generate_reports(collections['instrumento'], collections['centro_por_ano'], collections['cursos_por_centro'], ano, dbName, modal, id_instrumento)
+    res: dict = generate_reports(collections['instrumento'], collections['centro_por_ano'], collections['cursos_por_centro'], ano, dbName, modal, id_instrumento, nome_instrumento)
     return res
 
 

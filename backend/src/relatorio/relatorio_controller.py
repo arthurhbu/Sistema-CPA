@@ -4,7 +4,7 @@ from src.relatorio.compor_partes_relatorio import compor_introducao, compor_conc
 from src.relatorio.gerar_relatorio import gerar_relatorio_por_curso
 
 
-def gerar_todos_relatorios(collection_instrumento: Collection, collection_centro_por_ano: Collection, collection_cursos_por_centro: Collection, arquivo_intro: str, arquivo_conclusao: str, ano: int, database_name: str, modal: str) -> None:
+def gerar_todos_relatorios(collection_instrumento: Collection, collection_centro_por_ano: Collection, collection_cursos_por_centro: Collection, ano: int, database_name: str, modal: str, nome_instrumento: str) -> None:
     """
     Gera relatório de todos os cursos.
     
@@ -26,13 +26,13 @@ def gerar_todos_relatorios(collection_instrumento: Collection, collection_centro
     for centro in centros:
         if centro == 'nan':
             print('Centro nan não existe, por favor, confira o CSV ou alguma das etapas anteriores')
-        res: dict = gerar_relatorios_por_centro(collection_instrumento, collection_centro_por_ano, collection_cursos_por_centro, arquivo_intro, arquivo_conclusao, ano, centro, database_name, modal)
+        res: dict = gerar_relatorios_por_centro(collection_instrumento, collection_centro_por_ano, collection_cursos_por_centro, ano, centro, database_name, modal, nome_instrumento)
         if res['Success'] == False:
             return {'Success': False, 'Error': res['Error']}
     return {'Success': True}
         
 
-def gerar_relatorios_por_centro(collection_instrumento: Collection, collection_centro_por_ano: Collection, collection_cursos_por_centro: Collection, arquivo_intro: str, arquivo_conclusao: str, ano: int, centro_de_ensino: str, database_name: str, modal: str) -> None:
+def gerar_relatorios_por_centro(collection_instrumento: Collection, collection_centro_por_ano: Collection, collection_cursos_por_centro: Collection, ano: int, centro_de_ensino: str, database_name: str, modal: str, nome_instrumento: str) -> None:
     """
     Gera os relatórios de um mesmo centro de ensino da UEM.
     Args:
@@ -53,12 +53,11 @@ def gerar_relatorios_por_centro(collection_instrumento: Collection, collection_c
 
     cursos = collection_instrumento.distinct('nm_curso', {'centro_de_ensino': centro_de_ensino})
     for curso in cursos:
-        
-        res_compor_intro: dict = compor_introducao(collection_centro_por_ano, collection_cursos_por_centro, arquivo_intro, ano, centro_de_ensino, modal)
+        res_compor_intro: dict = compor_introducao(collection_centro_por_ano, collection_cursos_por_centro, ano, centro_de_ensino, modal, nome_instrumento)
         if res_compor_intro['Success'] == False: 
             return {'Success': False, 'Error': res_compor_intro['Error']}
         
-        res_compor_conclusao: dict = compor_conclusao(collection_cursos_por_centro, arquivo_conclusao, ano, curso, modal)
+        res_compor_conclusao: dict = compor_conclusao(collection_cursos_por_centro, ano, curso, modal, nome_instrumento)
         if res_compor_conclusao['Success'] == False:
             return {'Success': False, 'Error': res_compor_conclusao['Error']} 
         
@@ -66,4 +65,4 @@ def gerar_relatorios_por_centro(collection_instrumento: Collection, collection_c
         if res_gerar_relatorios['Success'] == False:
             return {'Success': False, 'Error': res_gerar_relatorios['Error']} 
         
-        return {'Success': True}
+    return {'Success': True}

@@ -377,6 +377,15 @@ function GerarRelatorio(){
                     <p style={{fontSize: '1.3rem', fontFamily: 'Inter', fontWeight: '400', marginTop:'0'}}>Insira o ano do instrumento</p>
                     <StyledInput type='number' value={ano} onChange={handleAnoChange}></StyledInput>
                 </div>
+                <div className={styles.containerRelatorioEsp_escolhaComponentesRelatorio_instrumento}>
+                    <p style={{fontSize: '1.3rem', fontFamily: 'Inter', fontWeight: '400', marginTop:'0'}}>Modal</p>
+                    <SelectAutoWidth 
+                        onSelectChange={handleSelectIntroConlcChange} 
+                        label='Tipo'
+                        options={tipoIntroConlc}  
+                    />
+                </div>
+                
             </div>
 
             {/* Container para conter aba de visualizacao e mudanca de introducao e conclusao daquele instrumento*/}

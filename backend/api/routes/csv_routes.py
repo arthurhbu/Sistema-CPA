@@ -2,17 +2,20 @@ from flask import Blueprint, request, current_app
 from api.controllers.csv_controller import CsvController
 from api.utils.error_handlers import *
 from app import import_state
+import logging
 
 csv_bp = Blueprint('csv', __name__, url_prefix='/api/csv')
 controller = CsvController()
 
+logger = logging.getLogger(__name__)
+
 @csv_bp.route('/importar', methods=['POST'])
 def import_csv():
-    
     required_files = ['file', 'arquivo_introducao', 'arquivo_conclusao']
     missing = [f for f in required_files if f not in request.files or not request.files[f].filename]
     
     if missing:
+        logger.error(f"Missing files: {missing}")
         return validation_error(missing_fields=missing)
     
     csv_file = request.files['file']

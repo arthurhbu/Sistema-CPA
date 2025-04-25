@@ -18,15 +18,15 @@ class CsvController:
         '''
         try:
             result = self.csv_service.process_csv_import(
-                csv_file=csv_file, 
-                intro_file=intro_file, 
-                concl_file=concl_file, 
-                mongo_client=mongo_client
+                csv_file, 
+                intro_file, 
+                concl_file, 
+                mongo_client
             )
-            if 'error' in result:
-                return jsonify(result), 400
+            if result['error'] == '':
+                return jsonify(result), 200
             
-            return jsonify(result), 200
+            return jsonify(result), 400
             
         except Exception as e:
             logger.exception('Erro interno do servidor')

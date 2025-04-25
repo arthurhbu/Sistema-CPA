@@ -24,8 +24,5 @@ def list_pdfs():
 @pdf_bp.route('/gerar', methods=['POST'])
 def generate_pdf():
     
-    if not request.files or request.files['compressArchive'].filename:
-        return validation_error(missing_fields='compressArchive')
-    
     zip_file_md = request.files['compressArchive']
     return controller.generate_pdf(zip_file_md)

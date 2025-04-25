@@ -204,17 +204,27 @@ function Importar(){
 
     const confirmImportCSV = async () => { 
 
-        const formData = new FormData()
-        formData.append('ano', ano)
-        formData.append('modalidade', selectedCsvType)
+        const dataToSend = { 
+            ano: ano,
+            modalidade: selectedCsvType
+        }
 
         setIsProcessing(true);
         try { 
             const res = await fetch(`${process.env.REACT_APP_BACKEND}/api/csv/importar/confirmar`, {
                 method: 'POST',
-                body: formData,
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(dataToSend), 
             });
             const result = await res.json();
+            if (result.error) { 
+                setPopupImportMessage(result.error);
+                setPopupImportVisible(true);
+                return;
+            }
+
             setPopupHeaderVisible(false);
             setImportStatus(res.status);
             setPopupImportMessage(result.message);

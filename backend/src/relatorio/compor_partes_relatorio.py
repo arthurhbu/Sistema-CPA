@@ -5,9 +5,10 @@ import sys
 from pathlib import Path
 from pymongo.collection import Collection
 sys.stdout.reconfigure(encoding="utf-8")
+import os 
 
 
-def compor_introducao(collection_centro_por_ano: Collection,collection_cursos_por_centro: Collection, arquivo_intro: str, ano: int, centro_de_ensino: str, modal: str) -> dict:
+def compor_introducao(collection_centro_por_ano: Collection,collection_cursos_por_centro: Collection, ano: int, centro_de_ensino: str, modal: str, nome_instrumento: str) -> dict:
     """
     Gera um arquivo markdown contendo as informações da introdução do relatório baseado no tipo de instrumento, levando em conta que cada template possui suas próprias informações a serem passadas.
 
@@ -23,8 +24,12 @@ def compor_introducao(collection_centro_por_ano: Collection,collection_cursos_po
         None: Não possui Raises, Exceptions passadas via return.
     """
     try:
+        path_intro = os.path.join('relatorio_componentes', nome_instrumento, 'introducao')
+        arquivos_intro = os.listdir(path_intro)
+        arq_intro = arquivos_intro[0]
+        arquivo_path = os.path.join(path_intro, arq_intro)
         if modal == 'discente':	
-            with open(f'relatorio_componentes/{arquivo_intro}','r',encoding='utf-8') as f:
+            with open(arquivo_path,'r',encoding='utf-8') as f:
                 template = f.read()
             renderer = pystache.Renderer()
             respondentes_total = 0
@@ -57,7 +62,7 @@ def compor_introducao(collection_centro_por_ano: Collection,collection_cursos_po
                 arquivo.write(f'{intro} \n')
                 
         elif modal == 'ead':
-            with open(f'relatorio_componentes/{arquivo_intro}','r',encoding='utf-8') as f:
+            with open(arquivo_path,'r',encoding='utf-8') as f:
                 template = f.read()
             renderer = pystache.Renderer()
             respondentes_total = 0
@@ -75,7 +80,7 @@ def compor_introducao(collection_centro_por_ano: Collection,collection_cursos_po
                 arquivo.write(f'{intro} \n')
                 
         elif modal == 'egresso':
-            with open(f'relatorio_componentes/{arquivo_intro}','r',encoding='utf-8') as f:
+            with open(arquivo_path,'r',encoding='utf-8') as f:
                 template = f.read()
             renderer = pystache.Renderer()
             
@@ -85,7 +90,7 @@ def compor_introducao(collection_centro_por_ano: Collection,collection_cursos_po
                 arquivo.write(f'{intro} \n')
                 
         else:
-            with open(f'relatorio_componentes/{arquivo_intro}','r',encoding='utf-8') as f:
+            with open(arquivo_path,'r',encoding='utf-8') as f:
                 template = f.read()
             renderer = pystache.Renderer()
             
@@ -99,7 +104,7 @@ def compor_introducao(collection_centro_por_ano: Collection,collection_cursos_po
         return {'Success': False, 'Error': f'Ocorreu um erro ao tentar compor introdução: {e}'}
         
 
-def compor_conclusao(collection_name_cursos_por_centro: Collection, arquivo_conclusao: str, ano: int, curso: str, modal: str) -> None:
+def compor_conclusao(collection_name_cursos_por_centro: Collection, ano: int, curso: str, modal: str, nome_instrumento: str) -> None:
     """
     Compõe o arquivo de conclusão do relatório, baseado no tipo de instrumento que está sendo passado, sendo classificados em: Egresso, EAD, Discente, Docente e Tecnico. Cada um deles tem um template de conclusão diferente por isso o uso de um "Switch case" para escolher o template correto.
 
@@ -116,8 +121,12 @@ def compor_conclusao(collection_name_cursos_por_centro: Collection, arquivo_conc
     """
     
     try:
+        path_concl = os.path.join('relatorio_componentes', nome_instrumento, 'conclusao')
+        arquivos_concl = os.listdir(path_concl)
+        arq_concl = arquivos_concl[0]
+        arquivo_path = os.path.join(path_concl, arq_concl)
         if modal == 'discente':
-            with open(f'relatorio_componentes/{arquivo_conclusao}', 'r', encoding='utf-8') as f:
+            with open(arquivo_path, 'r', encoding='utf-8') as f:
                 template = f.read()
             renderer = pystache.Renderer()
             for document in collection_name_cursos_por_centro.find():
@@ -132,7 +141,7 @@ def compor_conclusao(collection_name_cursos_por_centro: Collection, arquivo_conc
                 arquivo.write(f'{conclusao} \n')
                 
         elif modal == 'ead':
-            with open(f'relatorio_componentes/{arquivo_conclusao}', 'r', encoding='utf-8') as f:
+            with open(arquivo_path, 'r', encoding='utf-8') as f:
                 template = f.read()
             renderer = pystache.Renderer()
             for document in collection_name_cursos_por_centro.find():
@@ -146,7 +155,7 @@ def compor_conclusao(collection_name_cursos_por_centro: Collection, arquivo_conc
                 arquivo.write(f'{conclusao} \n')
                 
         elif modal == 'egresso':
-            with open(f'relatorio_componentes/{arquivo_conclusao}', 'r', encoding='utf-8') as f:
+            with open(arquivo_path, 'r', encoding='utf-8') as f:
                 template = f.read()
             renderer = pystache.Renderer()
             for document in collection_name_cursos_por_centro.find():
@@ -159,7 +168,7 @@ def compor_conclusao(collection_name_cursos_por_centro: Collection, arquivo_conc
             with open("relatorio/info_conclusao.md","w", encoding='utf-8') as arquivo:
                 arquivo.write(f'{conclusao} \n')
         else: 
-            with open(f'relatorio_componentes/{arquivo_conclusao}', 'r', encoding='utf-8') as f:
+            with open(arquivo_path, 'r', encoding='utf-8') as f:
                 template = f.read()
             renderer = pystache.Renderer()
             

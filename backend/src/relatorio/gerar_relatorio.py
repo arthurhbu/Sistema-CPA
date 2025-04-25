@@ -60,7 +60,7 @@ def gerar_relatorio_por_curso(curso_escolhido: str, collection_curso: Collection
             for document in collection_curso.find({'nm_curso': curso_escolhido}).sort({'cd_grupo': 1, 'cd_subgrupo': 1, 'ordem_pergunta': 1}):
 
                     captionToPandoc = replace_reference_in_caption(document['relatorioGraficoAI'], contador)
-
+                    
                     if document['cd_grupo'] not in codGrupo:
                         print('\n',file=arquivo)
                         arquivo.write(f"## {document['nm_grupo']}")
@@ -107,6 +107,7 @@ def gerar_relatorio_por_curso(curso_escolhido: str, collection_curso: Collection
             conclusao = rendererConclusao.render(template_conclusao, {'curso': curso_escolhido, 'participacao_curso': ponto_2_virgula(participacao_curso)})
             arquivo.write(f'{conclusao} \n')
         arquivo.close()
+        return {'Success': True}
         
     except Exception as e :
         return {'Success': False, 'Error': f'Ocorreu um erro ao tentar gerar os relatórios: {e}'}

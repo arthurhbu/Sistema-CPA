@@ -117,7 +117,6 @@ class CsvService:
                 progresso = get_progresso_insercao(filename, mongo_client)
                 progresso = converteObjectIDToStr(progresso)  
                 progresso = removeKeys(progresso, ['_id', 'instrumento'])
-                print(progresso)
                 
             return {'processing': processing, 'file': filename, 'progresso': progresso}, True
         except Exception as e:

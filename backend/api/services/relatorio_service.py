@@ -14,12 +14,12 @@ class RelatorioService:
             template_path = os.path.join('relatorio_componentes', 'templates_intro_e_concl.md')
             
             if not os.path.exists(template_path):
-                return not_found_error('Template')
+                return not_found_error('Template'), False
             
-            return {'template_path': template_path, 'download_name': 'templates_intro_e_concl.md'}
+            return {'template_path': template_path, 'download_name': 'templates_intro_e_concl.md'}, True
         except Exception as e: 
             logger.exception('Erro ao tentar baixar o arquivo template')
-            return error_response('Erro ao tentar baixar o arquivo template', details=f'Detalhes do erro: \n {e}')
+            return error_response('Erro ao tentar baixar o arquivo template', details=f'Detalhes do erro: \n {e}'), False
         
     def generate_reports(self, instrumento, mongo_client, ano, modalidade, id_instrumento):
         
@@ -45,12 +45,12 @@ class RelatorioService:
             result_filepath = os.path.join('relatorio', 'markdowns', 'zip_temp_files', filename_zip)
             
             if not os.path.exists(result_filepath):
-                return not_found_error('Arquivo')
+                return not_found_error('Arquivo'), False
             
-            return {'result_filepath': result_filepath, 'download_name': filename_zip}
+            return {'result_filepath': result_filepath, 'download_name': filename_zip}, True
         except Exception as e: 
             logger.exception('Erro ao baixar relatorios zip')
-            return error_response('Erro ao baixar relatorios zip', details=f'Detalhes do erro: \n {e}')
+            return error_response('Erro ao baixar relatorios zip', details=f'Detalhes do erro: \n {e}'), False
         
         
     def delete_zip(self, filename_zip):
@@ -58,20 +58,19 @@ class RelatorioService:
             result_filepath = os.path.join('relatorio', 'markdowns', 'zip_temp_files', filename_zip)
             
             if not os.path.exists(result_filepath):
-                return not_found_error('Arquivo')
+                return not_found_error('Arquivo'), False
             
             os.remove(result_filepath)
             
-            return 'Arquivo deletado com sucesso'
+            return 'Arquivo deletado com sucesso', True
         except Exception as e:
             logger.exception('Erro ao deletar relatorios zip')
-            return error_response('Erro ao deletar relatorios zip', details=f'Detalhes do erro: \n {e}')
+            return error_response('Erro ao deletar relatorios zip', details=f'Detalhes do erro: \n {e}'), False
         
         
     def get_avaliable_zips(self,):
         try:
-            print('DKSAKDASKDSAKDASKFJISAFJOASDJKASKDASKDSAKDKSADKASDKASKDASKDASKDSAK')
-            zip_directory = './relatorio/markdowns/zip_temp_files/'
+            zip_directory = os.path.join('relatorio', 'markdowns', 'zip_temp_files')
             
             files = [f for f in os.listdir(zip_directory) if f.endswith('.zip')]
             
@@ -88,7 +87,6 @@ class RelatorioService:
                     'filename': filename,
                     'size': file_stats.st_size,
                 })
-            print(zips)
             return {'zips': zips}, True
         except Exception as e:
             logger.exception('Erro ao listar arquivos')

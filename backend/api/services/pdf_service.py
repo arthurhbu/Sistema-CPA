@@ -58,10 +58,10 @@ class PdfService:
                     'size': file_stats.st_size,
                 })
                 
-            return {'pdfs': pdfs}
+            return {'pdfs': pdfs}, True
         except Exception as e: 
             logger.exception('Erro ao listar PDFs')
-            return error_response('Erro ao listar PDFs', status_code=500, details=f'Detalhes do erro: \n {e}')
+            return error_response('Erro ao listar PDFs', status_code=500, details=f'Detalhes do erro: \n {e}'), False
     
     def generate_pdf(self, zip_file_md):
         
