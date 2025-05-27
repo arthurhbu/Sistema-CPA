@@ -84,6 +84,7 @@ class PdfService:
         
     def _process_pdf_generation_thread(self, file_path, id_instrumento_pdf):
         try: 
+            os.makedirs(os.path.join('relatorio', 'pdfs', 'pdfs_zip_temp_files'), exist_ok=True)
             url_api_pdf = os.getenv("URL_API_PDF")
             
             with open(file_path, 'rb') as zip_file_md:

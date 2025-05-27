@@ -7,7 +7,8 @@ from pandas import DataFrame
 from src.utils.percentage_update_database import percentage_calculator,insert_dict_disciplina,insert_percentage_dict_into_database
 from pymongo.errors import PyMongoError
 from pandas.errors import EmptyDataError
-from typing import Union
+from typing import Union, Dict, List, Tuple
+import numpy as np
 
 class CSVManagment:
 
@@ -177,7 +178,6 @@ class CSVManagment:
         columns_to_drop_csv_cc: list = df_cursoCentro.columns[pos_drop_column_csv_cc]
         df_cursoCentro = df_cursoCentro.drop(columns=columns_to_drop_csv_cc)
 
-        #Substituir nomes do header para evitar erros de nome
         index: int = 0
         for coluna in cabecalho:
             df_principal.rename(columns={df_principal.columns[index]: coluna}, inplace=True)
@@ -258,6 +258,44 @@ class CSVManagment:
         df_final.dropna(subset=['respostas'], inplace=True)
         df_final.to_csv(f'{dir_arquivo}/CSVs/csvFiltrado.csv', index=False)
     
+    @staticmethod
+    def validate_csv_data(df: DataFrame, required_columns: List[str], expected_types: Dict[str, type]) -> Tuple[bool, str]:
+        """
+        Validates the integrity of CSV data by checking required columns and data types.
+        
+        Args:
+            df (DataFrame): The pandas DataFrame to validate
+            required_columns (List[str]): List of column names that must be present
+            expected_types (Dict[str, type]): Dictionary mapping column names to their expected data types
+            
+        Returns:
+            Tuple[bool, str]: (is_valid, error_message)
+        """
+        if df.empty:
+            return False, "O arquivo CSV está vazio"
+            
+        missing_columns = [col for col in required_columns if col not in df.columns]
+        if missing_columns:
+            return False, f"Colunas obrigatórias ausentes: {', '.join(missing_columns)}"
+            
+        null_columns = df[required_columns].columns[df[required_columns].isnull().any()].tolist()
+        if null_columns:
+            return False, f"Valores nulos encontrados nas colunas: {', '.join(null_columns)}"
+            
+        for col, expected_type in expected_types.items():
+            if col in df.columns:
+                if expected_type == int:
+                    if not pd.to_numeric(df[col], errors='coerce').notnull().all():
+                        return False, f"Coluna {col} contém valores não numéricos"
+                elif expected_type == float:
+                    if not pd.to_numeric(df[col], errors='coerce').notnull().all():
+                        return False, f"Coluna {col} contém valores não numéricos"
+                elif expected_type == str:
+                    if not df[col].astype(str).notnull().all():
+                        return False, f"Coluna {col} contém valores nulos"
+                        
+        return True, ""
+
     def insert_main_csv_to_database(collection_name: Collection, csv_file_name: str, modalidade: str) -> Union[str, Exception]:
         """
         Realiza a inserção dos dados provenientes do CSV do instrumento no banco de dados utilizando data frames, além de realizar a filtragem do csv.
@@ -273,7 +311,6 @@ class CSVManagment:
         
         """
         try:
-            
             if modalidade == 'Discente' or modalidade == 'EAD':
                 CSVManagment.csv_filter_discentes_and_ead(csv_file_name)
             elif modalidade == 'Docente' or modalidade == 'Agente':
@@ -307,6 +344,28 @@ class CSVManagment:
                 'respostas',
                 'total_do_curso']
 
+            required_columns = [
+                'cd_curso', 'nm_curso', 'centro_de_ensino', 'cd_grupo', 'nm_grupo',
+                'cd_subgrupo', 'nm_subgrupo', 'cd_disciplina', 'nm_disciplina',
+                'ordem_pergunta', 'cd_pergunta', 'nm_pergunta', 'ordem_opcoes',
+                'opcao', 'respostas', 'total_do_curso'
+            ]
+            
+            expected_types = {
+                'cd_curso': int,
+                'cd_grupo': int,
+                'cd_subgrupo': int,
+                'cd_disciplina': int,
+                'ordem_pergunta': int,
+                'cd_pergunta': int,
+                'ordem_opcoes': int,
+                'respostas': int,
+                'total_do_curso': int
+            }
+            
+            is_valid, error_message = CSVManagment.validate_csv_data(df, required_columns, expected_types)
+            if not is_valid:
+                return f"Erro de validação do CSV: {error_message}"
 
             print('Inserindo infos no banco: \n')
             temp_pctdict = {}
@@ -328,17 +387,17 @@ class CSVManagment:
                     collection_name.insert_one(
                         {
                         cabecalho[0]: int(df.iloc[i,0]),    #codigo_curso
-                        cabecalho[1]:f'{df.iloc[i,1]}',     #nome_do_curso
-                        cabecalho[2]: f'{df.iloc[i,2]}',    #centro_de_ensino
+                        cabecalho[1]: str(df.iloc[i,1]),     #nome_do_curso
+                        cabecalho[2]: str(df.iloc[i,2]),    #centro_de_ensino
                         cabecalho[3]: int(df.iloc[i,3]),    #codigo_grupo
                         cabecalho[4]: str(df.iloc[i,4]),    #nome_grupo
                         cabecalho[5]: int(df.iloc[i,5]),    #codigo_subgrupo
-                        cabecalho[6]: f'{df.iloc[i,6]}',    #nome_subgrupo
+                        cabecalho[6]: str(df.iloc[i,6]),    #nome_subgrupo
                         cabecalho[7]: int(df.iloc[i,7]),    #codigo_disciplina
                         cabecalho[8]: str(df.iloc[i,8]),    #nome_disciplina
                         cabecalho[9]: int(df.iloc[i,9]),    #ordem_pergunta
                         cabecalho[10]: int(df.iloc[i,10]),  #codigo_pergunta 
-                        cabecalho[11]: f"{df.iloc[i,11]}",  #nome_pergunta
+                        cabecalho[11]: str(df.iloc[i,11]),  #nome_pergunta
                         cabecalho[12]: int(df.iloc[i,12]),  #ordem_opcao
                         cabecalho[15]: int(df.iloc[i,15])   #total_do_curso
                         }
@@ -395,8 +454,22 @@ class CSVManagment:
             csvArchive = 'cursos_e_centros.csv'
             dirArquivo = CSVManagment.find_path()
             df = pd.read_csv(f'{dirArquivo}/CSVs/{csvArchive}', sep=',', header = 0)
-
-            print(df)
+            
+            required_columns = [
+                'cd_curso', 'codigo_mec', 'centro_de_ensino', 
+                'nm_curso', 'matriculados', 'ano_referencia'
+            ]
+            
+            expected_types = {
+                'cd_curso': int,
+                'codigo_mec': float,
+                'matriculados': int,
+                'ano_referencia': int
+            }
+            
+            is_valid, error_message = CSVManagment.validate_csv_data(df, required_columns, expected_types)
+            if not is_valid:
+                return f"Erro de validação do CSV: {error_message}"
 
             cabecalho = [
                 'cd_curso',
@@ -453,7 +526,24 @@ class CSVManagment:
             csvArchive = 'centros_e_diretores.csv'
             dirArquivo = CSVManagment.find_path()
             df = pd.read_csv(f'{dirArquivo}/CSVs/{csvArchive}', sep=',', header = 0)
-            print(df)
+            
+            required_columns = [
+                'centro_de_ensino', 'centro_descricao', 
+                'diretor', 'diretor_adjunto', 'ano_da_direcao'
+            ]
+            
+            expected_types = {
+                'centro_de_ensino': str,
+                'centro_descricao': str,
+                'diretor': str,
+                'diretor_adjunto': str,
+                'ano_da_direcao': str
+            }
+            
+            is_valid, error_message = CSVManagment.validate_csv_data(df, required_columns, expected_types)
+            if not is_valid:
+                return f"Erro de validação do CSV: {error_message}"
+
             cabecalho = [
                 'centro_de_ensino',
                 'centro_descricao',
