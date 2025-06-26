@@ -38,7 +38,7 @@ class RelatorioService:
     def generate_reports(self, instrumento, mongo_client, ano, modalidade, id_instrumento):
         
         try:
-            res: dict = setup_to_generate_reports(instrumento, mongo_client, int(ano), modalidade, id_instrumento)
+            res: dict = setup_to_generate_reports(instrumento, mongo_client, ano, modalidade, id_instrumento)
             
             if res['Success'] == True:
                 send_email_via_gmail_api('', 'sec-cpa@uem.br', 'Relatórios gerados', f'Os relatórios do instrumento {instrumento} foram gerados com sucesso.')
@@ -46,8 +46,8 @@ class RelatorioService:
                 return jsonify({
                     'success': True, 
                     'id_instrumento': id_instrumento,
-                    'download_url': f'/api/download/{id_instrumento}',
-                }), 200
+                    'download_url': f'/api/{id_instrumento}/download',
+                })
             
             return error_response('Erro ao tentar gerar relatórios', details=res['error'])
         except Exception as e: 

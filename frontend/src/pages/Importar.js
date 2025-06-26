@@ -456,12 +456,12 @@ return (
             {/* Popup para substituir templates */}
             {popupReplaceTemplatesVisible && <div className={styles.overlay}/>} 
             {popupReplaceTemplatesVisible && (
-                <div className={styles.popup} style={{minWidth: '350px', maxWidth: '90vw', height: '40vh', display: 'flex', flexDirection: 'column', justifyContent: 'space-between'}}>
-                    <div>
+                <div className={styles.popup} style={{minWidth: '350px', maxWidth: '90vw', height: 'auto', minHeight: '45vh', maxHeight: '80vh', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', padding: '30px', overflow: 'auto'}}>
+                    <div style={{flex: '1', display: 'flex', flexDirection: 'column', gap: '20px', minHeight: '0'}}>
                         <p className={styles.popup_message_header}>Substituir Arquivo dos Templates</p>
-                        <p style={{fontSize: '1.3rem', color: '#333'}}>Faça upload do novo arquivo contendo os templates de introdução e conclusão (O arquivo deve possuir o nome "templates_intro_e_concl.md"):</p>
+                        <p style={{fontSize: '1.3rem', color: '#333', margin: '0'}}>Faça upload do novo arquivo contendo os templates de introdução e conclusão (O arquivo deve possuir o nome "templates_intro_e_concl.md"):</p>
                     </div>
-                    <div className={styles.inputArquivoBox} style={{margin: '0 auto', width: '80%', minHeight: 'unset', height: 'unset', background: '#E8E8E8'}}>
+                    <div className={styles.inputArquivoBox} style={{margin: '20px auto', width: '80%', minHeight: 'unset', height: 'unset', background: '#E8E8E8', flex: '0 0 auto'}}>
                         <div style={{display: 'flex', justifyContent:'space-between', color: ''}}>
                             <p style={{color: '#000'}} className={styles.inputArquivoBox_text}> Template escolhido: </p>
                             <div>
@@ -485,11 +485,13 @@ return (
                             <p style={{margin: '0', fontSize: '1.3rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', width: '70%', marginLeft: '15px'}}>{replaceTemplateFile[0].name}</p>
                         )}
                     </div>
-                    {replaceTemplatesError && <p className={styles.errorMessage}>{replaceTemplatesError}</p>}
-                    {replaceTemplatesSuccess && <p style={{color: 'green', fontWeight: 500}}>{replaceTemplatesSuccess}</p>}
-                    <div style={{display: 'flex', justifyContent: 'flex-end', marginTop: '2vh'}}>
-                        <button className={styles.popup_cancel_button} onClick={() => {setPopupReplaceTemplatesVisible(false); setReplaceTemplateFile([]); setReplaceTemplatesError(''); setReplaceTemplatesSuccess('');}}>Cancelar</button>
-                        <button className={styles.popup_confirm_button} onClick={handleReplaceTemplatesSubmit}>Confirmar</button>
+                    <div style={{flex: '0 0 auto', display: 'flex', flexDirection: 'column', gap: '10px', marginTop: 'auto'}}>
+                        {replaceTemplatesError && <p className={styles.errorMessage}>{replaceTemplatesError}</p>}
+                        {replaceTemplatesSuccess && <p style={{color: 'green', fontWeight: 500, margin: '0'}}>{replaceTemplatesSuccess}</p>}
+                        <div style={{display: 'flex', justifyContent: 'flex-end', gap: '15px', marginTop: '15px'}}>
+                            <button className={styles.popup_cancel_button} onClick={() => {setPopupReplaceTemplatesVisible(false); setReplaceTemplateFile([]); setReplaceTemplatesError(''); setReplaceTemplatesSuccess('');}}>Cancelar</button>
+                            <button className={styles.popup_confirm_button} onClick={handleReplaceTemplatesSubmit}>Confirmar</button>
+                        </div>
                     </div>
                 </div>
             )}

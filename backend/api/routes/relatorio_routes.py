@@ -24,21 +24,40 @@ def download_templates_intro_concl():
     
 @relatorio_bp.route('/gerar', methods=['POST'])
 def generate_reports():
-    required_fields = ['introConcl', 'ano', 'instrumento']
-    missing = [f for f in required_fields if f not in request.form]
+    # Verificar se os dados vêm como JSON ou form data
+    if request.is_json:
+        data = request.get_json()
+        required_fields = ['introConcl', 'ano', 'instrumento']
+        missing = [f for f in required_fields if f not in data or not data[f]]
+    else:
+        required_fields = ['introConcl', 'ano', 'instrumento']
+        missing = [f for f in required_fields if f not in request.form or not request.form[f]]
     
     if missing:
         return validation_error(missing_fields=missing)
     
-    ano = request.form.get('ano')
-    introConcl = request.form.get('introConcl')
-    instrumento = request.form.get('instrumento')
+    # Obter dados da requisição
+    if request.is_json:
+        data = request.get_json()
+        ano = data.get('ano')
+        introConcl = data.get('introConcl')
+        instrumento = data.get('instrumento')
+    else:
+        ano = request.form.get('ano')
+        introConcl = request.form.get('introConcl')
+        instrumento = request.form.get('instrumento')
+    
+    # Validar se ano é um número válido
+    try:
+        ano = int(ano)
+    except (ValueError, TypeError):
+        return validation_error(missing_fields=['ano deve ser um número válido'])
     
     id_instrumento = f'{instrumento}_id'
     
     mongo_client = current_app.config['MONGO_CLIENT']
     
-    return controller.generate_reports(instrumento, mongo_client, int(ano), introConcl, id_instrumento)
+    return controller.generate_reports(instrumento, mongo_client, ano, introConcl, id_instrumento)
     
         
 @relatorio_bp.route('/<string:id_instrumento>/download', methods=['GET'])

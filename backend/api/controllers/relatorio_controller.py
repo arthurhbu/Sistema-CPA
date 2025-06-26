@@ -50,7 +50,7 @@ class RelatorioController:
             if not success:
                 return result
             
-            return send_file(result['result_filepath'], as_attachment=True, download_name=result['download_name'], mimetype='text/markdown')
+            return send_file(result['result_filepath'], as_attachment=True, download_name=result['download_name'], mimetype='application/zip')
         except Exception as e:
             logger.exception('Erro interno do servidor')
             return jsonify({'error': f'Erro interno no servidor: {e}'}), 500
