@@ -228,6 +228,7 @@ def replace_reference_in_caption(caption_from_ai: str, index: int) -> str:
     """
 
     substitions = { 
+        "_index_": "index_",
         "Index_": "index_",
         "tabela": "Tabela",
         "Figura": "figura"

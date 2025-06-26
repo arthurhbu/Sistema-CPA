@@ -75,12 +75,12 @@ def graph_plot(sub_dir_name: str, dir_saida_fig: Path, cod_curso: int, cod_subgr
     return path
 
 
-def controller_graph_generator(database_name: Database,collection_name: Collection, opcoes: list[str], porcentagem: list[float], cod_curso: int, cd_subgrupo: int, nu_pergunta: int, pergunta:str) -> Path:
+def controller_graph_generator(database_name: str, collection_name: Collection, opcoes: list[str], porcentagem: list[float], cod_curso: int, cd_subgrupo: int, nu_pergunta: int, pergunta:str) -> Path:
     """
     Função que realiza a chamada da função que gera os gráficos para cada documento que estiver no banco de dados.
 
     Args: 
-        database_name (Database): Database/instrumento que será utilizado.
+        database_name (str): Nome do banco de dados/instrumento que será utilizado.
         collection_name (Collection): Collection do csv do instrumento.
         opcoes (list[str]): Lista contendo as opcoes de uma pergunta do instrumento.
         porcentagem (list[float]): Lista contendo a porcentagem de uma pergunta do instrumento.

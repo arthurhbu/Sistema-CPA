@@ -20,7 +20,16 @@ def connection(db_config: dict) -> MongoClient:
             db_config['host'],
             username=db_config['username'],
             password=db_config['password'],
-            serverSelectionTimeoutMS=5000
+            serverSelectionTimeoutMS=5000,
+            maxPoolSize=50,  
+            minPoolSize=10,  
+            maxIdleTimeMS=30000,  
+            waitQueueTimeoutMS=10000,  
+            connectTimeoutMS=20000,  
+            socketTimeoutMS=20000, 
+            retryWrites=True,  
+            retryReads=True,  
+            heartbeatFrequencyMS=10000  
         )
     except errors.ConnectionError as err:
         print(f"Connection error: {err}")

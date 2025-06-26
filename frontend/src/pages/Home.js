@@ -24,7 +24,7 @@ function Home(){
 
         try { 
             const res = await fetch(`${process.env.REACT_APP_BACKEND}/api/instrumento/etapa/atualizar`, { 
-                method: 'POST',
+                method: 'PUT',
                 headers: { 'Content-Type': 'application/json'},
                 body: JSON.stringify({ instrumento, etapa, novoValor: !etapas[etapa] })
             });

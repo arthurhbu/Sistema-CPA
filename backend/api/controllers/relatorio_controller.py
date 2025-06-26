@@ -8,6 +8,18 @@ logger = logging.getLogger(__name__)
 class RelatorioController:
     def __init__(self):
         self.relatorio_service = RelatorioService()    
+    
+    def upload_templates(self, arquivo_template):
+        try:
+            result, success = self.relatorio_service.upload_templates(arquivo_template)
+            
+            if not success:
+                return result
+            
+            return jsonify({'message': result}), 200
+        except Exception as e:
+            logger.exception('Erro interno do servidor')
+            return jsonify({'error': f'Erro interno no servidor: {e}'}), 500
         
     def download_templates_intro_concl(self,):
         try:
@@ -58,7 +70,6 @@ class RelatorioController:
         
     def get_avaliable_zips(self):
         try:
-            print('jdisqJIDFSAJIOFSAJIodfjiosadfjioasdjiosakopdASOKPDkopjksopadjiopsaJPDOISApkodksaopDKOPSakodpsaKOP')
             result, success = self.relatorio_service.get_avaliable_zips()
             
             if not success:

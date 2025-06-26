@@ -45,6 +45,8 @@ def initalize_database_inserts(database_name: Database, csv_filename: str, clien
             'Geracao_de_Dados': 'Pendente',
             'Criacao_Cursos_por_Centro_Database': 'Pendente',
             'Criacao_Centro_por_Ano_Database': 'Pendente',
+            'Importado': False,
+            'Gerado': False,
         }
     )
     
@@ -76,10 +78,32 @@ def initalize_database_inserts(database_name: Database, csv_filename: str, clien
         return {'Success': False, 'Error': progresso_etapa3, 'Message': 'Ocorreu um erro ao tentar inserir CSV centro_diretor'}
     update_progresso(progresso, 'Insercao_Centro_Diretor_Database', progresso_etapa3)
     
+    progresso.update_one(
+        {
+            'Importado': False
+        },
+        {
+            '$set': {
+                'Importado': True
+            }
+        }
+    )
+    
     progresso_etapa4: str = generate_graph_table_report(client, database_name, collection_instrumento)
     if progresso_etapa4 != 'Finalizado':
         return {'Success': False, 'Error': progresso_etapa4, 'Message': 'Ocorreu um erro ao tentar gerar grafico, tabela e legenda'}
     update_progresso(progresso, 'Geracao_de_Dados', progresso_etapa4)
+    
+    progresso.update_one(
+        {
+            'Gerado': False
+        },
+        {
+            '$set': {
+                'Gerado': True
+            }
+        }
+    )
     
     return {'Success': True, 'Error': '', 'Message': 'Inserção e geração de dados finalizada com sucesso'}
 
@@ -191,7 +215,7 @@ def inserir_e_processar_csv(ano: int, csv_Filename: str, modalidade: str, client
         
         if response_initalize_database_inserts['Success'] == False: 
             send_email_via_gmail_api('', 'sec-cpa@uem.br', f"{response_initalize_database_inserts['Message']}", f"{response_initalize_database_inserts['Error']}")
-            return
+            return 'False'
         
         response_prepare_side_dataframes: dict = prepare_side_dataframes(
             database, 
@@ -204,7 +228,7 @@ def inserir_e_processar_csv(ano: int, csv_Filename: str, modalidade: str, client
         
         if response_prepare_side_dataframes['Success'] == False:
             send_email_via_gmail_api('', 'sec-cpa@uem.br', 'Ocorreu um erro ao tentar gerar as collections de apoio', f"{response_prepare_side_dataframes['Error']}")
-            return
+            return 'False'
         
         return 'Inserção finalizada com sucesso'
 

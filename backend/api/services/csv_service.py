@@ -86,10 +86,16 @@ class CsvService:
         
     def _process_csv_thread(self, csv_filename, ano, modalidade, mongo_client):
         try:
-            inserir_e_processar_csv(int(ano), csv_filename, modalidade, mongo_client)
+            erro = inserir_e_processar_csv(int(ano), csv_filename, modalidade, mongo_client)
         except Exception as e:
             logger.exception("Errro no processamento")
         finally: 
+            if erro == 'False':
+                csv_filename = csv_filename.replace('.csv', '')
+                mongo_client.drop_database(csv_filename.replace(' ', ''))
+                import_state.processing = False
+                logger.error(f'Erro ao processar CSV: {erro}')
+                return
             time.sleep(2)
             send_email_via_gmail_api('', 'sec-cpa@uem.br', 'Processamento de CSV concluído', f'O processamento do CSV {csv_filename} foi concluído com sucesso. \nO instrumento estará disponível para ser gerado os relatórios markdowns \n\nSISTEMA CPA.')
             import_state.processing = False

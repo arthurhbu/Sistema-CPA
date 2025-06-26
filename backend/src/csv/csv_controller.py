@@ -60,7 +60,6 @@ class CSVManagment:
         columns_to_drop_main_csv: list = df_principal.columns[columns_positions_toDrop_mainCsv]
         df_principal = df_principal.drop(columns=columns_to_drop_main_csv)
 
-
         df_principal.iloc[:, 2] = df_principal.apply(lambda row: f"{row.iloc[3]} em {row.iloc[2]}", axis=1)
 
         columns: int = df_principal.columns[3]
@@ -76,8 +75,7 @@ class CSVManagment:
         for coluna in cabecalho:
             df_principal.rename(columns={df_principal.columns[index]: coluna}, inplace=True)
             index+=1 
-
-        df_principal.dropna(subset=['respostas'], inplace=True)
+            
         df_principal.to_csv(f'{dir_arquivo}/CSVs/csvFiltrado.csv', index=False)
     
     def csv_filter_docentes_and_tecnicos(csv_file_name) -> None:
@@ -91,7 +89,6 @@ class CSVManagment:
         Returns:
             None: Não possui retorno, ele salva o arquivo csv filtrado diretamente no diretório.
         """
-        
         
         cabecalho: list = [   
             'cd_grupo',
@@ -126,7 +123,6 @@ class CSVManagment:
         df_principal.insert(2, 'centro_de_ensino', '-')
         df_principal.insert(7,'cd_disciplina', 0 )
         df_principal.insert(8, 'nm_disciplina', '-')
-        print(df_principal)        
         df_principal.to_csv(f'{dir_arquivo}/CSVs/csvFiltrado.csv', index=False) 
         
     def csv_filter_discentes_and_ead(csv_file_name) -> None:
@@ -193,8 +189,10 @@ class CSVManagment:
 
         df_final = df_final[cabecalho]
 
-        print(df_final)
         df_final.dropna(subset=['respostas'], inplace=True)
+        df_final.rename(columns={df_final.columns[1]: 'nm_curso'}, inplace=True)
+        df_final.rename(columns={df_final.columns[2]: 'centro_de_ensino'}, inplace=True)
+        
         df_final.to_csv(f'{dir_arquivo}/CSVs/csvFiltrado.csv', index=False) 
 
     def csv_filter_egressos(csv_file_name) -> None:
@@ -249,13 +247,17 @@ class CSVManagment:
 
         df_final = pd.merge(df_principal, df_cursoCentro, on='cd_curso', how='outer')
         df_final.drop_duplicates(inplace=True)
-
+        
         cabecalho.insert(1, 'Nome_Do_Curso')
         cabecalho.insert(2, 'Centro_de_Ensino')
 
         df_final = df_final[cabecalho]
 
         df_final.dropna(subset=['respostas'], inplace=True)
+        
+        df_final.rename(columns={df_final.columns[1]: 'nm_curso'}, inplace=True)
+        df_final.rename(columns={df_final.columns[2]: 'centro_de_ensino'}, inplace=True)
+        
         df_final.to_csv(f'{dir_arquivo}/CSVs/csvFiltrado.csv', index=False)
     
     @staticmethod
@@ -273,10 +275,14 @@ class CSVManagment:
         """
         if df.empty:
             return False, "O arquivo CSV está vazio"
-            
+        
         missing_columns = [col for col in required_columns if col not in df.columns]
         if missing_columns:
             return False, f"Colunas obrigatórias ausentes: {', '.join(missing_columns)}"
+        
+        # expected_column_count = 16
+        # if len(df.columns) != expected_column_count:
+        #     return False, f"Número incorreto de colunas. Esperado: {expected_column_count}, Encontrado: {len(df.columns)}"
             
         null_columns = df[required_columns].columns[df[required_columns].isnull().any()].tolist()
         if null_columns:
@@ -387,7 +393,7 @@ class CSVManagment:
                     collection_name.insert_one(
                         {
                         cabecalho[0]: int(df.iloc[i,0]),    #codigo_curso
-                        cabecalho[1]: str(df.iloc[i,1]),     #nome_do_curso
+                        cabecalho[1]: str(df.iloc[i,1]),    #nome_do_curso
                         cabecalho[2]: str(df.iloc[i,2]),    #centro_de_ensino
                         cabecalho[3]: int(df.iloc[i,3]),    #codigo_grupo
                         cabecalho[4]: str(df.iloc[i,4]),    #nome_grupo
@@ -399,7 +405,8 @@ class CSVManagment:
                         cabecalho[10]: int(df.iloc[i,10]),  #codigo_pergunta 
                         cabecalho[11]: str(df.iloc[i,11]),  #nome_pergunta
                         cabecalho[12]: int(df.iloc[i,12]),  #ordem_opcao
-                        cabecalho[15]: int(df.iloc[i,15])   #total_do_curso
+                        cabecalho[15]: int(df.iloc[i,15]),   #total_do_curso
+                        'processado': False,
                         }
                     )
 
@@ -455,22 +462,6 @@ class CSVManagment:
             dirArquivo = CSVManagment.find_path()
             df = pd.read_csv(f'{dirArquivo}/CSVs/{csvArchive}', sep=',', header = 0)
             
-            required_columns = [
-                'cd_curso', 'codigo_mec', 'centro_de_ensino', 
-                'nm_curso', 'matriculados', 'ano_referencia'
-            ]
-            
-            expected_types = {
-                'cd_curso': int,
-                'codigo_mec': float,
-                'matriculados': int,
-                'ano_referencia': int
-            }
-            
-            is_valid, error_message = CSVManagment.validate_csv_data(df, required_columns, expected_types)
-            if not is_valid:
-                return f"Erro de validação do CSV: {error_message}"
-
             cabecalho = [
                 'cd_curso',
                 'codigo_mec',
@@ -527,23 +518,6 @@ class CSVManagment:
             dirArquivo = CSVManagment.find_path()
             df = pd.read_csv(f'{dirArquivo}/CSVs/{csvArchive}', sep=',', header = 0)
             
-            required_columns = [
-                'centro_de_ensino', 'centro_descricao', 
-                'diretor', 'diretor_adjunto', 'ano_da_direcao'
-            ]
-            
-            expected_types = {
-                'centro_de_ensino': str,
-                'centro_descricao': str,
-                'diretor': str,
-                'diretor_adjunto': str,
-                'ano_da_direcao': str
-            }
-            
-            is_valid, error_message = CSVManagment.validate_csv_data(df, required_columns, expected_types)
-            if not is_valid:
-                return f"Erro de validação do CSV: {error_message}"
-
             cabecalho = [
                 'centro_de_ensino',
                 'centro_descricao',

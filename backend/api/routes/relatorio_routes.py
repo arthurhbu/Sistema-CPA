@@ -6,6 +6,18 @@ from api.utils.error_handlers import *
 relatorio_bp = Blueprint('relatorio', __name__, url_prefix='/api/relatorios')
 controller = RelatorioController()
 
+@relatorio_bp.route('/templates/upload', methods=['POST'])
+def upload_templates():
+    required_files = ['arquivo_template']
+    missing = [f for f in required_files if f not in request.files or not request.files[f].filename]
+    
+    if missing:
+        return validation_error(missing_fields=missing)
+    
+    arquivo_template = request.files.get('arquivo_template')
+    
+    return controller.upload_templates(arquivo_template)
+
 @relatorio_bp.route('/templates/download', methods=['GET'])
 def download_templates_intro_concl():
     return controller.download_templates_intro_concl()

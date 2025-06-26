@@ -3,6 +3,7 @@ import os
 from api.utils.error_handlers import *
 from src.main_controller import get_etapas, atualiza_etapa
 from api.utils_api import *
+from src.data_generator.generator_controller import generate_graph_table_report
 
 logger = logging.getLogger(__name__)
 
@@ -17,6 +18,84 @@ class InstrumentoService:
         except Exception as e:
             logger.exception('Erro ao tentar listar os databases disponíveis')
             return f'Erro ao tentar listar os databases disponíveis: {e}', False
+        
+    def list_instrumentos_with_status(self, mongo_client):
+        '''
+            Informações que serão retornadas:
+            - Data de criação do instrumento
+            - Nome do instrumento
+            - Total de documentos
+            - Documentos processados
+            - Documentos não processados
+            - Percentual de documentos processados
+            - Percentual de documentos não processados
+        '''
+        
+        try:
+            databases: list[str] = mongo_client.list_database_names()
+            instrumentos: list[str] = [db for db in databases if db not in ['admin', 'config', 'local']] 
+            result = {}
+            
+            for instrumento in instrumentos:
+                collection_instrumento = mongo_client[instrumento]['instrumento']
+                progresso = mongo_client[instrumento]['progresso_da_insercao']
+                progresso_document = progresso.find_one({})
+                importado = progresso_document['Importado']
+                gerado = progresso_document['Gerado']
+                total_documentos = collection_instrumento.count_documents({})
+                documentos_processados = collection_instrumento.count_documents({'processado': True})
+                documentos_nao_processados = total_documentos - documentos_processados
+                percentual_processados = (documentos_processados / total_documentos) * 100 if total_documentos > 0 else 0
+                percentual_nao_processados = (documentos_nao_processados / total_documentos) * 100 if total_documentos > 0 else 0
+                primeiro_documento = collection_instrumento.find_one({}, sort=[('_id', 1)])
+                data_criacao = primeiro_documento['_id'].generation_time if primeiro_documento else None
+                
+                status_info = {
+                    'nome_instrumento': instrumento,
+                    'data_criacao': data_criacao,
+                    'importado': importado,
+                    'gerado': gerado,
+                    'total_documentos': total_documentos,
+                    'documentos_processados': documentos_processados,
+                    'documentos_nao_processados': documentos_nao_processados,
+                    'percentual_processados': round(percentual_processados, 2),
+                    'percentual_nao_processados': round(percentual_nao_processados, 2)
+                }
+                result[instrumento] = status_info
+            
+            return result, True
+            
+        except Exception as e:
+            logger.exception('Erro ao listar status dos instrumentos')
+            return error_response('Erro ao listar status dos instrumentos', details=e), False
+        
+        
+    def continuar_geracao(self, nome_instrumento, mongo_client):
+        try:
+            logger.info(f'Iniciando continuação da geração do instrumento: {nome_instrumento}')
+            
+            if not nome_instrumento:
+                return 'Nome do instrumento não fornecido', False
+                
+            database = mongo_client[nome_instrumento]
+            instrumento_collection = database['instrumento']
+            progresso_collection = database['progresso_da_insercao']
+            
+            logger.info('Chamando generate_graph_table_report')
+            resultado = generate_graph_table_report(mongo_client, nome_instrumento, instrumento_collection)
+            logger.info(f'Resultado do processamento: {resultado}')
+            
+            if resultado == 'Finalizado':
+                logger.info('Processamento concluído com sucesso')
+                progresso_collection.update_one({'Gerado': False}, {'$set': {'Gerado': True}})
+                return 'Processamento concluído com sucesso', True
+            else:
+                logger.error(f'Erro no processamento: {resultado}')
+                return str(resultado), False
+                
+        except Exception as e:
+            logger.exception('Erro ao continuar a geração do instrumento')
+            return f'Erro ao continuar a geração do instrumento: {str(e)}', False
         
     def download_introducao_instrumento(self, instrumento: str): 
         try:

@@ -21,7 +21,30 @@ class InstrumentoController:
             logger.exception('Erro interno do servidor')
             return jsonify({'error': f'Erro interno no servidor: {e}'}), 500
     
-    
+    def list_instrumentos_with_status(self, mongo_client):
+        try:
+            result, success = self.instrumento_service.list_instrumentos_with_status(mongo_client)
+            
+            if not success:
+                return jsonify({'erro': result}), 400
+            
+            return jsonify(result)
+        except Exception as e:
+            logger.exception('Erro interno do servidor')
+            return jsonify({'error': f'Erro interno no servidor: {e}'}), 500
+        
+    def continuar_geracao(self, nome_instrumento, mongo_client):
+        try:
+            result, success = self.instrumento_service.continuar_geracao(nome_instrumento, mongo_client)
+            
+            if not success:
+                return jsonify({'erro': result}), 400
+            
+            return jsonify(result)
+        except Exception as e:
+            logger.exception('Erro interno do servidor')
+            return jsonify({'error': f'Erro interno no servidor: {e}'}), 500
+        
     def download_introducao_instrumento(self, instrumento: str):
         try:
             result, success = self.instrumento_service.download_introducao_instrumento(instrumento)

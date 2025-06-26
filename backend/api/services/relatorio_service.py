@@ -9,6 +9,20 @@ logger = logging.getLogger(__name__)
 
 class RelatorioService:
     
+    def upload_templates(self, arquivo_template):
+        try:
+            template_path = os.path.join('relatorio_componentes', 'templates_intro_e_concl.md')
+            
+            if not os.path.exists(template_path):
+                return not_found_error('Template'), False
+            
+            arquivo_template.save(template_path)
+            
+            return {'message': 'Template atualizado com sucesso'}, True
+        except Exception as e: 
+            logger.exception('Erro ao tentar atualizar o arquivo template')
+            return error_response('Erro ao tentar atualizar o arquivo template', details=f'Detalhes do erro: \n {e}'), False
+    
     def download_templates_intro_concl(self,):
         try:
             template_path = os.path.join('relatorio_componentes', 'templates_intro_e_concl.md')

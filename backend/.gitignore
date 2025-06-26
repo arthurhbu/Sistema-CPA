@@ -1,4 +1,18 @@
-# created by virtualenv automatically
 .env
 build
 dist
+
+venv/
+env/
+.venv/
+
+__pycache__/
+*.pyc
+
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+relatorio/

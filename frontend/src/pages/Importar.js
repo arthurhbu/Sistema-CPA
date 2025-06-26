@@ -24,10 +24,14 @@ function Importar(){
     const csvInputRef = useRef(null);
     const introducaoInputRef = useRef(null);
     const conclusaoInputRef = useRef(null);
+    const replaceIntroInputRef = useRef(null);
+    const replaceTemplateInputRef = useRef(null);
 
     const [csvFile, setCsvFile] = useState([]);
     const [introducaoFile, setIntroducaoFile] = useState([]);
     const [conclusaoFile, setConclusaoFile] = useState([]);
+    const [replaceIntroFile, setReplaceIntroFile] = useState([]);
+    const [replaceTemplateFile, setReplaceTemplateFile] = useState([]);
     const [ano, setAno] = useState('');
     const [popupHeaderVisible, setPopupHeaderVisible] = useState(false);
     const [popupImportVisible, setPopupImportVisible] = useState(false);
@@ -39,6 +43,9 @@ function Importar(){
     const [popupErrorMessage, setPopupErrorMessage] = useState('');
     const [isProcessing, setIsProcessing] = useState(false);
     const [selectedCsvType, setSelectedCsvType] = useState('');
+    const [popupReplaceTemplatesVisible, setPopupReplaceTemplatesVisible] = useState(false);
+    const [replaceTemplatesError, setReplaceTemplatesError] = useState('');
+    const [replaceTemplatesSuccess, setReplaceTemplatesSuccess] = useState('');
 
     const headersDisponiveis = {
         "Discente & EAD": ['Nome Instrumento', 'Ano Instrumento', 'Data Inicio', 'Data Fim', 'Codigo Curso', 'Nome Curso', 'Codigo Grupo', 'Nome Grupo', 'Codigo Subgrupo', 'Nome Subgrupo', 'Codigo Disciplina', 'Disciplina', 'Turma', 'Serie', 'Ordem Pergunta', 'Codigo Pergunta', 'Pergunta', 'Ordem Opcoes', 'Opcao', 'Porcentagem', 'Respostas', 'Total do Curso'],
@@ -59,6 +66,7 @@ function Importar(){
     const triggerCsvInput = () => csvInputRef.current.click();
     const triggerIntroducaoInput = () => introducaoInputRef.current.click();
     const triggerConclusaoInput = () => conclusaoInputRef.current.click();
+    const triggerReplaceTemplateInput = () => replaceTemplateInputRef.current.click();
 
     const renderFileList = (files) => { 
         return files.map((file, index) => (
@@ -117,6 +125,18 @@ function Importar(){
             setConclusaoFile(Array.from(e.target.files));
         }
     }
+
+    const handleReplaceIntroChange = (e) => {
+        if (e.target.files.length > 0) {
+            setReplaceIntroFile(Array.from(e.target.files));
+        }
+    };
+
+    const handleReplaceTemplateChange = (e) => {
+        if (e.target.files.length > 0) {
+            setReplaceTemplateFile(Array.from(e.target.files));
+        }
+    };
 
     const handleSelectCsvTypeChange = (value) => {
         setSelectedCsvType(value);
@@ -234,6 +254,25 @@ function Importar(){
         } 
     };
 
+    const handleReplaceTemplatesSubmit = async () => {
+        setReplaceTemplatesError('');
+        setReplaceTemplatesSuccess('');
+        if (!replaceTemplateFile.length) {
+            setReplaceTemplatesError('Selecione o arquivo antes de confirmar.');
+            return;
+        }
+        // Placeholder para upload real
+        try {
+            const formData = new FormData();
+            formData.append('arquivo_template', replaceTemplateFile[0]);
+            await fetch(`${process.env.REACT_APP_BACKEND}/api/relatorios/templates/upload`, { method: 'POST', body: formData });
+            setReplaceTemplatesSuccess('Template substituído com sucesso!');
+            setReplaceTemplateFile([]);
+        } catch (error) {
+            setReplaceTemplatesError('Erro ao substituir template.');
+        }
+    };
+
 return (
         <div className={styles.importar}>
 
@@ -257,6 +296,7 @@ return (
                     </p>
                     <div className={styles.containerButton}>
                         <button onClick={handleDownloadTemplate} className={styles.button_templates}> Baixar Templates </button>
+                        <button onClick={() => setPopupReplaceTemplatesVisible(true)} className={styles.button_templates_replace} style={{}}>Substituir Templates</button>
                     </div>
                 </div>
                 <div style={{display:'flex', justifyContent:'center'}}>
@@ -411,6 +451,47 @@ return (
                 </div>
             ) : (
                 <div></div>
+            )}
+
+            {/* Popup para substituir templates */}
+            {popupReplaceTemplatesVisible && <div className={styles.overlay}/>} 
+            {popupReplaceTemplatesVisible && (
+                <div className={styles.popup} style={{minWidth: '350px', maxWidth: '90vw', height: '40vh', display: 'flex', flexDirection: 'column', justifyContent: 'space-between'}}>
+                    <div>
+                        <p className={styles.popup_message_header}>Substituir Arquivo dos Templates</p>
+                        <p style={{fontSize: '1.3rem', color: '#333'}}>Faça upload do novo arquivo contendo os templates de introdução e conclusão (O arquivo deve possuir o nome "templates_intro_e_concl.md"):</p>
+                    </div>
+                    <div className={styles.inputArquivoBox} style={{margin: '0 auto', width: '80%', minHeight: 'unset', height: 'unset', background: '#E8E8E8'}}>
+                        <div style={{display: 'flex', justifyContent:'space-between', color: ''}}>
+                            <p style={{color: '#000'}} className={styles.inputArquivoBox_text}> Template escolhido: </p>
+                            <div>
+                                <input
+                                    type='file'
+                                    ref={replaceTemplateInputRef}
+                                    onChange={handleReplaceTemplateChange}
+                                    accept='.md'
+                                    style={{display: 'none'}}
+                                />
+                                <button 
+                                    className={styles.buttonImportArquivoMD}
+                                    onClick={triggerReplaceTemplateInput}
+                                    type='button'
+                                >
+                                    <CiImport style={{fontSize: '3em'}}/>
+                                </button>
+                            </div>
+                        </div>
+                        {replaceTemplateFile.length > 0 && (
+                            <p style={{margin: '0', fontSize: '1.3rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', width: '70%', marginLeft: '15px'}}>{replaceTemplateFile[0].name}</p>
+                        )}
+                    </div>
+                    {replaceTemplatesError && <p className={styles.errorMessage}>{replaceTemplatesError}</p>}
+                    {replaceTemplatesSuccess && <p style={{color: 'green', fontWeight: 500}}>{replaceTemplatesSuccess}</p>}
+                    <div style={{display: 'flex', justifyContent: 'flex-end', marginTop: '2vh'}}>
+                        <button className={styles.popup_cancel_button} onClick={() => {setPopupReplaceTemplatesVisible(false); setReplaceTemplateFile([]); setReplaceTemplatesError(''); setReplaceTemplatesSuccess('');}}>Cancelar</button>
+                        <button className={styles.popup_confirm_button} onClick={handleReplaceTemplatesSubmit}>Confirmar</button>
+                    </div>
+                </div>
             )}
 
         </div>

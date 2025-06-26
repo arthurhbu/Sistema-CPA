@@ -1,4 +1,4 @@
-from flask import Blueprint, current_app, request
+from flask import Blueprint, current_app, request, jsonify
 from api.controllers.instrumento_controller import InstrumentoController
 from api.utils.error_handlers import *
 
@@ -10,7 +10,22 @@ def list_instrumentos():
     mongo_client = current_app.config['MONGO_CLIENT']
     return controller.list_instrumentos(mongo_client)
 
+@instrumento_bp.route('/listarComStatus', methods=['GET'])
+def list_instrumentos_with_status():
+    mongo_client = current_app.config['MONGO_CLIENT']
+    return controller.list_instrumentos_with_status(mongo_client)
 
+@instrumento_bp.route('/continuarGeracao', methods=['POST'])
+def continuar_geracao():
+        data = request.get_json()
+        if not data or 'nome_instrumento' not in data:
+            return jsonify({'error': 'Nome do instrumento não fornecido'}), 400
+            
+        nome_instrumento = data.get('nome_instrumento')
+        mongo_client = current_app.config['MONGO_CLIENT']
+        
+        return controller.continuar_geracao(nome_instrumento, mongo_client)
+        
 @instrumento_bp.route('/<string:instrumento>/introducao/download', methods=['GET'])
 def download_introducao_instrumento(instrumento):
     return controller.download_introducao_instrumento(instrumento)
@@ -42,7 +57,7 @@ def replace_conclusao_instrumento(instrumento):
     return controller.replace_conclusao_instrumento(instrumento, concl_file)
 
 
-@instrumento_bp.route('/etapas', methods=['GET'])
+@instrumento_bp.route('/etapas', methods=['POST'])
 def get_steps_instrument():
     data = request.json
     database: str = data.get('instrumento')

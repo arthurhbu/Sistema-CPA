@@ -2,3 +2,12 @@
 auth.json
 backend/api/gmail_api/token.json
 backend/api/gmail_api/credentials.json
+venv/
+env/
+.venv/
+
+__pycache__/
+*.pyc
+
+.vscode/
+.idea/

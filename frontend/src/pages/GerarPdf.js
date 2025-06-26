@@ -218,6 +218,7 @@ export default function GerarPdf(){
 
             const resData = await response.json()
             
+            setCompressArchive([]);
             setPopupMessage(resData.message);
             setPopupVisible(true);
 
