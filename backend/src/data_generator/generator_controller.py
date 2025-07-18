@@ -16,82 +16,109 @@ sys.stdout.reconfigure(encoding="utf-8")
 import logging
 
 logger = logging.getLogger(__name__)
-
-def generate_graph_table_report(mongo_client, database_name: str, collection: Collection) -> str:
-    """
-    Gera relatórios de gráficos e tabelas para documentos não processados.
     
+def generate_graph_table_report(client: MongoClient, database_name: Database, collection_name: Collection) -> Union[str, Exception]:
+    """ 
+    Função para gerar gráfico, tabela e legenda para cada pergunta do instrumento. No caso de a pergunta pertencer a uma disciplina, somente a tabela é gerada.
+
     Args:
-        mongo_client: Cliente MongoDB
-        database_name: Nome do banco de dados
-        collection: Collection do MongoDB contendo os dados
-        
+        client (MongoClient): Client do mongo.
+        database_name (Database): Database/instrumento que a função vai inserir os dados.
+        collection_name (Collection): Collection do csv do instrumento.
     Returns:
-        str: Mensagem indicando o resultado do processamento
+        String | Exception: Ele retorna ou uma string sinalizando que foi finalizado, ou uma exceção que pode vir acontecer na função.
+    Raises:
+        raise: Não há raises, apenas returns com as Exceptions geradas.
     """
     try:
-        # Busca documentos não processados
-        documentos = collection.find({'processado': False})
-        total_docs = collection.count_documents({'processado': False})
-        
-        if total_docs == 0:
-            logger.info("Nenhum documento não processado encontrado")
-            return 'Finalizado'
+        #Inicia a sessão com o mongo
+        with client.start_session() as session:
+            session_id = session.session_id
+
+            #Filtra os documentos que não foram processados
+            cursor: CursorType = collection_name.find({'processado': False}, no_cursor_timeout = True, session=session).batch_size(10)
             
-        logger.info(f"Encontrados {total_docs} documentos não processados")
-        
-        # Processa cada documento
-        for doc in documentos:
+            #Atualiza o timestamp a cada 5 minutos
+            refresh_timeStamp: datetime = datetime.now()
+            
+            #Inicia o loop para processar os documentos
             try:
-                # Extrai dados do documento
-                cd_curso = doc.get('cd_curso')
-                cd_subgrupo = doc.get('cd_subgrupo')
-                cd_pergunta = doc.get('cd_pergunta')
-                nm_pergunta = doc.get('nm_pergunta')
-                pct_por_opcao = doc.get('pct_por_opcao', {})
-                
-                if not all([cd_curso, cd_subgrupo, cd_pergunta, nm_pergunta, pct_por_opcao]):
-                    logger.warning(f"Documento {doc.get('_id')} está incompleto, pulando...")
-                    continue
-                
-                # Prepara dados para o gráfico
-                opcoes = list(pct_por_opcao.keys())
-                porcentagens = list(pct_por_opcao.values())
-                
-                # Gera o gráfico
-                logger.info(f"Gerando gráfico para pergunta {cd_pergunta}")
-                path_figura = controller_graph_generator(
-                    database_name,  # Passando o nome do banco de dados
-                    collection,
-                    opcoes,
-                    porcentagens,
-                    cd_curso,
-                    cd_subgrupo,
-                    cd_pergunta,
-                    nm_pergunta
-                )
-                
-                # Marca o documento como processado
-                result = collection.update_one(
-                    {'_id': doc['_id']},
-                    {'$set': {'processado': True}}
-                )
-                
-                if result.modified_count == 0:
-                    logger.error(f"Falha ao marcar documento {doc['_id']} como processado")
-                    return f"Erro ao atualizar status do documento {doc['_id']}"
+                for document in cursor:
+                    #Atualiza o timestamp a cada 5 minutos
+                    if (datetime.now() - refresh_timeStamp).total_seconds() > 300:
+                        client.admin.command({'refreshSessions': [session_id]})
+                        refresh_timeStamp = datetime.now()
                     
-                logger.info(f"Documento {doc['_id']} processado com sucesso")
-                
+                    #Formata a pergunta
+                    pergunta_formatada = re.sub(r"^\d+\.\d+-\s*",'',document["nm_pergunta"])
+                    
+                    #Tenta ordenar as opções e porcentagense criar a tabela
+                    try:
+                        sorted_pctOptDict: dict = dict(sorted(document["pct_por_opcao"].items(), key=lambda x: x[1], reverse=True))
+                        opcoes, pct = dict_to_list(sorted_pctOptDict)
+                        table: str = compose_table(pergunta_formatada, document['pct_por_opcao'], document['total_do_curso'])
+                    except KeyError as key_error:
+                        return f'Erro de chave: {key_error}'
+                    
+                    path: str = '-'
+                    caption_graph: str = '-'
+                    report_graph: str = '-'
+
+                    #Se a pergunta não pertencer a uma disciplina, gera o gráfico e o relatório
+                    if document['nm_disciplina'] == '-':
+                        try:
+                            path = controller_graph_generator(database_name, collection_name, opcoes, pct, document["cd_curso"], document["cd_subgrupo"], document["cd_pergunta"], pergunta_formatada)
+                            report_graph = create_report(pergunta_formatada, sorted_pctOptDict) 
+                        except (ValueError, RuntimeError, OSError) as graph_error:
+                            return f'Erro ao gerar ou gravar gráfico: {graph_error}'
+                        
+                        try: 
+                            collection_name.update_one(
+                                {
+                                    '_id': document['_id']
+                                },
+                                {
+                                    '$set': {
+                                        'path': path,
+                                        'tabela': table,
+                                        'relatorioGraficoAI': report_graph,
+                                        'tituloGraficoAI': caption_graph,
+                                        'processado': True
+                                    }
+                                }   
+                            )
+                        except (DuplicateKeyError, OperationFailure) as db_error:
+                            return f'Erro no banco de dados: {db_error}'
+                        continue
+                    
+                    #Se a pergunta pertencer a uma disciplina, gera somente a tabela
+                    try:
+                        collection_name.update_one(
+                            {
+                                '_id': document['_id']
+                            },
+                            {
+                                '$set': {
+                                    'path': path,
+                                    'tabela': table,
+                                    'relatorioGraficoAI': report_graph,
+                                    'tituloGraficoAI': caption_graph,
+                                    'processado': True
+                                }
+                            }
+                        )
+                    except (DuplicateKeyError, OperationFailure) as db_error:
+                        return f'Erro no banco de dados: {db_error}'
+                    
+                return 'Finalizado'
             except Exception as e:
-                logger.error(f"Erro ao processar documento {doc.get('_id')}: {str(e)}")
-                return f"Erro ao processar documento: {str(e)}"
+                return f'Ocorreu um erro ao tentar gerar os dados: {e}'
+            finally:
+                cursor.close()
                 
-        return 'Finalizado'
-        
-    except Exception as e:
-        logger.error(f"Erro ao gerar relatórios: {str(e)}")
-        return f"Erro ao gerar relatórios: {str(e)}"
+    except (ConnectionFailure, InvalidOperation, CursorNotFound) as mongo_error:
+        return f'Erro de conexão ou operação com MongoDB: {mongo_error}'
+
 
 
     #PARA MEXER NA TABELA E RELATORIOAI(ALTERAR O FINAL DO RELATORIO ADICIONANDO NOVA FRASE)

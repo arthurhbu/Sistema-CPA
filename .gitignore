@@ -2,12 +2,21 @@
 auth.json
 backend/api/gmail_api/token.json
 backend/api/gmail_api/credentials.json
+
 venv/
 env/
 .venv/
 
-__pycache__/
+__pycache__
+*/__pycache__
+*/__pycache__/
+*/__pycache__/*
 *.pyc
+*.pyo
+*.pyd
+*.pyw
+*.pyz
+*.pywz
 
 .vscode/
 .idea/

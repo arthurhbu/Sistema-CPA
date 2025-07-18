@@ -35,12 +35,12 @@ function GerarRelatorio(){
 
     const tipoIntroConlc = [
         {label: 'Nenhum', value: ''},
-        {label: 'Discente', value: 'Discente'},
-        {label: 'Egresso', value: 'Egresso'},
-        {label: 'EAD', value: 'EAD'},
-        {label: 'Docente', value: 'Docente'},
-        {label: 'Agente', value: 'Agente'},
-        {label: 'Pos', value: 'Pos'},
+        {label: 'Discente', value: 'discente'},
+        {label: 'Egresso', value: 'egresso'},
+        {label: 'EAD', value: 'ead'},
+        {label: 'Docente', value: 'docente'},
+        {label: 'Agente', value: 'agente'},
+        {label: 'Pos', value: 'pos'},
     ];
 
     const handleSelectIntroConlcChange = (value) => { 
@@ -321,7 +321,7 @@ function GerarRelatorio(){
 
     const handleSubmit = async () => { 
         if(!ano || !instrumento || !introConcl) { 
-            setErrorMessage('Por Favor, preencha todos os campos antes de gerar o relatório!!!!')
+            setErrorMessage('Por Favor, preencha todos os campos antes de gerar o relatório')
             return;
         }
 
