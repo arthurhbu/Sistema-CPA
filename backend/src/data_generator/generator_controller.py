@@ -65,7 +65,7 @@ def generate_graph_table_report(client: MongoClient, database_name: Database, co
                     report_graph: str = '-'
 
                     #Se a pergunta não pertencer a uma disciplina, gera o gráfico e o relatório
-                    if document['nm_disciplina'] == '-':
+                    if document['nm_disciplina'] == '-' or document['nm_disciplina'] == 0 or str(document['nm_disciplina']) == '0':
                         try:
                             path = controller_graph_generator(database_name, collection_name, opcoes, pct, document["cd_curso"], document["cd_subgrupo"], document["cd_pergunta"], pergunta_formatada)
                             report_graph = create_report(pergunta_formatada, sorted_pctOptDict) 

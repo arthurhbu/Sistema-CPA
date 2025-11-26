@@ -15,6 +15,7 @@ services:
       - mongo
     environment:
       FLASK_ENV: development
+      OLLAMA_BASE_URL: http://servidor-ai:11434
     volumes:
       - ./backend:/app
     networks:

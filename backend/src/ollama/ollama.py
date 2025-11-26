@@ -3,8 +3,13 @@ import random as rand
 import ollama
 import requests
 import json
+import os
 
-url = 'http://servidor-ai:11434/api/generate'
+# Read base URL from environment with a sensible default.
+# You can set OLLAMA_BASE_URL in Docker/Docker Compose, e.g., http://servidor-ai:11434
+OLLAMA_BASE_URL = os.getenv('OLLAMA_BASE_URL', 'http://servidor-ai:11434')
+url = f"{OLLAMA_BASE_URL.rstrip('/')}/api/generate"
+url_ollama = OLLAMA_BASE_URL
 
 headers = {'Content-Type': 'application/json'}
 

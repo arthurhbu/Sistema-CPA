@@ -75,6 +75,9 @@ class CSVManagment:
         for coluna in cabecalho:
             df_principal.rename(columns={df_principal.columns[index]: coluna}, inplace=True)
             index+=1 
+        
+        df_principal['nm_disciplina'] = df_principal['nm_disciplina'].replace(0, '-')
+        df_principal['nm_disciplina'] = df_principal['nm_disciplina'].replace('0', '-')
             
         df_principal.to_csv(f'{dir_arquivo}/CSVs/csvFiltrado.csv', index=False)
     
@@ -410,7 +413,7 @@ class CSVManagment:
                         }
                     )
 
-                    if nm_disciplina == '-' and (cd_disciplina == 0.0 or cd_disciplina == 0):
+                    if (nm_disciplina == '-' or nm_disciplina == 0 or str(nm_disciplina) == '0') and (cd_disciplina == 0.0 or cd_disciplina == 0):
                         insert_percentage_dict_into_database(
                             collection_name, 'pct_por_opcao', opcao_e_pct, 
                             'cd_curso', int(df.iloc[i,0]), 
