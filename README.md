@@ -25,6 +25,10 @@ Um sistema desenvolvido com o intuito de agilizar e automatizar processos que en
 
 O projeto atualmente já está em produção mas certar partes ainda estão sendo desenvolvidas.
 
+Abaixo listamos algumas pendências
+
+- [Pendências](pendencias.md)
+
 # Requisitos
 
 Os requisitos para se rodar o Sistema é ter o Podman instalado em sua máquina e no caso de usar Windows, tenha Podman Desktop instalado.
