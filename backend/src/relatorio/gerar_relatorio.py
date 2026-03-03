@@ -66,8 +66,7 @@ def gerar_relatorio_por_curso(nome_arquivo: str, cd_curso: int, collection_curso
             contador: int = 0
             print(f'Curso que está sendo gerado o relatório: {nome_curso_display} (Código: {cd_curso})')
 
-            # MUDANÇA: Usar cd_curso em vez de nm_curso para buscar documentos
-            for document in collection_curso.find({'cd_curso': cd_curso}).sort({'cd_grupo': 1, 'cd_subgrupo': 1, 'ordem_pergunta': 1}):
+            for document in collection_curso.find({'cd_curso': cd_curso}).sort([('cd_grupo', 1), ('cd_subgrupo', 1), ('cd_disciplina', 1), ('ordem_pergunta', 1)]):
 
                     captionToPandoc = replace_reference_in_caption(document['relatorioGraficoAI'], contador)
                     
@@ -77,11 +76,13 @@ def gerar_relatorio_por_curso(nome_arquivo: str, cd_curso: int, collection_curso
                         print('\n', file=arquivo)
                         codGrupo.append(document['cd_grupo'])
                         codSubgrupo = []
+                        codDisciplina = []  # Limpar disciplinas ao mudar de grupo
                     if document['cd_subgrupo'] not in codSubgrupo:
                         print('\n',file=arquivo)
                         arquivo.write(f"### {document['nm_subgrupo']}")
                         print('\n',file=arquivo)
                         codSubgrupo.append(document['cd_subgrupo'])
+                        codDisciplina = []  # Limpar disciplinas ao mudar de subgrupo
 
                     if document['nm_disciplina'] == '-':
                         pergunta_formatada: str = re.sub(r"^\s*\d+\.\d+\s*-\s*",'',document["nm_pergunta"]).strip()
@@ -100,7 +101,9 @@ def gerar_relatorio_por_curso(nome_arquivo: str, cd_curso: int, collection_curso
                     
                     if document['cd_disciplina'] not in codDisciplina:
                         print('\n', file=arquivo)
-                        arquivo.write(f"Considerando a disciplina **{document['nm_disciplina']}**, temos os seguintes resultados expressos por tabelas.")
+                        arquivo.write(f"#### **Disciplina: {document['nm_disciplina'].strip()}**")
+                        print('\n', file=arquivo)
+                        arquivo.write(f"Considerando a disciplina **{document['nm_disciplina'].strip()}**, temos os seguintes resultados expressos por tabelas.")
                         print('\n', file=arquivo)
                         codDisciplina.append(document['cd_disciplina'])
 
