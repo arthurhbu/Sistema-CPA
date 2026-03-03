@@ -50,7 +50,8 @@ function Importar(){
     const headersDisponiveis = {
         "Discente & EAD": ['Nome Instrumento', 'Ano Instrumento', 'Data Inicio', 'Data Fim', 'Codigo Curso', 'Nome Curso', 'Codigo Grupo', 'Nome Grupo', 'Codigo Subgrupo', 'Nome Subgrupo', 'Codigo Disciplina', 'Disciplina', 'Turma', 'Serie', 'Ordem Pergunta', 'Codigo Pergunta', 'Pergunta', 'Ordem Opcoes', 'Opcao', 'Porcentagem', 'Respostas', 'Total do Curso'],
         "Egresso": ['Nome Instrumento', 'Ano Instrumento', 'Data Inicio', 'Data Fim', 'Codigo Curso', 'Nome Curso', 'Codigo Grupo', 'Nome Grupo', 'Codigo Subgrupo', 'Nome Subgrupo', 'Ordem Pergunta', 'Codigo Pergunta', 'Pergunta', 'Ordem Opcoes', 'Opcao', 'Porcentagem', 'Respostas', 'Total do Curso'],
-        "Docente & Técnicos": ['Nome Instrumento', 'Ano Instrumento', 'Data Inicio', 'Data Fim', 'Classe', 'Codigo Grupo', 'Nome Grupo', 'Codigo Subgrupo', 'Nome Subgrupo', 'Ordem Pergunta', 'Codigo Pergunta', 'Pergunta', 'Ordem Opcoes', 'Opcao', 'Porcentagem', 'Respostas', 'Total do Curso']
+        "Docente & Técnicos": ['Nome Instrumento', 'Ano Instrumento', 'Data Inicio', 'Data Fim', 'Classe', 'Codigo Grupo', 'Nome Grupo', 'Codigo Subgrupo', 'Nome Subgrupo', 'Ordem Pergunta', 'Codigo Pergunta', 'Pergunta', 'Ordem Opcoes', 'Opcao', 'Porcentagem', 'Respostas', 'Total do Curso'],
+        "Pos Graduação": ["Nome Instrumento", "Ano Instrumento", "Data Inicio", "Data Fim", "Codigo Centro", "Nome Centro", "Codigo Departamento", "Nome Departamento", "Codigo Curso", "Nome Curso", "Tipo Nivel", "Codigo Grupo", "Nome Grupo", "Codigo Subgrupo", "Nome Subgrupo", "Codigo Disciplina", "Disciplina", "Ordem Pergunta", "Codigo Pergunta", "Pergunta", "Ordem Opcoes", "Opcao", "Porcentagem", "Respostas", "Total do Curso"]
     };
 
     const importationType = [
@@ -283,9 +284,9 @@ return (
                     A etapa de inserção é feito com o uso de Inteligência Artificial por isso pode demorar um certo tempo para finalizar. Enquanto um instrumento está sendo processado não é possível inserir outro, pois o precesso é feito de maneira unitária. Mas é possível visualizar o progresso aqui:  <Link to='/progresso'>Progresso de inserção</Link>
                 </p>
                 <div className={styles.tutorial_container}>
-                    <p style={{color: 'black'}} className={styles.infos}>
-                        <p style={{fontSize:'1.7rem', fontWeight:'700'}}>Tutorial de importação:</p>
-                        Para realizar a importação com êxito, siga esses passos: 
+                    <div className={styles.infos}>
+                        <h3 className={styles.tutorial_title}>Tutorial de importação</h3>
+                        <p style={{color: '#333', marginBottom: '1rem'}}>Para realizar a importação com êxito, siga esses passos:</p> 
                         <ul className={styles.etapas_ul}>
                             <li style={{marginBottom: '1.9vh'}}>Baixe e personalize a Introdução e Conclusão para o instrumento que será processado.</li>
                             <li style={{marginBottom: '1.9vh'}}>Escolha modalidade/tipo do instrumento que será importado, para que não haja incoerências na rotina de importação.</li>
@@ -293,16 +294,16 @@ return (
                             <li style={{marginBottom: '1.9vh'}}>Insira o ano referente à quando foi aplicado o formulário do instrumento.</li>
                             <li style={{marginBottom: '1.9vh'}}>Após clicar no botão de importar, confira as colunas do csv que estará importando para ver se ele bate com o padrão que buscamos.</li>
                         </ul>
-                    </p>
+                    </div>
                     <div className={styles.containerButton}>
                         <button onClick={handleDownloadTemplate} className={styles.button_templates}> Baixar Templates </button>
                         <button onClick={() => setPopupReplaceTemplatesVisible(true)} className={styles.button_templates_replace} style={{}}>Substituir Templates</button>
                     </div>
                 </div>
-                <div style={{display:'flex', justifyContent:'center'}}>
-                    <div style={{backgroundColor:'#E8E8E8', borderRadius:'10px', padding:'3.5vh', marginTop:'5vh', width:'50%',display:'flex', justifyContent:'center', flexDirection: 'column'}} >
-                        <p style={{marginTop: '0', fontFamily:'Inter', fontSize:'1.4rem', fontWeight:'500', alignItems: 'center'}}>Primeiro insira a modalidade do instrumento que será processado: </p>
-                        <div style={{width: '100%', display:'flex', alignSelf:'center'}}>
+                <div style={{display:'flex', justifyContent:'center', width: '100%'}}>
+                    <div className={styles.modalidade_container}>
+                        <p className={styles.modalidade_text}>Primeiro insira a modalidade do instrumento que será processado: </p>
+                        <div className={styles.modalidade_select}>
                             <SelectAutoWidth 
                                 onSelectChange={handleSelectCsvTypeChange} 
                                 label='Modal'
@@ -348,7 +349,7 @@ return (
                             {renderFileList(csvFile)}
                         </div>
 
-                        <div style={{marginTop:'7vh'}} className={styles.inputArquivoBox}>
+                        <div className={styles.inputArquivoBox} style={{marginTop:'2rem'}}>
                             <div style={{display: 'flex', justifyContent:'space-between'}}>
                                 <p style={{color: '#000'}} className={styles.inputArquivoBox_text}> Introdução escolhida: </p>
                                 <div>
@@ -371,7 +372,7 @@ return (
                             {renderFileList(introducaoFile)}
                         </div>
                         
-                        <div style={{marginTop:'7vh'}} className={styles.inputArquivoBox}>
+                        <div className={styles.inputArquivoBox} style={{marginTop:'2rem'}}>
                             <div style={{display: 'flex', justifyContent:'space-between'}}>
                                 <p style={{color: '#000'}} className={styles.inputArquivoBox_text}> Conclusão escolhida: </p>
                                 <div>

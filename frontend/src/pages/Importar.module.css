@@ -9,8 +9,10 @@ ul {
 
 /*-Container Importar*/
 .importar { 
-    min-height: 1000px;
-    width: 100%
+    min-height: calc(100vh - 200px);
+    width: 100%;
+    background: linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%);
+    padding-bottom: 2rem;
 }
 
 /*--Session contendo a introdução da importação*/
@@ -19,78 +21,113 @@ ul {
     flex-direction: column;
     align-items: center;
     width: 70%; 
+    max-width: 1200px;
     margin: auto;
-    margin-bottom: 5%;
+    margin-bottom: 3rem;
+    padding-top: 2rem;
 }
 
 .titulo { 
     text-align: center;
-    font-size: 3rem;
+    font-size: 2.75rem;
     font-family: 'Inter';
     font-weight: 600;
-    margin-top: 10%;
-    margin-bottom: 1%;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    color: #000b1f;
 }
 
 .infos { 
-    font-family: 'inter';
-    font-size: 1.5rem;
+    font-family: 'Inter';
+    font-size: 1.2rem;
     text-align: justify;
-    color: #828282;
+    color: #666;
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
 }
 
 .tutorial_container { 
-    margin-top: 5vh;
-    margin-bottom: 5vh;
+    margin-top: 3rem;
+    margin-bottom: 3rem;
     width: 100%;
-    background-color: #E8E8E8;
-    padding: 1rem;
-    padding-left: 4rem;
-    padding-right: 4rem;
-    border-radius: 10px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(240, 240, 240, 0.95) 100%);
+    padding: 2.5rem;
+    border-radius: 16px;
+    border: 2px solid rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+    transition: all 0.3s ease;
+}
+
+.tutorial_title {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: #000b1f;
+    margin: 0 0 0.5rem 0;
+    font-family: 'Inter';
 }
 
 .etapas_ul { 
-    margin: 0;
-    margin-left: 5vw;
-    /* margin-right: 4vw; */
-    font-size: 1.2rem;
+    margin: 1.5rem 0;
+    margin-left: 2rem;
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #333;
+}
+
+.etapas_ul li {
+    margin-bottom: 1rem;
+    position: relative;
+    padding-left: 0.5rem;
 }
 
 .containerButton { 
-    margin-top: 6vh;
+    margin-top: 2rem;
     width: 100%;
-    height: 12vh;
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-direction: column;
-    margin-bottom: 4vh;
+    flex-direction: row;
+    gap: 1rem;
+    margin-bottom: 1rem;
 }
 
 .button_templates { 
     list-style: none;
-    width: 20%;
-    height: 80%;
-    background-color: #00ff77;
-    color: rgb(0, 0, 0);
-    border: 2px solid currentColor;
-    border-radius: 7px;
+    min-width: 180px;
+    height: 3em;
+    background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
     font-family: 'Inter';
-    font-weight: 700;
+    font-weight: 600;
     font-size: 1rem;
     overflow: hidden;
     position: relative;
     text-decoration: none;
     will-change: transform;
     z-index: 0;
-    transition: 0.2s ease-in-out;
-    margin-bottom: 1vh;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+    padding: 0 1.5rem;
+}
+
+.button_templates::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+    z-index: 1;
 }
 
 .button_templates::after { 
-    background-color: #54ff8a;
-    border-radius: 7px;
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    border-radius: 8px;
     content: '';
     display: block;
     height: 100%;
@@ -98,47 +135,62 @@ ul {
     position: absolute;
     left: 0;
     top: 0;
-    transform: translate(-100%, 0) rotate(10deg);
-    transform-origin: top left;
-    transition: .2s transform ease-out;
-    will-change: transform;
+    opacity: 0;
+    transition: opacity 0.3s ease;
     z-index: -1;
 }
 
 .button_templates:hover::after{
-    transform: translate(0, 0);
+    opacity: 1;
 }
 
-.button_templates:hover{
-    border: 2px solid #000;
-    color: #000000;
-    transform: scale(1.05);
-    will-change: transform;
-    cursor: pointer;
+.button_templates:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+    color: white;
+}
+
+.button_templates:hover::before {
+    left: 100%;
 }
 
 .button_templates_replace { 
     list-style: none;
-    width: 20%;
-    height: 80%;
-    background-color: #ffe066;
-    color: rgb(0, 0, 0);
-    border: 2px solid currentColor;
-    border-radius: 7px;
+    min-width: 180px;
+    height: 3em;
+    background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
     font-family: 'Inter';
-    font-weight: 700;
+    font-weight: 600;
     font-size: 1rem;
     overflow: hidden;
     position: relative;
     text-decoration: none;
     will-change: transform;
     z-index: 0;
-    transition: 0.2s ease-in-out;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
+    padding: 0 1.5rem;
+}
+
+.button_templates_replace::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+    z-index: 1;
 }
 
 .button_templates_replace::after { 
-    background-color: #ffe066;
-    border-radius: 7px;
+    background: linear-gradient(135deg, #D97706 0%, #B45309 100%);
+    border-radius: 8px;
     content: '';
     display: block;
     height: 100%;
@@ -146,39 +198,40 @@ ul {
     position: absolute;
     left: 0;
     top: 0;
-    transform: translate(-100%, 0) rotate(10deg);
-    transform-origin: top left;
-    transition: .2s transform ease-out;
-    will-change: transform;
+    opacity: 0;
+    transition: opacity 0.3s ease;
     z-index: -1;
 }
 
 .button_templates_replace:hover::after{
-    transform: translate(0, 0);
+    opacity: 1;
 }
 
-.button_templates_replace:hover{
-    border: 2px solid #000;
-    color: #000000;
-    transform: scale(1.05);
-    will-change: transform;
-    cursor: pointer;
+.button_templates_replace:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
+    color: white;
+}
+
+.button_templates_replace:hover::before {
+    left: 100%;
 }
 
 /*--Session contendo área para procurar arquivo e inputar informações*/
 .sessionProcArq { 
     position: relative;
     min-height: 550px;
-    padding: 5em;
-    background-color: #E8E8E8;
-    margin-bottom: 10%;
+    padding: 3rem;
+    background: linear-gradient(135deg, #f0f0f0 0%, #e8e8e8 100%);
+    margin-bottom: 3rem;
     display: flex;
-    /* display: grid;
-    grid-template-columns: repeat(2, 50%);
-    grid-template-rows: repeat(2, 1fr);
-    grid-column-gap: 30px;
-    grid-row-gap: 0px; */
     justify-content: space-around;
+    border-radius: 16px;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 1400px;
+    width: 90%;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .overlay_blocked_section {
@@ -211,40 +264,62 @@ ul {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
-    padding: 20px;
-    height: 12vh;
+    padding: 1.5rem;
+    min-height: 120px;
     max-width: 35em;
     width: 100%;
-    background-color: #ffffff;
-    border-radius: 10px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(250, 250, 250, 0.95) 100%);
+    border-radius: 12px;
+    border: 2px solid rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+.inputArquivoBox:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+    border-color: rgba(97, 215, 251, 0.4);
 }
 
 .inputArquivoBox_text { 
     font-family: 'Inter';
-    font-weight: 700;
-    color: #484eff;
-    font-size: 1.4rem;
+    font-weight: 600;
+    color: #000b1f;
+    font-size: 1.2rem;
     margin: 0;
-    margin-top: 10px;
-    margin-left: 15px;
+    margin-top: 0;
+    margin-left: 0;
 }
 
 .buttonImportArquivoCsv { 
-    border: 0;
-    background-color: #2ef092;
-    border-radius: 10px;
+    border: none;
+    background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+    border-radius: 8px;
     font-family: 'Inter';
-    font-weight: 700;
+    font-weight: 600;
     font-size: 1rem;
-    color: rgb(0, 0, 0);
+    color: white;
     position: relative;
     overflow: hidden;
-    transition: transform 0.2s ease-in-out, background-color 0.2s ease-in-out; 
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(16, 185, 129, 0.3);
+}
+
+.buttonImportArquivoCsv::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+    z-index: 1;
 }
 
 .buttonImportArquivoCsv::after { 
-    background-color: #54ff8a;
-    border-radius: 10px;
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    border-radius: 8px;
     content: '';
     display: block;
     height: 100%;
@@ -252,38 +327,55 @@ ul {
     position: absolute;
     left: 0;
     top: 0;
-    transform: translate(-100%, 0) rotate(10deg);
-    transform-origin: top left;
-    transition: transform 0.2s ease-out; 
+    opacity: 0;
+    transition: opacity 0.3s ease;
     z-index: -1; 
 }
 
 .buttonImportArquivoCsv:hover { 
     cursor: pointer;
-    background-color: #32cd82; 
-    transform: scale(1.05); 
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+    color: white;
 }
 
 .buttonImportArquivoCsv:hover::after {
-    transform: translate(0, 0); 
+    opacity: 1;
+}
+
+.buttonImportArquivoCsv:hover::before {
+    left: 100%;
 }
 
 .buttonImportArquivoMD { 
-    border: 0;
-    background-color: #61d7fb;
-    border-radius: 10px;
+    border: none;
+    background: linear-gradient(135deg, #4A90E2 0%, #357ABD 100%);
+    border-radius: 8px;
     font-family: 'Inter';
-    font-weight: 700;
+    font-weight: 600;
     font-size: 1rem;
-    color: rgb(0, 0, 0);
+    color: white;
     position: relative;
     overflow: hidden;
-    transition: transform 0.2s ease-in-out, background-color 0.2s ease-in-out; 
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(74, 144, 226, 0.3);
+}
+
+.buttonImportArquivoMD::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+    z-index: 1;
 }
 
 .buttonImportArquivoMD::after { 
-    background-color: #53d4fc;
-    border-radius: 10px;
+    background: linear-gradient(135deg, #357ABD 0%, #2563A8 100%);
+    border-radius: 8px;
     content: '';
     display: block;
     height: 100%;
@@ -291,20 +383,24 @@ ul {
     position: absolute;
     left: 0;
     top: 0;
-    transform: translate(-100%, 0) rotate(10deg);
-    transform-origin: top left;
-    transition: transform 0.2s ease-out; 
+    opacity: 0;
+    transition: opacity 0.3s ease;
     z-index: -1; 
 }
 
 .buttonImportArquivoMD:hover { 
     cursor: pointer;
-    background-color: #3cc1cd; 
-    transform: scale(1.05); 
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(74, 144, 226, 0.4);
+    color: white;
 }
 
 .buttonImportArquivoMD:hover::after {
-    transform: translate(0, 0); 
+    opacity: 1;
+}
+
+.buttonImportArquivoMD:hover::before {
+    left: 100%;
 }
 
 /*-------------------------------- Div para input ano e botao import ------------------------------*/
@@ -322,28 +418,43 @@ ul {
 }
 
 .importarButton { 
-    margin-top: 10vh;
+    margin-top: 2rem;
     list-style: none;
-    width: 30%;
+    min-width: 200px;
     height: 3.5em;
-    background-color: #ffffffea;
-    color: rgb(0, 0, 0);
-    border: 2px solid currentColor;
-    border-radius: 7px;
+    background: linear-gradient(135deg, #4A90E2 0%, #357ABD 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
     font-family: 'Inter';
-    font-weight: 700;
-    font-size: 1em;
+    font-weight: 600;
+    font-size: 1.1em;
     overflow: hidden;
     position: relative;
     text-decoration: none;
     will-change: transform;
     z-index: 0;
-    transition: 0.2s ease-in-out;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
+    padding: 0 2rem;
+}
+
+.importarButton::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+    z-index: 1;
 }
 
 .importarButton::after { 
-    background-color: #246137;
-    border-radius: 7px;
+    background: linear-gradient(135deg, #357ABD 0%, #2563A8 100%);
+    border-radius: 8px;
     content: '';
     display: block;
     height: 100%;
@@ -351,23 +462,23 @@ ul {
     position: absolute;
     left: 0;
     top: 0;
-    transform: translate(-100%, 0) rotate(10deg);
-    transform-origin: top left;
-    transition: .2s transform ease-out;
-    will-change: transform;
+    opacity: 0;
+    transition: opacity 0.3s ease;
     z-index: -1;
 }
 
 .importarButton:hover::after{
-    transform: translate(0, 0);
+    opacity: 1;
 }
 
-.importarButton:hover{
-    border: 2px solid transparent;
-    color: #ffffff;
-    transform: scale(1.05);
-    will-change: transform;
-    cursor:pointer;
+.importarButton:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(74, 144, 226, 0.4);
+    color: white;
+}
+
+.importarButton:hover::before {
+    left: 100%;
 }
 
 /*----Popup----*/
@@ -582,5 +693,142 @@ ul {
     }
     100% {
         transform: rotate(360deg);
+    }
+}
+
+.errorMessage { 
+    color: #c75c5c;
+    font-weight: 500;
+    margin-top: 0.5rem;
+}
+
+.modalidade_container {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(240, 240, 240, 0.95) 100%);
+    border-radius: 16px;
+    padding: 2.5rem;
+    margin-top: 3rem;
+    width: 100%;
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 2px solid rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+}
+
+.modalidade_text {
+    margin: 0 0 1.5rem 0;
+    font-family: 'Inter';
+    font-size: 1.3rem;
+    font-weight: 500;
+    text-align: center;
+    color: #000b1f;
+}
+
+.modalidade_select {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+/* Responsividade */
+@media (max-width: 1024px) {
+    .intro {
+        width: 85%;
+    }
+    
+    .sessionProcArq {
+        flex-direction: column;
+        gap: 2rem;
+        padding: 2rem;
+    }
+    
+    .inputsArquivosImportacao {
+        width: 100%;
+    }
+    
+    .container_inputAno_button {
+        width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .intro {
+        width: 95%;
+        padding-top: 1rem;
+    }
+    
+    .titulo {
+        font-size: 2rem;
+        margin-top: 1rem;
+    }
+    
+    .infos {
+        font-size: 1rem;
+    }
+    
+    .tutorial_container {
+        padding: 1.5rem;
+    }
+    
+    .etapas_ul {
+        font-size: 1rem;
+        margin-left: 1rem;
+    }
+    
+    .containerButton {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+    
+    .button_templates,
+    .button_templates_replace {
+        width: 100%;
+        min-width: auto;
+    }
+    
+    .sessionProcArq {
+        padding: 1.5rem;
+        width: 95%;
+    }
+    
+    .inputArquivoBox {
+        padding: 1.25rem;
+        min-height: 100px;
+    }
+    
+    .inputArquivoBox_text {
+        font-size: 1.1rem;
+    }
+    
+    .modalidade_container {
+        padding: 1.5rem;
+    }
+    
+    .modalidade_text {
+        font-size: 1.1rem;
+    }
+    
+    .importarButton {
+        width: 100%;
+        min-width: auto;
+    }
+}
+
+@media (max-width: 480px) {
+    .titulo {
+        font-size: 1.75rem;
+    }
+    
+    .tutorial_container {
+        padding: 1.25rem;
+    }
+    
+    .inputArquivoBox {
+        padding: 1rem;
+    }
+    
+    .modalidade_container {
+        padding: 1.25rem;
     }
 }

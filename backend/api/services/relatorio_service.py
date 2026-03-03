@@ -4,6 +4,7 @@ from api.utils.error_handlers import *
 import logging
 from src.main_controller import setup_to_generate_reports
 from api.gmail_api.gmail_api_controller import send_email_via_gmail_api
+from api.gmail_api.error_email_builder import ErrorEmailBuilder
 
 logger = logging.getLogger(__name__)
 
@@ -41,7 +42,13 @@ class RelatorioService:
             res: dict = setup_to_generate_reports(instrumento, mongo_client, ano, modalidade, id_instrumento)
             
             if res['Success'] == True:
-                send_email_via_gmail_api('', 'sec-cpa@uem.br', 'Relatórios gerados', f'Os relatórios do instrumento {instrumento} foram gerados com sucesso.')
+                # Usar o novo sistema de notificação estruturada
+                email_data = ErrorEmailBuilder.build_success_notification(
+                    instrumento=instrumento,
+                    operation='Geracao de Relatorios',
+                    context={'id_instrumento': id_instrumento, 'status': 'Disponivel para download'}
+                )
+                send_email_via_gmail_api('', 'sec-cpa@uem.br', email_data['subject'], email_data['body'])
                                 
                 return jsonify({
                     'success': True, 

@@ -451,7 +451,10 @@ class CSVManagment:
 
     def insert_curso_e_centro_csv_to_database(collection_name: Collection) -> Union[str, Exception]:
         '''
-        Realiza a inserção do CSV curso e centro no database. 
+        Realiza a inserção do CSV curso e centro no database, tratando faltas de Código do Curso e Código MEC.
+        
+        - Se faltar cd_curso (primeira coluna): a linha é ignorada e o processo continua.
+        - Se faltar codigo_mec (segunda coluna): o campo é gravado como None.
         
         Args:
             collection_name (Collection): Collection do csv do instrumento.
@@ -474,17 +477,59 @@ class CSVManagment:
                 'ano_referencia'
             ]
 
+            linhas_ignoradas = []
+
             for i in range(len(df)):
-                collection_name.insert_one(
-                    {
-                        cabecalho[0]: int(df.iloc[i,0]),
-                        cabecalho[1]: float(df.iloc[i,1]),
-                        cabecalho[2]: str(df.iloc[i,2]),
-                        cabecalho[3]: str(df.iloc[i,3]),
-                        cabecalho[4]: int(df.iloc[i,4]),
-                        cabecalho[5]: int(df.iloc[i,5])
-                    }
-                )
+                raw_cd_curso = df.iloc[i, 0]
+                raw_codigo_mec = df.iloc[i, 1]
+                raw_centro = df.iloc[i, 2]
+                raw_nome_curso = df.iloc[i, 3]
+                raw_matriculados = df.iloc[i, 4]
+                raw_ano_ref = df.iloc[i, 5]
+
+                if pd.isna(raw_cd_curso):
+                    linhas_ignoradas.append(
+                        f"Linha {i+1} ignorada: cd_curso ausente."
+                    )
+                    continue
+                try:
+                    cd_curso = int(raw_cd_curso)
+                except (TypeError, ValueError):
+                    linhas_ignoradas.append(
+                        f"Linha {i+1} ignorada: cd_curso inválido ({raw_cd_curso})."
+                    )
+                    continue
+
+                if pd.isna(raw_codigo_mec):
+                    codigo_mec = None
+                else:
+                    try:
+                        codigo_mec = float(raw_codigo_mec)
+                    except (TypeError, ValueError):
+                        codigo_mec = None
+
+                try:
+                    centro_de_ensino = str(raw_centro)
+                    nm_curso = str(raw_nome_curso)
+                    matriculados = int(raw_matriculados) if not pd.isna(raw_matriculados) else 0
+                    ano_referencia = int(raw_ano_ref) if not pd.isna(raw_ano_ref) else None
+                except (TypeError, ValueError) as e:
+                    linhas_ignoradas.append(
+                        f"Linha {i+1} ignorada: erro ao converter campos numéricos ({e})."
+                    )
+                    continue
+
+                doc = {
+                    cabecalho[0]: cd_curso,
+                    cabecalho[1]: codigo_mec,
+                    cabecalho[2]: centro_de_ensino,
+                    cabecalho[3]: nm_curso,
+                    cabecalho[4]: matriculados,
+                    cabecalho[5]: ano_referencia
+                }
+
+                collection_name.insert_one(doc)
+
             return 'Finalizado'
         except FileNotFoundError as e:
             return f"Arquivo não encontrado: {e}"

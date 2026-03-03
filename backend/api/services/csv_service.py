@@ -7,8 +7,9 @@ from src.main_controller import inserir_e_processar_csv
 import logging
 import time
 from api.gmail_api.gmail_api_controller import send_email_via_gmail_api
+from api.gmail_api.error_email_builder import ErrorEmailBuilder
 import shutil
-from api.utils_api import converteObjectIDToStr, removeKeys
+from api.utils_api import converteObjectIDToStr, removeKeys, normalize_database_name
 from src.main_controller import get_progresso_insercao
 
 
@@ -23,7 +24,7 @@ class CsvService:
     def process_csv_import(self, csv_file, intro_file, concl_file, mongo_client):
         '''Insere o arquivo CSV e introdução e conclusão no sistema'''
         try:
-            database_name: str = csv_file.filename.replace('.csv', '');
+            database_name: str = normalize_database_name(csv_file.filename)
             databases_existentes = mongo_client.list_database_names();
             
             if database_name in databases_existentes:
@@ -54,7 +55,7 @@ class CsvService:
     def _setup_intro_concl_directories(self, csv_filename, intro_file, concl_file):
         """Configura os diretórios de introdução e conclusão."""
         
-        intro_conclusao_foldername = csv_filename.replace('.csv', '')
+        intro_conclusao_foldername = normalize_database_name(csv_filename)
         
         intro_conclusao_diretorio = f'relatorio_componentes/{intro_conclusao_foldername}'
         
@@ -91,24 +92,34 @@ class CsvService:
             logger.exception("Errro no processamento")
         finally: 
             if erro == 'False':
-                csv_filename = csv_filename.replace('.csv', '')
-                mongo_client.drop_database(csv_filename.replace(' ', ''))
+                database_name = normalize_database_name(csv_filename)
+                mongo_client.drop_database(database_name)
                 import_state.processing = False
                 logger.error(f'Erro ao processar CSV: {erro}')
                 return
             time.sleep(2)
-            send_email_via_gmail_api('', 'sec-cpa@uem.br', 'Processamento de CSV concluído', f'O processamento do CSV {csv_filename} foi concluído com sucesso. \nO instrumento estará disponível para ser gerado os relatórios markdowns \n\nSISTEMA CPA.')
+            # Usar o novo sistema de notificação estruturada
+            email_data = ErrorEmailBuilder.build_success_notification(
+                instrumento=csv_filename,
+                operation='Processamento de CSV',
+                context={'status': 'Disponivel para geracao de relatorios'}
+            )
+            send_email_via_gmail_api('', 'sec-cpa@uem.br', email_data['subject'], email_data['body'])
             import_state.processing = False
             
             
     def cancel_csv_importation(self, nome_instrumento):
         try:
-            csv_file_name = f'{nome_instrumento}.csv';
+            normalized_name = normalize_database_name(nome_instrumento)
+            csv_file_name = f'{normalized_name}.csv'
             csv_file_path = os.path.join(self.CSV_UPLOAD_FOLDER, csv_file_name);
-            os.remove(csv_file_path);
             
-            intro_conclusao_diretorio: str = f'relatorio_componentes/{nome_instrumento}';
-            shutil.rmtree(intro_conclusao_diretorio);
+            if os.path.exists(csv_file_path):
+                os.remove(csv_file_path)
+            
+            intro_conclusao_diretorio: str = f'relatorio_componentes/{normalized_name}'
+            if os.path.exists(intro_conclusao_diretorio):
+                shutil.rmtree(intro_conclusao_diretorio)
             
             return 'Importação cancelada com sucesso.', True
         except Exception as e: 

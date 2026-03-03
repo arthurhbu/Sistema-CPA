@@ -9,6 +9,7 @@ from src.relatorio.relatorio_controller import gerar_todos_relatorios
 from database.databaseQuerys import *
 from src.utils.compact_and_send_zip import zip_markdown_files
 from api.gmail_api.gmail_api_controller import send_email_via_gmail_api
+from api.gmail_api.error_email_builder import ErrorEmailBuilder
 from api.utils.error_handlers import *
 
 '''
@@ -124,26 +125,65 @@ def prepare_side_dataframes(database: Database, ano: int, modal: str, collection
         Raise: A função não levanta nenhuma exceção, apenas repassa as exceções que ocorreram antes.
     """
 
+    # Coletar informações de diagnóstico
     centros = collection_instrumento.distinct('centro_de_ensino')
+    count_instrumento = collection_instrumento.count_documents({})
+    count_cursos_centros = collection_cursos_e_centros.count_documents({})
+    count_cursos_ano = collection_cursos_e_centros.count_documents({'ano_referencia': ano})
+    
+    # Verificar códigos de curso em comum
+    cursos_instrumento = set(collection_instrumento.distinct('cd_curso'))
+    cursos_centros = set(collection_cursos_e_centros.distinct('cd_curso'))
+    codigos_comum = len(cursos_instrumento & cursos_centros)
+    
+    # Contexto para diagnóstico
+    context = {
+        'centros': centros,
+        'count_instrumento': count_instrumento,
+        'count_cursos_centros': count_cursos_centros,
+        'count_cursos_ano': count_cursos_ano,
+        'codigos_comum': codigos_comum
+    }
+    
+    # Verificação inicial de dados
+    if count_cursos_ano == 0:
+        anos_disponiveis = collection_cursos_e_centros.distinct('ano_referencia')
+        error_msg = f"Nenhum curso encontrado para o ano {ano}. Anos disponiveis: {anos_disponiveis}"
+        context['anos_disponiveis'] = anos_disponiveis
+        return {'Success': False, 'Error': error_msg, 'Context': context}
+    
+    if codigos_comum == 0:
+        error_msg = f"Nenhum codigo de curso em comum entre instrumento e cursos_e_centros para o ano {ano}"
+        return {'Success': False, 'Error': error_msg, 'Context': context}
 
     document_to_insert = []
 
     for centro in centros:
+        context['centro_atual'] = centro
         resultado_cursos_por_centro: dict = df_cursos_por_centro(collection_cursos_e_centros, ano, centro)
         if resultado_cursos_por_centro['Success'] == False:
-            return {'Success': False, 'Error': f"{resultado_cursos_por_centro['error']}"}
+            return {'Success': False, 'Error': f"Erro no centro '{centro}': {resultado_cursos_por_centro['error']}", 'Context': context}
         document_to_insert.extend(resultado_cursos_por_centro['resultado'])
+    
+    # Verificação crítica antes do insert_many
+    if len(document_to_insert) == 0:
+        error_msg = "Nenhum documento para inserir em cursos_por_centro. Possivel incompatibilidade de dados."
+        return {'Success': False, 'Error': error_msg, 'Context': context}
         
-    database['cursos_por_centro'].insert_many(document_to_insert)   
-    progresso_etapa5 = 'Finalizado'
-    update_progresso(progresso,'Criacao_Cursos_por_Centro_Database',progresso_etapa5)
+    try:
+        database['cursos_por_centro'].insert_many(document_to_insert)   
+        progresso_etapa5 = 'Finalizado'
+        update_progresso(progresso,'Criacao_Cursos_por_Centro_Database',progresso_etapa5)
+    except Exception as e:
+        error_msg = f"Erro ao inserir documentos em cursos_por_centro: {str(e)}"
+        return {'Success': False, 'Error': error_msg, 'Context': context}
 
     resultado_df_centro_por_ano: dict  = df_centro_por_ano(collection_instrumento, database, ano)
 
     if resultado_df_centro_por_ano['Success'] == False: 
         progresso_etapa6 = resultado_df_centro_por_ano['error']
         update_progresso(progresso, 'Criacao_Centro_por_Ano_Database', progresso_etapa6)
-        return {'Success': False, 'Error': f"{resultado_df_centro_por_ano['error']}"}
+        return {'Success': False, 'Error': f"Erro na criacao centro_por_ano: {resultado_df_centro_por_ano['error']}", 'Context': context}
     
     progresso_etapa6 = resultado_df_centro_por_ano['message']
     update_progresso(progresso, 'Criacao_Centro_por_Ano_Database', progresso_etapa6)
@@ -172,13 +212,26 @@ def generate_reports(collection_instrumento: Collection, collection_centro_por_a
     res_gerar_todos_relatorios: dict = gerar_todos_relatorios(collection_instrumento, collection_centro_por_ano, collection_cursos_por_centro, ano, database_name, modal, nome_instrumento)
     
     if res_gerar_todos_relatorios['Success'] == False:
-        send_email_via_gmail_api('', 'sec-cpa@uem.br', 'Ocorreu um erro ao tentar gerar os relatórios', f"Uma exceção inesperada ocorreu durante a geração de relatórios, confira a seguir: \n\n {res_gerar_todos_relatorios['Error']} ")
+        # Usar o novo sistema de emails estruturados
+        context = res_gerar_todos_relatorios.get('Context', {})
+        email_data = ErrorEmailBuilder.build_report_generation_error(
+            instrumento=database_name,
+            error_details=res_gerar_todos_relatorios['Error'],
+            context=context
+        )
+        send_email_via_gmail_api('', 'sec-cpa@uem.br', email_data['subject'], email_data['body'])
         return {'Success': False, 'error': res_gerar_todos_relatorios['Error']}
     
     res_zip_files: dict = zip_markdown_files(database_name, f'{id_instrumento}.zip')
     
     if res_zip_files['Success'] == False: 
-        send_email_via_gmail_api('', 'sec-cpa@uem.br', 'Um erro ocorreu ao tentar compactar relatorios', f"Uma exceção inesperada ocorreu durante a compactação de arquivos, confira a seguir: \n\n {res_zip_files['Error']} ")
+        # Usar o novo sistema de emails estruturados para erro de compactação
+        email_data = ErrorEmailBuilder.build_report_generation_error(
+            instrumento=database_name,
+            error_details=f"Erro na compactacao de arquivos: {res_zip_files['Error']}",
+            context={'etapa': 'Compactacao de arquivos ZIP'}
+        )
+        send_email_via_gmail_api('', 'sec-cpa@uem.br', email_data['subject'], email_data['body'])
         return {'Success': False, 'error': res_zip_files['Error']}
         
     return {'Success': True}
@@ -214,7 +267,14 @@ def inserir_e_processar_csv(ano: int, csv_Filename: str, modalidade: str, client
             )
         
         if response_initalize_database_inserts['Success'] == False: 
-            send_email_via_gmail_api('', 'sec-cpa@uem.br', f"{response_initalize_database_inserts['Message']}", f"{response_initalize_database_inserts['Error']}")
+            # Usar o novo sistema de emails estruturados
+            email_data = ErrorEmailBuilder.build_csv_import_error(
+                instrumento=csv_Filename,
+                modalidade=modalidade,
+                etapa=response_initalize_database_inserts.get('Message', 'Importacao inicial'),
+                error_details=response_initalize_database_inserts['Error']
+            )
+            send_email_via_gmail_api('', 'sec-cpa@uem.br', email_data['subject'], email_data['body'])
             return 'False'
         
         response_prepare_side_dataframes: dict = prepare_side_dataframes(
@@ -227,7 +287,16 @@ def inserir_e_processar_csv(ano: int, csv_Filename: str, modalidade: str, client
             )
         
         if response_prepare_side_dataframes['Success'] == False:
-            send_email_via_gmail_api('', 'sec-cpa@uem.br', 'Ocorreu um erro ao tentar gerar as collections de apoio', f"{response_prepare_side_dataframes['Error']}")
+            # Usar o novo sistema de emails estruturados
+            context = response_prepare_side_dataframes.get('Context', {})
+            email_data = ErrorEmailBuilder.build_collections_error(
+                instrumento=csv_Filename,
+                modalidade=modalidade,
+                ano=ano,
+                error_details=response_prepare_side_dataframes['Error'],
+                context=context
+            )
+            send_email_via_gmail_api('', 'sec-cpa@uem.br', email_data['subject'], email_data['body'])
             return 'False'
         
         return 'Inserção finalizada com sucesso'

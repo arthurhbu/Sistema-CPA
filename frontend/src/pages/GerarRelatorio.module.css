@@ -2,31 +2,39 @@
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    min-height: 1000px;
+    min-height: calc(100vh - 200px);
     flex-direction: column;
     padding-top: 25px;
+    padding-bottom: 4rem;
+    position: relative;
+    background: linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%);
 }
 
 .containerIntro{ 
     display: flex;
     align-items: center;
     flex-direction: column;
-    width: 70%;
+    width: 85%;
+    max-width: 1400px;
     justify-content: center;
     text-align: justify;
+    margin-bottom: 3rem;
 }
 
 .containerIntro_tituloPagina { 
-    font-size: 3rem;
+    font-size: 2.75rem;
     font-family: 'Inter';
     font-weight: 600;
-    margin-bottom: 10px;
+    margin-bottom: 1rem;
+    color: #000b1f;
+    text-align: center;
 }
 
 .containerIntro_infos { 
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     font-family: 'Inter';
-    color: #828282;
+    color: #666;
+    line-height: 1.7;
 }
 
 .containerInstrumento { 
@@ -38,59 +46,140 @@
 .containerRelatorioEsp { 
     margin-top: 100px;
     display: flex;
-    width: 80%;
+    width: 90%;
+    max-width: 1400px;
     justify-content: space-around;
+    gap: 2rem;
 }
 
 .containerRelatorioEsp_escolhaComponentesRelatorio_instrumento { 
-    width: 20%;
-    background-color: rgb(231, 228, 228);
-    /* border: 3px solid #d9d7d7; */
-    padding: 30px;
-    border-radius: 5px;
+    width: 30%;
+    min-width: 280px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(240, 240, 240, 0.95) 100%);
+    border: 2px solid rgba(0, 0, 0, 0.2);
+    padding: 2.5rem;
+    border-radius: 16px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.containerRelatorioEsp_escolhaComponentesRelatorio_instrumento::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #4A90E2, #10B981);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+}
+
+.containerRelatorioEsp_escolhaComponentesRelatorio_instrumento:hover::before {
+    transform: scaleX(1);
+}
+
+.containerRelatorioEsp_escolhaComponentesRelatorio_instrumento:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+    transform: translateY(-2px);
 }
 
 .containerRelatorioEsp_escolhaComponentesRelatorio_Ano { 
-    width: 25%;
-    background-color: rgb(231, 228, 228);
-    /* border: 3px solid #d9d7d7; */
-    padding: 30px;
-    border-radius: 5px;
+    width: 35%;
+    min-width: 320px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(240, 240, 240, 0.95) 100%);
+    border: 2px solid rgba(0, 0, 0, 0.2);
+    padding: 2.5rem;
+    border-radius: 16px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+    transition: all 0.3s ease;
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
+    position: relative;
+    overflow: hidden;
+}
+
+.containerRelatorioEsp_escolhaComponentesRelatorio_Ano::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #4A90E2, #10B981);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+}
+
+.containerRelatorioEsp_escolhaComponentesRelatorio_Ano:hover::before {
+    transform: scaleX(1);
+}
+
+.containerRelatorioEsp_escolhaComponentesRelatorio_Ano:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+    transform: translateY(-2px);
 }
 
 .containerTrocaIntroConcl { 
     margin-top: 7vh;
     flex-direction: column;
-    width: 80%;
+    width: 90%;
+    max-width: 1400px;
     display: flex;
     justify-content: center;
-
 }
 
 .containerTrocaIntroConcl_MaxWidth { 
     align-self: center;
-    width: 95%;
+    width: 100%;
     display: flex;
     flex-direction: column;
-    height: auto;
-    /* background-color: rgb(234, 228, 228); */
     height: auto;
     border-radius: 8px;
 }
 
 .containerIntroducao{
-    width: 80%;
+    width: 90%;
+    max-width: 1400px;
     display: flex;
     align-self: center;
-    /* border: 3px solid #d9d7d7; */
-    background-color: rgb(231, 228, 228);
-    border-radius: 8px;
-    padding: 1rem;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(240, 240, 240, 0.95) 100%);
+    border: 2px solid rgba(0, 0, 0, 0.2);
+    border-radius: 16px;
+    padding: 2.5rem;
     flex-direction: column;
     margin-top: 5vh;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.containerIntroducao::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #4A90E2, #10B981);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+}
+
+.containerIntroducao:hover::before {
+    transform: scaleX(1);
+}
+
+.containerIntroducao:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+    transform: translateY(-2px);
 }
 
 .containerOpcoesIntroEConcl { 
@@ -101,43 +190,79 @@
 
 .containerSubstituirIntroducao { 
     display: flex;
-    width: 75%;
+    width: 85%;
+    align-items: center;
+    gap: 1rem;
+}
+
+.containerSubstituirIntroducao p {
+    width: auto;
+    min-width: 180px;
+    font-size: 1rem;
+    font-family: 'Inter';
+    font-weight: 500;
+    margin: 0;
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
 .containerImportNewIntroducao{ 
     display: flex;
-    width: 75%;
-    border: 2px solid #c8c5c5;    
-    padding: 1rem;
-    border-radius: 8px;
-    display: flex;
+    flex: 1;
+    border: 2px solid rgba(0, 0, 0, 0.2);    
+    padding: 1.5rem;
+    border-radius: 12px;
     justify-content: space-between;
-    margin-left: 1vw;
+    align-items: center;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(250, 250, 250, 0.95) 100%);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    gap: 1rem;
+}
+
+.containerImportNewIntroducao:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+    border-color: rgba(74, 144, 226, 0.4);
 }
 
 .buttonSubstituir { 
     align-self: center;
-    background-color: #61d7fb;
-    color: rgb(0, 0, 0);
-    border: 0;
-    border-radius: 7px;
+    background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
     font-family: 'Inter';
-    font-weight: 500;
-    font-size: 1em;
+    font-weight: 600;
+    font-size: 0.9em;
     overflow: hidden;
     position: relative;
     text-decoration: none;
     will-change: transform;
     z-index: 0;
-    transition: 0.2s ease-in-out;
-    padding: 10px;
-    margin-right: 10px;
+    transition: all 0.3s ease;
+    padding: 8px 1.2rem;
     height: fit-content;
+    box-shadow: 0 2px 4px rgba(245, 158, 11, 0.3);
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.buttonSubstituir::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+    z-index: 1;
 }
 
 .buttonSubstituir::after { 
-    background-color: #53d4fc;
-    border-radius: 10px;
+    background: linear-gradient(135deg, #D97706 0%, #B45309 100%);
+    border-radius: 8px;
     content: '';
     display: block;
     height: 100%;
@@ -145,38 +270,55 @@
     position: absolute;
     left: 0;
     top: 0;
-    transform: translate(-100%, 0) rotate(10deg);
-    transform-origin: top left;
-    transition: transform 0.2s ease-out; 
+    opacity: 0;
+    transition: opacity 0.3s ease;
     z-index: -1; 
 }
 
 .buttonSubstituir:hover { 
     cursor: pointer;
-    background-color: #3cc1cd; 
-    transform: scale(1.05); 
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
+    color: white;
 }
 
 .buttonSubstituir:hover::after {
-    transform: translate(0, 0); 
+    opacity: 1;
+}
+
+.buttonSubstituir:hover::before {
+    left: 100%;
 }
 
 .buttonImportArquivoMD{
-    border: 0;
-    background-color: #61d7fb;
-    border-radius: 10px;
+    border: none;
+    background: linear-gradient(135deg, #4A90E2 0%, #357ABD 100%);
+    border-radius: 8px;
     font-family: 'Inter';
-    font-weight: 700;
+    font-weight: 600;
     font-size: 1rem;
-    color: rgb(0, 0, 0);
+    color: white;
     position: relative;
     overflow: hidden;
-    transition: transform 0.2s ease-in-out, background-color 0.2s ease-in-out; 
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(74, 144, 226, 0.3);
+}
+
+.buttonImportArquivoMD::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+    z-index: 1;
 }
 
 .buttonImportArquivoMD::after { 
-    background-color: #53d4fc;
-    border-radius: 10px;
+    background: linear-gradient(135deg, #357ABD 0%, #2563A8 100%);
+    border-radius: 8px;
     content: '';
     display: block;
     height: 100%;
@@ -184,43 +326,60 @@
     position: absolute;
     left: 0;
     top: 0;
-    transform: translate(-100%, 0) rotate(10deg);
-    transform-origin: top left;
-    transition: transform 0.2s ease-out; 
+    opacity: 0;
+    transition: opacity 0.3s ease;
     z-index: -1; 
 }
 
 .buttonImportArquivoMD:hover { 
     cursor: pointer;
-    background-color: #3cc1cd; 
-    transform: scale(1.05); 
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(74, 144, 226, 0.4);
+    color: white;
 }
 
 .buttonImportArquivoMD:hover::after {
-    transform: translate(0, 0); 
+    opacity: 1;
+}
+
+.buttonImportArquivoMD:hover::before {
+    left: 100%;
 }
 
 .button_download_introConcl { 
-    background-color: #00ff77;
-    color: rgb(0, 0, 0);
-    border: 0;
-    border-radius: 7px;
+    background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
     font-family: 'Inter';
-    font-weight: 500;
+    font-weight: 600;
     font-size: 1em;
     overflow: hidden;
     position: relative;
     text-decoration: none;
     will-change: transform;
     z-index: 0;
-    transition: 0.2s ease-in-out;
-    padding: 10px;
-    margin-right: 10px; 
+    transition: all 0.3s ease;
+    padding: 10px 1.5rem;
+    margin-right: 10px;
+    box-shadow: 0 2px 4px rgba(16, 185, 129, 0.3);
+}
+
+.button_download_introConcl::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+    z-index: 1;
 }
 
 .button_download_introConcl::after { 
-    background-color: #54ff8a;
-    border-radius: 7px;
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    border-radius: 8px;
     content: '';
     display: block;
     height: 100%;
@@ -228,56 +387,76 @@
     position: absolute;
     left: 0;
     top: 0;
-    transform: translate(-100%, 0) rotate(10deg);
-    transform-origin: top left;
-    transition: .2s transform ease-out;
-    will-change: transform;
+    opacity: 0;
+    transition: opacity 0.3s ease;
     z-index: -1;
 }
 
 .button_download_introConcl:hover::after{
-    transform: translate(0, 0);
+    opacity: 1;
 }
 
-.button_download_introConcl:hover{
-    color: #000000;
-    transform: scale(1.05);
-    will-change: transform;
+.button_download_introConcl:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+    color: white;
     cursor: pointer;
 }
 
+.button_download_introConcl:hover::before {
+    left: 100%;
+}
+
 .containerButton { 
-    width: 50%;
+    width: 70%;
+    max-width: 600px;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    margin-bottom: 130px;
+    margin-bottom: 2rem;
+    margin-top: 2rem;
 }
 
 .buttonGerarRelatorio { 
     margin-top: 10vh;
     list-style: none;
-    width: 30%;
+    width: 60%;
+    min-width: 200px;
+    max-width: 350px;
     height: 3.5em;
-    background-color: #00ff77;
-    color: rgb(0, 0, 0);
-    border: 2px solid currentColor;
-    border-radius: 7px;
+    background: linear-gradient(135deg, #4A90E2 0%, #357ABD 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
     font-family: 'Inter';
-    font-weight: 700;
+    font-weight: 600;
     font-size: 1em;
     overflow: hidden;
     position: relative;
     text-decoration: none;
     will-change: transform;
     z-index: 0;
-    transition: 0.2s ease-in-out;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
+}
+
+.buttonGerarRelatorio::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+    z-index: 1;
 }
 
 .buttonGerarRelatorio::after { 
-    background-color: #54ff8a;
-    border-radius: 7px;
+    background: linear-gradient(135deg, #357ABD 0%, #2563A8 100%);
+    border-radius: 8px;
     content: '';
     display: block;
     height: 100%;
@@ -285,23 +464,23 @@
     position: absolute;
     left: 0;
     top: 0;
-    transform: translate(-100%, 0) rotate(10deg);
-    transform-origin: top left;
-    transition: .2s transform ease-out;
-    will-change: transform;
+    opacity: 0;
+    transition: opacity 0.3s ease;
     z-index: -1;
 }
 
 .buttonGerarRelatorio:hover::after{
-    transform: translate(0, 0);
+    opacity: 1;
 }
 
-.buttonGerarRelatorio:hover{
-    border: 2px solid #000;
-    color: #000000;
-    transform: scale(1.05);
-    will-change: transform;
-    cursor: pointer;
+.buttonGerarRelatorio:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(74, 144, 226, 0.4);
+    color: white;
+}
+
+.buttonGerarRelatorio:hover::before {
+    left: 100%;
 }
 
 .containerRelatoriosZip{
@@ -311,8 +490,9 @@
     flex-direction: column;
     margin-top: 1vh;
     width: 100%;
-    height: 50vh;
-    margin-bottom: 5vh;
+    max-height: 70vh;
+    margin-bottom: 2rem;
+    position: relative;
 }
 
 .downloaded_zip_box{
@@ -320,11 +500,14 @@
     display: flex;
     justify-content: flex-start;
     flex-direction: column;
-    width: 80%;
+    width: 95%;
+    max-width: 1600px;
     border-radius: 10px;
-    height: auto;
+    max-height: 70vh;
     padding: 1rem;
-    padding-bottom: 5vh;
+    padding-bottom: 1rem;
+    overflow: hidden;
+    position: relative;
 }
 
 .downloaded_zip_box_title{
@@ -361,6 +544,148 @@
     margin-right: 20px;
 }
 
+.zip_box_header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 0;
+    background-color: #000b1f;
+    z-index: 10;
+    padding-bottom: 1rem;
+}
+
+.zip_box_refresh {
+    margin-left: 20px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Estilos para cards de ZIPs */
+.zip_cards_container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+    padding: 0 1rem 1rem 1rem;
+    max-height: calc(70vh - 150px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(97, 215, 251, 0.5) rgba(0, 11, 31, 0.3);
+}
+
+/* Estilização da scrollbar para WebKit (Chrome, Safari, Edge) */
+.zip_cards_container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.zip_cards_container::-webkit-scrollbar-track {
+    background: rgba(0, 11, 31, 0.3);
+    border-radius: 10px;
+}
+
+.zip_cards_container::-webkit-scrollbar-thumb {
+    background: rgba(97, 215, 251, 0.5);
+    border-radius: 10px;
+}
+
+.zip_cards_container::-webkit-scrollbar-thumb:hover {
+    background: rgba(97, 215, 251, 0.7);
+}
+
+.zip_card {
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: all 0.3s ease;
+    min-height: 150px;
+}
+
+.zip_card:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.zip_card_info {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.zip_card_icon {
+    color: #61d7fb;
+    flex-shrink: 0;
+    margin-top: 0.25rem;
+}
+
+.zip_card_details {
+    flex: 1;
+    min-width: 0;
+}
+
+.zip_card_filename {
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 500;
+    margin: 0 0 0.5rem 0;
+    word-break: break-word;
+    line-height: 1.4;
+}
+
+.zip_card_size {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.875rem;
+    margin: 0;
+}
+
+.zip_card_actions {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    margin-top: auto;
+}
+
+.loading_container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 3rem;
+}
+
+.loading_text {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 1.1rem;
+}
+
+.empty_state {
+    text-align: center;
+    padding: 3rem 2rem;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.empty_state_text {
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.empty_state_subtext {
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+/* Estilos antigos da tabela (mantidos para compatibilidade) */
 .downloaded_zip_table { 
     width: 100%;
     color: #fff;
@@ -391,38 +716,248 @@
 }
 
 .button_download { 
-    background-color: #00ff77;
-    color: rgb(0, 0, 0);
-    border: 2px solid currentColor;
-    border-radius: 7px;
+    background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
     font-family: 'Inter';
-    font-weight: 700;
-    font-size: 1em;
+    font-weight: 600;
+    font-size: 0.9em;
     overflow: hidden;
     position: relative;
     text-decoration: none;
     will-change: transform;
     z-index: 0;
-    transition: 0.2s ease-in-out;
-    padding: 10px;
-    margin-right: 10px; 
+    transition: all 0.3s ease;
+    padding: 0.6rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex: 1;
+    justify-content: center;
+    box-shadow: 0 2px 4px rgba(16, 185, 129, 0.3);
 }
 
-.button_download:hover{
-    background-color: #0ec447;
+.button_download::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+    z-index: 1;
+}
+
+.button_download::after {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    border-radius: 8px;
+    content: '';
+    display: block;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: -1;
+}
+
+.button_download:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
     cursor: pointer;
+    color: white;
+}
+
+.button_download:hover::after {
+    opacity: 1;
+}
+
+.button_download:hover::before {
+    left: 100%;
+}
+
+.button_download svg {
+    flex-shrink: 0;
 }
 
 .button_delete { 
-    background-color: #f74a4a;
-    border: 0;
-    border-radius: 7px;
-    width: 3.5vw;
+    background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+    border: none;
+    border-radius: 8px;
+    padding: 0.6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    height: 44px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(239, 68, 68, 0.3);
+}
+
+.button_delete::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+    z-index: 1;
+}
+
+.button_delete::after {
+    background: linear-gradient(135deg, #DC2626 0%, #B91C1C 100%);
+    border-radius: 8px;
+    content: '';
+    display: block;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: -1;
+}
+
+.button_delete img {
+    width: 1.25rem;
+    height: 1.25rem;
+    filter: brightness(0) invert(1);
+    position: relative;
+    z-index: 2;
 }
 
 .button_delete:hover { 
-    background-color: #ee1212;
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
     cursor: pointer;
+}
+
+.button_delete:hover::after {
+    opacity: 1;
+}
+
+.button_delete:hover::before {
+    left: 100%;
+}
+
+/* Responsividade para cards */
+/* Responsividade */
+@media (max-width: 1024px) {
+    .containerIntro {
+        width: 85%;
+    }
+    
+    .containerRelatorioEsp {
+        flex-direction: column;
+        gap: 2rem;
+        width: 90%;
+    }
+    
+    .containerRelatorioEsp_escolhaComponentesRelatorio_instrumento,
+    .containerRelatorioEsp_escolhaComponentesRelatorio_Ano {
+        width: 100%;
+    }
+    
+    .containerIntroducao {
+        width: 90%;
+    }
+}
+
+@media (max-width: 768px) {
+    .containerGerarRelatorio {
+        padding-top: 1rem;
+        padding-bottom: 2rem;
+    }
+    
+    .containerIntro {
+        width: 90%;
+        padding: 0 1rem;
+    }
+    
+    .containerIntro_tituloPagina {
+        font-size: 2rem;
+    }
+    
+    .containerIntro_infos {
+        font-size: 1.2rem;
+    }
+    
+    .containerRelatorioEsp {
+        width: 95%;
+        margin-top: 3rem;
+    }
+    
+    .containerRelatorioEsp_escolhaComponentesRelatorio_instrumento,
+    .containerRelatorioEsp_escolhaComponentesRelatorio_Ano {
+        padding: 1.5rem;
+    }
+    
+    .containerIntroducao {
+        width: 95%;
+        padding: 1.5rem;
+    }
+    
+    .containerImportNewIntroducao {
+        width: 100%;
+        margin-left: 0;
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .zip_cards_container {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        padding: 0 0.5rem;
+    }
+    
+    .zip_card {
+        padding: 1.25rem;
+    }
+    
+    .zip_card_filename {
+        font-size: 0.9rem;
+    }
+    
+    .zip_card_size {
+        font-size: 0.8rem;
+    }
+    
+    .button_download {
+        font-size: 0.85em;
+        padding: 0.5rem 0.75rem;
+    }
+    
+    .buttonGerarRelatorio {
+        width: 80%;
+    }
+}
+
+@media (max-width: 480px) {
+    .containerIntro_tituloPagina {
+        font-size: 1.75rem;
+    }
+    
+    .containerIntro_infos {
+        font-size: 1rem;
+    }
+    
+    .containerRelatorioEsp_escolhaComponentesRelatorio_instrumento,
+    .containerRelatorioEsp_escolhaComponentesRelatorio_Ano {
+        padding: 1rem;
+    }
+    
+    .containerIntroducao {
+        padding: 1rem;
+    }
 }
 
 

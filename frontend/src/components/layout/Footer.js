@@ -6,7 +6,7 @@ function Footer() {
     return(
         <footer className={styles.footer}>
             <div className={styles.copy_right}>
-                <img alt='cpa_symbol' style={{width:'10%'}} src={cpa_symbol}></img>
+                <img alt='cpa_symbol' src={cpa_symbol}></img>
                 <span>Sistema CPA</span>&copy; 2024 
             </div>
         </footer>

@@ -96,9 +96,9 @@ function Home(){
         <div className={styles.home}>
 
             {/* Container para verificação de cada database por meio de uma checklist */}
-            <div style={{display:'flex', justifyContent:'center', backgroundColor:'#000b1f', width:'100%', paddingBottom:'150px', borderTop:'1px solid #292828'}}>
+            <div style={{display:'flex', justifyContent:'center', backgroundColor:'#000b1f', width:'100%', paddingBottom:'150px', borderTop:'1px solid rgba(255, 255, 255, 0.1)'}}>
                 <div className={styles.inicio}>
-                    <p style={{fontSize:'1.5rem', }}>Bem vindo ao sistema da CPA!</p>
+                    <p style={{fontSize:'2rem', fontWeight:'600', marginBottom:'1.5rem'}}>Bem vindo ao sistema da CPA!</p>
                     <SelectAutoWidth
                     onSelectChange={handleSelectDatabaseChange}
                     label='Instrumento'
@@ -109,16 +109,22 @@ function Home(){
                     <div>
                         <ul className={styles.inicio_checklist}>
                             {ordenarEtapas.map(({ key, value }) => ( 
-                                <li className={styles.inicio_checklist_item} key={key}>
+                                <li 
+                                    className={styles.inicio_checklist_item} 
+                                    key={key}
+                                    onClick={() => handleCheckboxChange(key)}
+                                >
                                     <Checkbox
                                         checked={value}
                                         onChange={() => handleCheckboxChange(key)}
+                                        onClick={(e) => e.stopPropagation()}
                                         sx={{
                                             color: 'white', 
                                             '&.Mui-checked': {
                                                 color: 'white', 
                                             },
-                                            '& .MuiSvgIcon-root': { fontSize: 28 }
+                                            '& .MuiSvgIcon-root': { fontSize: 28 },
+                                            pointerEvents: 'none'
                                         }}
                                     />    
                                     {key}
@@ -130,8 +136,10 @@ function Home(){
             </div>
 
             {/* Container contendo um tutorial passo a passo de funcionamento do sistema */}
-            <p style={{marginBottom:'3vh',textAlign:'center', marginTop:'10vh', fontSize:'2.5rem', fontWeight:'500'}}>Tutorial Passo a Passo</p>
-            <p style={{textAlign:'center', marginTop:'1vh', fontSize:'2rem', color:'#828282'}}>Siga esses passos para conseguir gerar os relatórios dos instrumentos.</p>
+            <div style={{textAlign:'center', marginTop:'6vh', marginBottom:'4vh'}}>
+                <h2 style={{marginBottom:'1rem', fontSize:'2.75rem', fontWeight:'600', color:'#000b1f'}}>Tutorial Passo a Passo</h2>
+                <p style={{fontSize:'1.4rem', color:'#666', maxWidth:'800px', margin:'0 auto', lineHeight:'1.6'}}>Siga esses passos para conseguir gerar os relatórios dos instrumentos.</p>
+            </div>
             <p> </p>
             <div className={styles.sessions}>
                     <div className={styles.sessionBox_right}>
@@ -167,7 +175,7 @@ function Home(){
 
             {/* Container com informações sobre a CPA e o Projeto */}
             <div className={styles.session_infos}>
-                <p style={{marginTop:'10vh',fontSize: '2.5rem', fontWeight:'600'}}>Sobre a CPA: </p>
+                <h2 style={{fontSize: '2.5rem', fontWeight:'600', marginBottom:'1rem'}}>Sobre a CPA</h2>
                 <div className={styles.session_infos_cpa}>
                     <img alt='banner' style={{width:'auto', height:'auto'}} src={cpa_banner}/>
                     <ul className={styles.session_infos_text}>
@@ -179,7 +187,7 @@ function Home(){
                     </ul>
                 </div>
                 <div className={styles.session_infos_sistema}>
-                    <p style={{marginTop:'10vh',fontSize: '2.5rem', fontWeight:'600'}}>Sobre o Sistema de geração automática de relatórios</p>
+                    <h2 style={{fontSize: '2.5rem', fontWeight:'600', marginBottom:'1.5rem'}}>Sobre o Sistema de geração automática de relatórios</h2>
                     <p className={styles.session_infos_sistema_text}>Este site foi desenvolvido pela Comissão Própria de Avaliação (CPA) da Universidade Estadual de Maringá (UEM) com o objetivo de facilitar a geração e o acesso a relatórios detalhados e precisos. Nossa plataforma permite a coleta, armazenamento e análise de dados de forma eficiente, oferecendo ferramentas intuitivas e robustas para apoiar decisões estratégicas e melhorar continuamente a qualidade acadêmica e administrativa da UEM. Foi feito uso de um Modelo de Inteligência Artificial geradora, combinado com outras ferramentas para ser feito a geração de dados.</p>
                 </div>
             </div>

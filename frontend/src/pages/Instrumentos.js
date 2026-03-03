@@ -277,7 +277,17 @@ function Instrumentos() {
 
             {/* Lista de Instrumentos */}
             <div className={styles.listaInstrumentos}>
-                {instrumentosFiltrados.map((instrumento) => (
+                {instrumentosFiltrados.length === 0 ? (
+                    <div className={styles.empty_state}>
+                        <p className={styles.empty_state_text}>Nenhum instrumento encontrado.</p>
+                        <p className={styles.empty_state_subtext}>
+                            {instrumentos.length === 0 
+                                ? 'Ainda não há instrumentos importados.' 
+                                : 'Tente ajustar os filtros de busca.'}
+                        </p>
+                    </div>
+                ) : (
+                    instrumentosFiltrados.map((instrumento) => (
                     <div key={instrumento.nome_instrumento} className={styles.instrumentoCard}>
                         <div className={styles.instrumentoInfo}>
                             <span className={styles.nomeArquivo}>{instrumento.nome_instrumento}</span>
@@ -311,7 +321,8 @@ function Instrumentos() {
                             )}
                         </div>
                     </div>
-                ))}
+                    ))
+                )}
             </div>
 
             {/* Paginação */}

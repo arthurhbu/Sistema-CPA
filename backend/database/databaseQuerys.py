@@ -15,6 +15,15 @@ def df_cursos_por_centro(collection_cursos_e_centros: Collection, ano: int, cent
         Raise: A função não levanta nenhuma exceção, apenas repassa as exceções que ocorreram antes.
     """
     try:
+        # Verificação prévia de dados
+        count_centro_ano = collection_cursos_e_centros.count_documents({
+            'ano_referencia': ano, 
+            'centro_de_ensino': centro_de_ensino
+        })
+        
+        if count_centro_ano == 0:
+            return {'Success': False, 'error': f'Nenhum curso encontrado para centro "{centro_de_ensino}" no ano {ano}'}
+        
         results = list(collection_cursos_e_centros.aggregate([
         {
             "$lookup": {
@@ -45,6 +54,7 @@ def df_cursos_por_centro(collection_cursos_e_centros: Collection, ano: int, cent
         {
             "$project": {
                 "_id": 0,
+                "cd_curso": "$_id",  # Incluir o código do curso no resultado
                 "nm_curso": 1,
                 "centro_de_ensino": 1,
                 "respondentes": "$total_do_curso",
@@ -72,9 +82,13 @@ def df_cursos_por_centro(collection_cursos_e_centros: Collection, ano: int, cent
             "$sort": {"nm_curso": 1}
         }
         ]))
+        
+        if len(results) == 0:
+            return {'Success': False, 'error': f'Agregacao retornou vazia para centro "{centro_de_ensino}" ano {ano}. Possivel problema: nenhum codigo de curso coincide entre instrumento e cursos_e_centros'}
+        
         return {'Success': True, 'resultado': results}
     except Exception as e:
-        return {'Success': False, 'error': f'Ocorreu um erro ao tentar criar Collection cursos_por_centro. Erro: {e}'}
+        return {'Success': False, 'error': f'Erro na agregacao MongoDB para centro "{centro_de_ensino}" ano {ano}: {str(e)} (Tipo: {type(e).__name__})'}
 
 
 def df_centro_por_ano(collection_instrumento: Collection, database: Database, ano: int):
@@ -203,7 +217,7 @@ def df_centro_por_ano(collection_instrumento: Collection, database: Database, an
         centro_por_ano_temp.drop()
         return {'Success': True, 'message': 'Finalizado'}
     except Exception as e: 
-        return {'Success': False, 'error': f'Ocorreu um erro ao tentar criar Collection centro_por_ano: {e}'}
+        return {'Success': False, 'error': f'Erro na criacao de centro_por_ano (ano {ano}): {str(e)} (Tipo: {type(e).__name__})'}
     
 def update_progresso(progresso: Database, etapa: str, resposta: str):
     if resposta == 'Finalizado':

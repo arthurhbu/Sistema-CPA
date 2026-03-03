@@ -99,7 +99,8 @@ class InstrumentoService:
         
     def download_introducao_instrumento(self, instrumento: str): 
         try:
-            introducao_path = os.path.join('relatorio_componentes', instrumento, 'introducao')
+            normalized_instrumento = normalize_database_name(instrumento)
+            introducao_path = os.path.join('relatorio_componentes', normalized_instrumento, 'introducao')
             
             if not os.path.exists(introducao_path):
                 return not_found_error('Diretório'), False
@@ -120,7 +121,8 @@ class InstrumentoService:
         
     def download_conclusao_instrumento(self, instrumento: str):
         try:
-            conclusao_path = os.path.join('relatorio_componentes', instrumento, 'conclusao')
+            normalized_instrumento = normalize_database_name(instrumento)
+            conclusao_path = os.path.join('relatorio_componentes', normalized_instrumento, 'conclusao')
             
             if not os.path.exists(conclusao_path):
                 return not_found_error('Diretório'), False
@@ -143,7 +145,8 @@ class InstrumentoService:
         try: 
             intro_filename = intro_file.filename
             
-            introducao_path = os.path.join('relatorio_componentes', instrumento, 'introducao')
+            normalized_instrumento = normalize_database_name(instrumento)
+            introducao_path = os.path.join('relatorio_componentes', normalized_instrumento, 'introducao')
             
             if not os.path.exists(introducao_path):
                 return not_found_error('Diretório'), False
@@ -167,7 +170,8 @@ class InstrumentoService:
         try: 
             concl_filename = concl_file.filename
             
-            conclusao_path = os.path.join('relatorio_componentes', instrumento, 'conclusao')
+            normalized_instrumento = normalize_database_name(instrumento)
+            conclusao_path = os.path.join('relatorio_componentes', normalized_instrumento, 'conclusao')
             
             if not os.path.exists(conclusao_path):
                 return not_found_error('Diretório'), False

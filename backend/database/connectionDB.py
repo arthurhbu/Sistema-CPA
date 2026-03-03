@@ -3,6 +3,7 @@ from pymongo import (
     errors)
 from pymongo.database import Database
 from database.pythonMongoConfig import readDBConfig
+from api.utils_api import normalize_database_name
 
 
 def connection(db_config: dict) -> MongoClient:
@@ -57,8 +58,7 @@ def connectToDatabase(database_name: str, client: MongoClient) -> tuple[str, Dat
         None:
     """
     print("Connection Established with MongoDB")
-    filterDBName = database_name.replace(" ", "")
-    filterDBName = filterDBName.replace(".csv", "")
+    filterDBName = normalize_database_name(database_name)
     database = client[filterDBName]
     print(filterDBName)
     return filterDBName, database

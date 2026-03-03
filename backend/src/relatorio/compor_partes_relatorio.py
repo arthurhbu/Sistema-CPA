@@ -104,7 +104,7 @@ def compor_introducao(collection_centro_por_ano: Collection,collection_cursos_po
         return {'Success': False, 'Error': f'Ocorreu um erro ao tentar compor introdução: {e}'}
         
 
-def compor_conclusao(collection_name_cursos_por_centro: Collection, ano: int, curso: str, modal: str, nome_instrumento: str) -> None:
+def compor_conclusao(collection_name_cursos_por_centro: Collection, ano: int, cd_curso: int, modal: str, nome_instrumento: str) -> None:
     """
     Compõe o arquivo de conclusão do relatório, baseado no tipo de instrumento que está sendo passado, sendo classificados em: Egresso, EAD, Discente, Docente e Tecnico. Cada um deles tem um template de conclusão diferente por isso o uso de um "Switch case" para escolher o template correto.
 
@@ -112,7 +112,7 @@ def compor_conclusao(collection_name_cursos_por_centro: Collection, ano: int, cu
         collection_name_cursos_por_centro (Collection): Collection que contém as informações do dataset cursos_por_centro.
         arquivo_conclusao (str): Nome do arquivo markdown de conclusão selecionado.
         ano (int): Inteiro contendo o ano do relatório.
-        curso (str): Nome do curso que está sendo gerado a conclusão.
+        cd_curso (int): Código do curso que está sendo gerado a conclusão.
         modal (str): Modalidade/Tipo do instrumento que será gerado a introdução.
     Returns:
         dict: Retorna um dict informando a falha e o erro ou sucesso.
@@ -129,11 +129,18 @@ def compor_conclusao(collection_name_cursos_por_centro: Collection, ano: int, cu
             with open(arquivo_path, 'r', encoding='utf-8') as f:
                 template = f.read()
             renderer = pystache.Renderer()
+            respondentes_total = 0
+            matriculas_totais = 0
             for document in collection_name_cursos_por_centro.find():
-                respondentes_total = document['respondentes']
-                matriculas_totais = document['matriculados']
+                respondentes_total += document['respondentes']
+                matriculas_totais += document['matriculados']
 
-            participacao_curso = collection_name_cursos_por_centro.find_one({'nm_curso': curso})['porcentagem']
+            # MUDANÇA: Usar cd_curso em vez de nm_curso
+            doc_curso = collection_name_cursos_por_centro.find_one({'cd_curso': cd_curso})
+            if doc_curso is not None and 'porcentagem' in doc_curso:
+                participacao_curso = doc_curso['porcentagem']
+            else:
+                participacao_curso = 0
             
             participacao_uem = round(100 * (respondentes_total/matriculas_totais), 2)
             conclusao = renderer.render(template, {'ano': ano, 'curso': '{{curso}}', 'participacao_uem': ponto_2_virgula(participacao_uem), 'participacao_curso': ponto_2_virgula(participacao_curso)})
@@ -144,9 +151,11 @@ def compor_conclusao(collection_name_cursos_por_centro: Collection, ano: int, cu
             with open(arquivo_path, 'r', encoding='utf-8') as f:
                 template = f.read()
             renderer = pystache.Renderer()
+            respondentes_total = 0
+            matriculas_totais = 0
             for document in collection_name_cursos_por_centro.find():
-                respondentes_total = document['respondentes']
-                matriculas_totais = document['matriculados']
+                respondentes_total += document['respondentes']
+                matriculas_totais += document['matriculados']
 
             participacao_uem = round(100 * (respondentes_total/matriculas_totais), 2)
             
@@ -158,9 +167,11 @@ def compor_conclusao(collection_name_cursos_por_centro: Collection, ano: int, cu
             with open(arquivo_path, 'r', encoding='utf-8') as f:
                 template = f.read()
             renderer = pystache.Renderer()
+            respondentes_total = 0
+            matriculas_totais = 0
             for document in collection_name_cursos_por_centro.find():
-                respondentes_total = document['respondentes']
-                matriculas_totais = document['matriculados']
+                respondentes_total += document['respondentes']
+                matriculas_totais += document['matriculados']
 
             participacao_uem = round(100 * (respondentes_total/matriculas_totais), 2)
             

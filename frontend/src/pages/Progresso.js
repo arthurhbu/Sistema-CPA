@@ -121,7 +121,10 @@ const Processo = () => {
                         <ul className={Styles.checkList}>
                             {Object.keys(progresso).length > 0 ? ( 
                                 Object.keys(progresso)
-                                .filter(key => key !== 'Importado' && key !== 'Gerado')
+                                .filter(key => {
+                                    const normalizedKey = key.trim().toLowerCase();
+                                    return normalizedKey !== 'importado' && normalizedKey !== 'gerado';
+                                })
                                 .reverse() 
                                 .map((key) => (
                                     progresso[key] === 'Finalizado' ? (

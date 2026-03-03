@@ -1,16 +1,19 @@
 .footer { 
     background-color: #000b1f;
     color: #FFF;
-    text-align: center;
-    padding: 30px 0;
+    text-align: left;
+    padding: 20px 25px;
     position: relative; /* Change to fixed if you want it always visible */
     width: 100%;
+    box-sizing: border-box;
 }
 
 .social_list { 
     display: flex;
     justify-content: center;
     list-style-type: none;
+    padding: 0;
+    margin: 0;
 }
 
 .social_list li{ 
@@ -27,15 +30,56 @@
 }
 
 .copy_right { 
-    margin-top: 2em;
+    margin-top: 0.5em;
     display: flex;
-    /* justify-content: center; */
+    justify-content: flex-start;
     align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
 }
 
 .copy_right span { 
-    font-size: 20px;
+    font-size: 18px;
     font-weight: bold;
     color: white;
-    margin-right: 10px;
+    margin-right: 5px;
+}
+
+.copy_right img {
+    max-width: 110px;
+    height: auto;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .footer {
+        padding: 16px 20px;
+    }
+    
+    .copy_right {
+        margin-top: 0.3em;
+        gap: 10px;
+    }
+    
+    .copy_right span {
+        font-size: 15px;
+    }
+    
+    .copy_right img {
+        max-width: 85px;
+    }
+}
+
+@media (max-width: 480px) {
+    .footer {
+        padding: 13px 15px;
+    }
+    
+    .copy_right span {
+        font-size: 13px;
+    }
+    
+    .copy_right img {
+        max-width: 70px;
+    }
 }

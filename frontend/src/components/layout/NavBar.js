@@ -10,7 +10,7 @@ function NavBar() {
             <nav className={styles.navbar}>
                 
 
-                    <img alt='cpa_logo' src={CPA_logo} style={{maxWidth:'10vw'}}></img>
+                    <img alt='cpa_logo' src={CPA_logo} style={{maxWidth:'8vw', height: 'auto', objectFit: 'contain'}}></img>
                     <ul className={styles.list}>
                         <li className={styles.item}>
                             <Link to="/">Home</Link>
@@ -31,7 +31,7 @@ function NavBar() {
                             <Link to='/gerar_pdfs'>Gerar PDFs</Link>
                         </li>
                     </ul>
-                    <img alt='uem_logo' src={UEM_logo} style={{maxWidth:'10vw'}}></img>
+                    <img alt='uem_logo' src={UEM_logo} style={{maxWidth:'8vw', height: 'auto', objectFit: 'contain'}}></img>
             </nav>
         </div>
     );

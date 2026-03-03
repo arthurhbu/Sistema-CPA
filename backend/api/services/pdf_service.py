@@ -4,6 +4,7 @@ from api.utils.error_handlers import *
 import logging
 import requests
 from api.gmail_api.gmail_api_controller import send_email_via_gmail_api
+from api.gmail_api.error_email_builder import ErrorEmailBuilder
 from threading import Thread
 
 logger = logging.getLogger(__name__)
@@ -97,34 +98,40 @@ class PdfService:
                 with open(path, 'wb') as f:
                     f.write(response.content)
        
-                send_email_via_gmail_api(
-                    '', 
-                    'sec-cpa@uem.br', 
-                    'PDFs dos relatórios.', 
-                    f'Os PDFs dos relatórios foram gerados com sucesso e já estão disponíveis em nosso sistema para download. \n\nSistema CPA'
+                # Usar o novo sistema de notificação estruturada
+                email_data = ErrorEmailBuilder.build_success_notification(
+                    instrumento=id_instrumento_pdf.replace('_pdf', ''),
+                    operation='Geracao de PDFs',
+                    context={'status': 'Disponivel para download', 'arquivo': f'{id_instrumento_pdf}.zip'}
                 )
+                send_email_via_gmail_api('', 'sec-cpa@uem.br', email_data['subject'], email_data['body'])
                 
             else:
-                send_email_via_gmail_api(
-                    '', 'sec-cpa@uem.br', 
-                    'Ocorreu um erro ao tentar gerar os PDFs', 
-                    f'Ocorreu um erro ao tentar gerar os PDFs dos relatórios.\n\n Confira o erro que ocorreu na api para gerar os PDFs: \n\n {response.text} \n {response.status_code}'
+                # Usar o novo sistema de emails estruturados
+                email_data = ErrorEmailBuilder.build_pdf_generation_error(
+                    instrumento=id_instrumento_pdf.replace('_pdf', ''),
+                    error_details=f"Erro HTTP {response.status_code}: {response.text}",
+                    context={'status_code': response.status_code}
                 )
+                send_email_via_gmail_api('', 'sec-cpa@uem.br', email_data['subject'], email_data['body'])
                 
         except requests.exceptions.Timeout:
-            send_email_via_gmail_api(
-                '', 
-                'sec-cpa@uem.br', 
-                'Ocorreu um erro ao tentar gerar os PDFs', 
-                f'Ocorreu uma exceção de timeout, ou seja, o tempo limite de requisição foi excedido. \n\n Confira o sistema para entender melhor o problema'
-            )          
+            # Usar o novo sistema de emails estruturados
+            email_data = ErrorEmailBuilder.build_pdf_generation_error(
+                instrumento=id_instrumento_pdf.replace('_pdf', ''),
+                error_details="Timeout na requisicao - tempo limite excedido",
+                context={'timeout': True}
+            )
+            send_email_via_gmail_api('', 'sec-cpa@uem.br', email_data['subject'], email_data['body'])          
             
         except requests.exceptions.RequestException as e:
-            send_email_via_gmail_api(
-                '', 'sec-cpa@uem.br', 
-                'Ocorreu um erro ao tentar gerar os PDFs', 
-                f'Ocorreu um erro na requisição, confira a exceção: \n\n {str(e)}'
-            )      
+            # Usar o novo sistema de emails estruturados
+            email_data = ErrorEmailBuilder.build_pdf_generation_error(
+                instrumento=id_instrumento_pdf.replace('_pdf', ''),
+                error_details=f"Erro na requisicao: {str(e)}",
+                context={'tipo_erro': 'RequestException'}
+            )
+            send_email_via_gmail_api('', 'sec-cpa@uem.br', email_data['subject'], email_data['body'])      
         finally: 
             if os.path.exists(file_path):
                 os.remove(file_path)

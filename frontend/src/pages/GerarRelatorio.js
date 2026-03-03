@@ -85,7 +85,6 @@ function GerarRelatorio(){
         setIsLoadingZips(true);
 
         try {
-
             const response = await fetch(`${process.env.REACT_APP_BACKEND}/api/relatorios/zips`, {
                 method: 'GET',
             })
@@ -97,13 +96,12 @@ function GerarRelatorio(){
             const resData = await response.json();
 
             if(resData.error) {
-                // throw new Error(resData.error)
                 console.log(resData.error)
             }
             
             setAvaliableZips(resData.zips || []);
         } catch(e){
-            throw new Error('Erro ao tentar fazer requisição', e)
+            console.error('Erro ao tentar fazer requisição', e);
         } finally { 
             setIsLoadingZips(false);
         }
@@ -313,8 +311,11 @@ function GerarRelatorio(){
 
             setPopupMessage('ZIP deletado com sucesso!');
             setPopupVisible(true);
+            fetchZipsDisponiveis();
         } catch (e) {
             console.error('Erro ao tentar deletar o ZIP', e);
+            setPopupMessage('Erro ao deletar o ZIP');
+            setPopupVisible(true);
         }
 
     }
@@ -404,7 +405,7 @@ function GerarRelatorio(){
                                 Baixar introdução
                             </button>
                             <div className={styles.containerSubstituirIntroducao}>
-                                <p style={{width:'15%'}}>Deseja substituir introdução?</p>
+                                <p>Deseja substituir introdução?</p>
                                 <div className={styles.containerImportNewIntroducao}>
                                     <input
                                         type='file'
@@ -444,7 +445,7 @@ function GerarRelatorio(){
                                 Baixar conclusão
                             </button>
                             <div className={styles.containerSubstituirIntroducao}>
-                                <p style={{width:'15%'}}>Deseja substituir conclusão?</p>
+                                <p>Deseja substituir conclusão?</p>
                                 <div className={styles.containerImportNewIntroducao}>
                                     <input
                                         type='file'
@@ -485,12 +486,12 @@ function GerarRelatorio(){
             <div className={styles.containerRelatoriosZip}>
                 <div className={styles.downloaded_zip_box}>
                     {/* Infos iniciais e botão para atualizar os relatórios gerados */}
-                    <div style={{display: 'flex', justifyContent: 'space-between'}}>    
-                        <div style={{marginBottom: '20px'}}>             
+                    <div className={styles.zip_box_header}>
+                        <div>             
                             <p className={styles.downloaded_zip_box_title}>Relatórios Gerados</p>
                             <p className={styles.downloaded_zip_box_text}>Arquivos ZIPs dos relatórios disponíveis para download: </p>
                         </div>   
-                        <div style={{marginLeft: '20px', display: 'flex', alignItems: 'center'}}>
+                        <div className={styles.zip_box_refresh}>
                         <p className={styles.downloaded_zip_box_text}>Atualizar lista de ZIPs</p>
                         <button 
                             onClick={fetchZipsDisponiveis}
@@ -505,44 +506,59 @@ function GerarRelatorio(){
                         </div>
                     </div>
 
-                {/* Tabela contendo informações gerais dos relatórios e botões para download e exclusão */}
+                {/* Lista de cards contendo informações gerais dos relatórios e botões para download e exclusão */}
                 {isLoadingZips ? (
-                    <p className="text-gray-500">Carregando lista de ZIPs...</p>
+                    <div className={styles.loading_container}>
+                        <p className={styles.loading_text}>Carregando lista de ZIPs...</p>
+                    </div>
+                    ) : avaliableZips.length === 0 ? (
+                    <div className={styles.empty_state}>
+                        <p className={styles.empty_state_text}>Nenhum relatório gerado ainda.</p>
+                        <p className={styles.empty_state_subtext}>Gere relatórios usando o formulário acima.</p>
+                    </div>
                     ) : (
-                    <div>
-                        <table className={styles.downloaded_zip_table}>
-                        <thead>
-                            <tr style={{width: '100%', display: 'flex', justifyContent: 'space-between'}}>
-                            <th className={styles.header_table}>Nome</th>
-                            <th className={styles.header_table}>Tamanho</th>
-                            <th className={styles.header_table}>Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {avaliableZips.map((zip) => (
-                            <tr key={zip.id} className={styles.table_body}>
-                                <td className={styles.tuple_table}>{zip.filename}</td>
-                                <td className={styles.tuple_table}>{formatFileSize(zip.size)}</td>
-                                <td className={styles.tuple_table}>
-                                    <div style={{display: 'flex'}}>
-                                        <button
-                                            onClick={() => downloadZip(zip.id)}
-                                            className={styles.button_download}
-                                        >
-                                            Baixar
-                                        </button>
-                                        <button 
-                                            className={styles.button_delete}
-                                            onClick={() => {deleteZip(zip.id)}}
-                                        >
-                                            <img style={{width: '1.5rem'}} src={delete_icon} alt='delete_icon'></img>
-                                        </button>
+                    <div className={styles.zip_cards_container}>
+                        {avaliableZips.map((zip) => (
+                            <div key={zip.id} className={styles.zip_card}>
+                                <div className={styles.zip_card_info}>
+                                    <div className={styles.zip_card_icon}>
+                                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                            <path d="M14 2V8H20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                        </svg>
                                     </div>
-                                </td>
-                            </tr>
-                            ))}
-                        </tbody>
-                        </table>
+                                    <div className={styles.zip_card_details}>
+                                        <p className={styles.zip_card_filename}>{zip.filename}</p>
+                                        <p className={styles.zip_card_size}>{formatFileSize(zip.size)}</p>
+                                    </div>
+                                </div>
+                                <div className={styles.zip_card_actions}>
+                                    <button
+                                        onClick={() => downloadZip(zip.id)}
+                                        className={styles.button_download}
+                                        title="Baixar arquivo"
+                                    >
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                            <path d="M7 10L12 15L17 10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                            <path d="M12 15V3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                        </svg>
+                                        Baixar
+                                    </button>
+                                    <button 
+                                        className={styles.button_delete}
+                                        onClick={() => {
+                                            if (window.confirm(`Tem certeza que deseja deletar ${zip.filename}?`)) {
+                                                deleteZip(zip.id);
+                                            }
+                                        }}
+                                        title="Deletar arquivo"
+                                    >
+                                        <img src={delete_icon} alt='delete_icon'/>
+                                    </button>
+                                </div>
+                            </div>
+                        ))}
                     </div>
                     )}
                 </div>
