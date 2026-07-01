@@ -34,7 +34,8 @@ def create_report(pergunta: str, dict_opt_pct: dict) -> str:
     temp_message: str = table_interpretation_text_generator(pergunta, dict_opt_pct)
 
     data = {
-        'model': 'gemma2',
+        # 'model': 'gemma2',
+        'model': 'gemma2:2b',
         'prompt': f"Reescreva na forma de um parágrafo sucinto iniciando com a frase {inicio_textual} o seguinte texto: \n {temp_message} ",
         'stream': False
     }
