@@ -35,7 +35,7 @@ def create_report(pergunta: str, dict_opt_pct: dict) -> str:
 
     data = {
         # 'model': 'gemma2',
-        'model': 'gemma2:2b',
+        'model': 'gemma2',
         'prompt': f"Reescreva na forma de um parágrafo sucinto iniciando com a frase {inicio_textual} o seguinte texto: \n {temp_message} ",
         'stream': False
     }

@@ -14,12 +14,12 @@ class CSVManagment:
 
     def find_path() -> Path:
         """
-        Função que retorna o caminho do diretório que está o arquivo csv
+        Função que retorna o caminho da pasta de CSVs utilizada pelo sistema.
 
         Returns:
-            Path: Caminho para o diretório do arquivo csv.
+            Path: Caminho para a pasta data/csv.
         """
-        path: Path = Path(__file__).parent.resolve()
+        path: Path = Path(__file__).resolve().parents[3] / 'data' / 'csv'
         return path
     
     def csv_filter_pos_graduacao(csv_file_name: str) -> None:
@@ -55,7 +55,7 @@ class CSVManagment:
 
         dir_arquivo: Path = CSVManagment.find_path()
 
-        df_principal: DataFrame = pd.read_csv(f'{dir_arquivo}/CSVs/{csv_file_name}', sep=',', header = 0)
+        df_principal: DataFrame = pd.read_csv(f'{dir_arquivo}/{csv_file_name}', sep=',', header = 0)
 
         columns_to_drop_main_csv: list = df_principal.columns[columns_positions_toDrop_mainCsv]
         df_principal = df_principal.drop(columns=columns_to_drop_main_csv)
@@ -79,7 +79,7 @@ class CSVManagment:
         df_principal['nm_disciplina'] = df_principal['nm_disciplina'].replace(0, '-')
         df_principal['nm_disciplina'] = df_principal['nm_disciplina'].replace('0', '-')
             
-        df_principal.to_csv(f'{dir_arquivo}/CSVs/csvFiltrado.csv', index=False)
+        df_principal.to_csv(f'{dir_arquivo}/csvFiltrado.csv', index=False)
     
     def csv_filter_docentes_and_tecnicos(csv_file_name) -> None:
         """
@@ -110,7 +110,7 @@ class CSVManagment:
         index_columns_to_drop: list = [0,1,2,3,4,14]
         
         dir_arquivo: Path = CSVManagment.find_path()
-        df_principal: DataFrame = pd.read_csv(f'{dir_arquivo}/CSVs/{csv_file_name}', sep=',', header = 0)
+        df_principal: DataFrame = pd.read_csv(f'{dir_arquivo}/{csv_file_name}', sep=',', header = 0)
         
         columns_to_drop: list = df_principal.columns[index_columns_to_drop]
         df_principal = df_principal.drop(columns=columns_to_drop)
@@ -126,7 +126,7 @@ class CSVManagment:
         df_principal.insert(2, 'centro_de_ensino', '-')
         df_principal.insert(7,'cd_disciplina', 0 )
         df_principal.insert(8, 'nm_disciplina', '-')
-        df_principal.to_csv(f'{dir_arquivo}/CSVs/csvFiltrado.csv', index=False) 
+        df_principal.to_csv(f'{dir_arquivo}/csvFiltrado.csv', index=False) 
         
     def csv_filter_discentes_and_ead(csv_file_name) -> None:
         """
@@ -163,8 +163,8 @@ class CSVManagment:
             
         dir_arquivo: Path = CSVManagment.find_path()
         
-        df_principal: DataFrame = pd.read_csv(f'{dir_arquivo}/CSVs/{csv_file_name}', sep=',', header = 0)
-        df_cursoCentro: DataFrame = pd.read_csv(f'{dir_arquivo}/CSVs/cursos_e_centros.csv', sep=',', header = 0)
+        df_principal: DataFrame = pd.read_csv(f'{dir_arquivo}/{csv_file_name}', sep=',', header = 0)
+        df_cursoCentro: DataFrame = pd.read_csv(f'{dir_arquivo}/cursos_e_centros.csv', sep=',', header = 0)
         
         if len(df_principal.columns) < header_graduacao:
             columns_to_drop_csv_p: list = df_principal.columns[pos_drop_column_csvP_sem_serie]
@@ -196,7 +196,7 @@ class CSVManagment:
         df_final.rename(columns={df_final.columns[1]: 'nm_curso'}, inplace=True)
         df_final.rename(columns={df_final.columns[2]: 'centro_de_ensino'}, inplace=True)
         
-        df_final.to_csv(f'{dir_arquivo}/CSVs/csvFiltrado.csv', index=False) 
+        df_final.to_csv(f'{dir_arquivo}/csvFiltrado.csv', index=False) 
 
     def csv_filter_egressos(csv_file_name) -> None:
         """
@@ -230,8 +230,8 @@ class CSVManagment:
 
         dir_arquivo: Path = CSVManagment.find_path()
         
-        df_principal: DataFrame = pd.read_csv(f'{dir_arquivo}/CSVs/{csv_file_name}', sep=',', header = 0)
-        df_cursoCentro: DataFrame = pd.read_csv(f'{dir_arquivo}/CSVs/cursos_e_centros.csv', sep=',', header = 0)
+        df_principal: DataFrame = pd.read_csv(f'{dir_arquivo}/{csv_file_name}', sep=',', header = 0)
+        df_cursoCentro: DataFrame = pd.read_csv(f'{dir_arquivo}/cursos_e_centros.csv', sep=',', header = 0)
 
         columns_to_drop_main_csv: list = df_principal.columns[columns_positions_toDrop_mainCsv]
         df_principal = df_principal.drop(columns=columns_to_drop_main_csv)
@@ -261,7 +261,7 @@ class CSVManagment:
         df_final.rename(columns={df_final.columns[1]: 'nm_curso'}, inplace=True)
         df_final.rename(columns={df_final.columns[2]: 'centro_de_ensino'}, inplace=True)
         
-        df_final.to_csv(f'{dir_arquivo}/CSVs/csvFiltrado.csv', index=False)
+        df_final.to_csv(f'{dir_arquivo}/csvFiltrado.csv', index=False)
     
     @staticmethod
     def validate_csv_data(df: DataFrame, required_columns: List[str], expected_types: Dict[str, type]) -> Tuple[bool, str]:
@@ -333,7 +333,7 @@ class CSVManagment:
             
             filterCsv = 'csvFiltrado.csv'
             dirArquivo = CSVManagment.find_path()
-            df = pd.read_csv(f'{dirArquivo}/CSVs/{filterCsv}', sep=',', header = 0)
+            df = pd.read_csv(f'{dirArquivo}/{filterCsv}', sep=',', header = 0)
 
             cabecalho = [
                 'cd_curso', 
@@ -466,7 +466,7 @@ class CSVManagment:
         try: 
             csvArchive = 'cursos_e_centros.csv'
             dirArquivo = CSVManagment.find_path()
-            df = pd.read_csv(f'{dirArquivo}/CSVs/{csvArchive}', sep=',', header = 0)
+            df = pd.read_csv(f'{dirArquivo}/{csvArchive}', sep=',', header = 0)
             
             cabecalho = [
                 'cd_curso',
@@ -564,7 +564,7 @@ class CSVManagment:
         try:
             csvArchive = 'centros_e_diretores.csv'
             dirArquivo = CSVManagment.find_path()
-            df = pd.read_csv(f'{dirArquivo}/CSVs/{csvArchive}', sep=',', header = 0)
+            df = pd.read_csv(f'{dirArquivo}/{csvArchive}', sep=',', header = 0)
             
             cabecalho = [
                 'centro_de_ensino',

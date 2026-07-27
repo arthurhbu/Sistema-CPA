@@ -274,25 +274,25 @@
 26,3419,CTC,Ciência da Computação,216,2022
 26,3419,CTC,Ciência da Computação,220,2021
 26,3419,CTC,Ciência da Computação,219,2020
-56,,EAD,Pedagogia,441,2024
+56,0,EAD,Pedagogia,441,2024
 43,58187,CTC,Design,119,2024
 43,58187,CTC,Design,121,2023
 43,58187,CTC,Design,125,2022
 43,58187,CTC,Design,134,2021
 43,58187,CTC,Design,120,2020
-56,,EAD,Pedagogia,378,2023
+56,0,EAD,Pedagogia,378,2023
 70,1148389,CTC,Engenharia Ambiental (CAU),53,2024
 70,1148389,CTC,Engenharia Ambiental (CAU),63,2023
 70,1148389,CTC,Engenharia Ambiental (CAU),60,2022
 70,1148389,CTC,Engenharia Ambiental (CAU),67,2021
 70,1148389,CTC,Engenharia Ambiental (CAU),102,2020
-56,,EAD,Pedagogia,248,2022
+56,0,EAD,Pedagogia,248,2022
 9,3402,CTC,Engenharia Civil,399,2024
 9,3402,CTC,Engenharia Civil,409,2023
 9,3402,CTC,Engenharia Civil,448,2022
 9,3402,CTC,Engenharia Civil,448,2021
 9,3402,CTC,Engenharia Civil,450,2020
-56,,EAD,Pedagogia,393,2021
+56,0,EAD,Pedagogia,393,2021
 74,150159,CTC,Engenharia Civil (CAU),111,2024
 74,150159,CTC,Engenharia Civil (CAU),126,2023
 74,150159,CTC,Engenharia Civil (CAU),151,2022
@@ -379,57 +379,57 @@
 75,150158,CTC,Engenharia Elétrica,202,2025
 56,,EAD,Pedagogia,579,2020
 57,121295,EAD,Física ,69,2025
-57,,EAD,Física ,56,2024
-57,,EAD,Física ,100,2023
-57,,EAD,Física ,37,2022
+57,0,EAD,Física ,56,2024
+57,0,EAD,Física ,100,2023
+57,0,EAD,Física ,37,2022
 76,150157,CTC,Engenharia de Produção (CRG),58,2025
-57,,EAD,Física ,95,2021
-57,,EAD,Física ,50,2020
+57,0,EAD,Física ,95,2021
+57,0,EAD,Física ,50,2020
 58,150204,EAD,Ciências Biológicas,222,2025
-58,,EAD,Ciências Biológicas,125,2024
-58,,EAD,Ciências Biológicas,186,2023
-58,,EAD,Ciências Biológicas,91,2022
-58,,EAD,Ciências Biológicas,209,2021
-58,,EAD,Ciências Biológicas,144,2020
+58,0,EAD,Ciências Biológicas,125,2024
+58,0,EAD,Ciências Biológicas,186,2023
+58,0,EAD,Ciências Biológicas,91,2022
+58,0,EAD,Ciências Biológicas,209,2021
+58,0,EAD,Ciências Biológicas,144,2020
 59,1147008,EAD,Letras,306,2025
-59,,EAD,Letras,196,2024
-59,,EAD,Letras,226,2023
+59,0,EAD,Letras,196,2024
+59,0,EAD,Letras,226,2023
 79,1165576,CCH,Pedagogia (PARFOR),29,2025
-59,,EAD,Letras,154,2022
-59,,EAD,Letras,322,2021
-59,,EAD,Letras,224,2020
+59,0,EAD,Letras,154,2022
+59,0,EAD,Letras,322,2021
+59,0,EAD,Letras,224,2020
 60,150205,EAD,História  ,260,2025
-60,,EAD,História  ,138,2024
-60,,EAD,História  ,144,2023
-60,,EAD,História  ,12,2022
-60,,EAD,História  ,19,2021
-60,,EAD,História  ,117,2020
-77,,EAD,Administração Pública,57,2024
-77,,EAD,Administração Pública,75,2023
-77,,EAD,Administração Pública,147,2022
-77,,EAD,Administração Pública,314,2021
-77,,EAD,Administração Pública,256,2020
+60,0,EAD,História  ,138,2024
+60,0,EAD,História  ,144,2023
+60,0,EAD,História  ,12,2022
+60,0,EAD,História  ,19,2021
+60,0,EAD,História  ,117,2020
+77,0,EAD,Administração Pública,57,2024
+77,0,EAD,Administração Pública,75,2023
+77,0,EAD,Administração Pública,147,2022
+77,0,EAD,Administração Pública,314,2021
+77,0,EAD,Administração Pública,256,2020
 77,1134434,EAD,Administração Pública,154,2025
 85,122892,PARFOR,Música,10,2025
-85,,PARFOR,Música,12,2024
-85,,PARFOR,Música,16,2023
-85,,PARFOR,Música,0,2022
-85,,PARFOR,Música,0,2021
-85,,PARFOR,Música ,0,2020
+85,0,PARFOR,Música,12,2024
+85,0,PARFOR,Música,16,2023
+85,0,PARFOR,Música,0,2022
+85,0,PARFOR,Música,0,2021
+85,0,PARFOR,Música ,0,2020
 87,3399,PARFOR,História,0,2025
-87,,PARFOR,História,10,2024
+87,0,PARFOR,História,10,2024
 92,3422,CCE,Licenciatura em Ciências Naturais (CRG),0,2025
-87,,PARFOR,História,20,2023
-87,,PARFOR,História,0,2022
-87,,PARFOR,História,0,2021
-87,,PARFOR,História,0,2020
+87,0,PARFOR,História,20,2023
+87,0,PARFOR,História,0,2022
+87,0,PARFOR,História,0,2021
+87,0,PARFOR,História,0,2020
 91,1671138,EAD,Tecnologia em Gestão Pública,163,2025
 93,5000545,CCB,Biotecnologia,111,2025
-91,,EAD,Tecnologia em Gestão Pública,93,2024
-91,,EAD,Tecnologia em Gestão Pública,129,2023
-91,,EAD,Tecnologia em Gestão Pública,0,2022
-91,,EAD,Tecnologia em Gestão Pública,0,2021
-91,,EAD,Tecnologia em Gestão Pública,23,2020
+91,0,EAD,Tecnologia em Gestão Pública,93,2024
+91,0,EAD,Tecnologia em Gestão Pública,129,2023
+91,0,EAD,Tecnologia em Gestão Pública,0,2022
+91,0,EAD,Tecnologia em Gestão Pública,0,2021
+91,0,EAD,Tecnologia em Gestão Pública,23,2020
 97,1595645,CCE,Física Médica (CRG),44,2025
 96,1691382,CTC,Arquitetura e Urbanismo (CAU),34,2025
 94,1691383,CTC,Engenharia da Computação (CAU),27,2025

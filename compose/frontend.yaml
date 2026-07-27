@@ -2,7 +2,11 @@ services:
   flask-backend:
     image: quay.io/uemcpa/sistema-backend
     environment:  
-      FLASK_ENV: development
+      - FLASK_ENV: development
+    volumes:
+      - ../data/csv:/data/csv:rw
+    ports:
+      - 5000:5000
     networks: 
       - rede-cpa
     
@@ -13,7 +17,8 @@ services:
     depends_on:
       - flask-backend
     environment:
-      WATCHPACK_POLLING: true
+      - WATCHPACK_POLLING: true
+      - REACT_APP_BACKEND=${REACT_APP_BACKEND}
     networks: 
       - rede-cpa
 

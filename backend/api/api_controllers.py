@@ -12,7 +12,7 @@ import shutil
 filename: str = ''
 processing: bool = False
 
-CSV_UPLOAD_FOLDER = 'src/csv/CSVs'
+CSV_UPLOAD_FOLDER = '/data/csv'
 if not os.path.exists(CSV_UPLOAD_FOLDER):
     os.makedirs(CSV_UPLOAD_FOLDER)
 

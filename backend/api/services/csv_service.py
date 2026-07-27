@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 class CsvService: 
     
     def __init__(self):
-        self.CSV_UPLOAD_FOLDER = 'src/csv/CSVs'
+        self.CSV_UPLOAD_FOLDER = '/data/csv'
 
     
     def process_csv_import(self, csv_file, intro_file, concl_file, mongo_client):

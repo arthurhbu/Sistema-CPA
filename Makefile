@@ -17,11 +17,20 @@ login:
 	@echo "Fazendo login no repositório $(REPO)..."; \
 	podman login quay.io  --authfile ./auth.json; 
 
-push: login build
+push: build
 	@VERSION=$$(cat .version); \
 	echo "Pushing image $(REPO)/$(IMAGE_NAME)backend:$$VERSION"; \
-	podman push  --authfile ./auth.json $(IMAGE_NAME)backend:$$VERSION $(REPO)/$(IMAGE_NAME)backend:$$VERSION; \
-	podman push  --authfile ./auth.json $(IMAGE_NAME)backend:$$VERSION $(REPO)/$(IMAGE_NAME)backend:latest; \
+	podman push   $(IMAGE_NAME)backend:$$VERSION $(REPO)/$(IMAGE_NAME)backend:$$VERSION; \
+	podman push   $(IMAGE_NAME)backend:$$VERSION $(REPO)/$(IMAGE_NAME)backend:latest; \
 	echo "Pushing image $(REPO)/$(IMAGE_NAME)frontend:latest"; \
-	podman push  --authfile ./auth.json $(IMAGE_NAME)frontend:$$VERSION $(REPO)/$(IMAGE_NAME)frontend:$$VERSION; \
-	podman push  --authfile ./auth.json $(IMAGE_NAME)frontend:$$VERSION $(REPO)/$(IMAGE_NAME)frontend:latest; \
+	podman push   $(IMAGE_NAME)frontend:$$VERSION $(REPO)/$(IMAGE_NAME)frontend:$$VERSION; \
+	podman push   $(IMAGE_NAME)frontend:$$VERSION $(REPO)/$(IMAGE_NAME)frontend:latest; \
+
+push-dev: build
+	@VERSION=$$(cat .version); \
+	echo "Pushing image $(REPO)/$(IMAGE_NAME)backend:$$VERSION"; \
+	podman push   $(IMAGE_NAME)backend:$$VERSION $(REPO)/$(IMAGE_NAME)backend:$$VERSION; \
+	# podman push  --authfile ./auth.json $(IMAGE_NAME)backend:$$VERSION $(REPO)/$(IMAGE_NAME)backend:latest; \
+	echo "Pushing image $(REPO)/$(IMAGE_NAME)frontend:latest"; \
+	podman push  $(IMAGE_NAME)frontend:$$VERSION $(REPO)/$(IMAGE_NAME)frontend:$$VERSION; \
+	# podman push  --authfile ./auth.json $(IMAGE_NAME)frontend:$$VERSION $(REPO)/$(IMAGE_NAME)frontend:latest; \
