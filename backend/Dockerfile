@@ -1,4 +1,4 @@
-FROM docker.io/python:3.9-slim
+FROM docker.io/python:3.11-slim
 LABEL mainatainer="CPA <cpa@uem.br>"
 LABEL br.uem.cpa.sistema.backend.author="Arthur Ueda"
 # LABEL br.uem.cpa.sistema.backend.version="v010"

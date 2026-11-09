@@ -12,8 +12,11 @@ from googleapiclient.discovery import build
 from google.auth.transport.requests import Request
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-TOKEN_PATH = os.path.join(BASE_DIR, 'token.json')
-CREDENTIALS_PATH = os.path.join(BASE_DIR, 'credentials.json')
+REPO_ROOT = os.path.abspath(os.path.join(BASE_DIR, os.pardir, os.pardir, os.pardir, os.pardir))
+CREDENTIALS_DIR = os.path.join(REPO_ROOT, 'data', 'credentials')
+os.makedirs(CREDENTIALS_DIR, exist_ok=True)
+TOKEN_PATH = os.path.join(CREDENTIALS_DIR, 'token.json')
+CREDENTIALS_PATH = os.path.join(CREDENTIALS_DIR, 'credentials.json')
 
 SCOPES = ["https://www.googleapis.com/auth/gmail.send"]
 

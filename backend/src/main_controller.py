@@ -266,16 +266,16 @@ def inserir_e_processar_csv(ano: int, csv_Filename: str, modalidade: str, client
             collections['etapas'], 
             )
         
-        # if response_initalize_database_inserts['Success'] == False: 
-        #     # Usar o novo sistema de emails estruturados
-        #     email_data = ErrorEmailBuilder.build_csv_import_error(
-        #         instrumento=csv_Filename,
-        #         modalidade=modalidade,
-        #         etapa=response_initalize_database_inserts.get('Message', 'Importacao inicial'),
-        #         error_details=response_initalize_database_inserts['Error']
-        #     )
-        #     send_email_via_gmail_api('cpa@uem.br', 'sec-cpa@uem.br', email_data['subject'], email_data['body'])
-        #     return 'False'
+        if response_initalize_database_inserts['Success'] == False: 
+            # Usar o novo sistema de emails estruturados
+            email_data = ErrorEmailBuilder.build_csv_import_error(
+                instrumento=csv_Filename,
+                modalidade=modalidade,
+                etapa=response_initalize_database_inserts.get('Message', 'Importacao inicial'),
+                error_details=response_initalize_database_inserts['Error']
+            )
+            send_email_via_gmail_api('', 'sec-cpa@uem.br', email_data['subject'], email_data['body'])
+            return 'False'
         
         response_prepare_side_dataframes: dict = prepare_side_dataframes(
             database, 
@@ -286,18 +286,18 @@ def inserir_e_processar_csv(ano: int, csv_Filename: str, modalidade: str, client
             collections['progresso']
             )
         
-        # if response_prepare_side_dataframes['Success'] == False:
-        #     # Usar o novo sistema de emails estruturados
-        #     context = response_prepare_side_dataframes.get('Context', {})
-        #     email_data = ErrorEmailBuilder.build_collections_error(
-        #         instrumento=csv_Filename,
-        #         modalidade=modalidade,
-        #         ano=ano,
-        #         error_details=response_prepare_side_dataframes['Error'],
-        #         context=context
-        #     )
-        #     send_email_via_gmail_api('cpa@uem.br', 'sec-cpa@uem.br', email_data['subject'], email_data['body'])
-        #     return 'False'
+        if response_prepare_side_dataframes['Success'] == False:
+            # Usar o novo sistema de emails estruturados
+            context = response_prepare_side_dataframes.get('Context', {})
+            email_data = ErrorEmailBuilder.build_collections_error(
+                instrumento=csv_Filename,
+                modalidade=modalidade,
+                ano=ano,
+                error_details=response_prepare_side_dataframes['Error'],
+                context=context
+            )
+            send_email_via_gmail_api('', 'sec-cpa@uem.br', email_data['subject'], email_data['body'])
+            return 'False'
         
         return 'Inserção finalizada com sucesso'
 
