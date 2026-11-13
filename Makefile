@@ -15,7 +15,8 @@ build:
 
 login:
 	@echo "Fazendo login no repositório $(REPO)..."; \
-	podman login quay.io  --authfile ./auth.json; 
+	# podman login quay.io  --authfile ./auth.json; 
+	podman login quay.io 
 
 push: build
 	@VERSION=$$(cat .version); \

@@ -14,6 +14,7 @@ pymongo==4.7.3
 pandas==2.2.2
 # pandas==3.0.2
 numpy==2.0.0
+# numpy==2.4.4
 
 # Visualização e gráficos
 matplotlib==3.9.0

@@ -219,7 +219,7 @@ def generate_reports(collection_instrumento: Collection, collection_centro_por_a
             error_details=res_gerar_todos_relatorios['Error'],
             context=context
         )
-        send_email_via_gmail_api('', 'sec-cpa@uem.br', email_data['subject'], email_data['body'])
+        send_email_via_gmail_api('', 'cpa@uem.br', email_data['subject'], email_data['body'])
         return {'Success': False, 'error': res_gerar_todos_relatorios['Error']}
     
     res_zip_files: dict = zip_markdown_files(database_name, f'{id_instrumento}.zip')
@@ -231,7 +231,7 @@ def generate_reports(collection_instrumento: Collection, collection_centro_por_a
             error_details=f"Erro na compactacao de arquivos: {res_zip_files['Error']}",
             context={'etapa': 'Compactacao de arquivos ZIP'}
         )
-        send_email_via_gmail_api('', 'sec-cpa@uem.br', email_data['subject'], email_data['body'])
+        send_email_via_gmail_api('', 'cpa@uem.br', email_data['subject'], email_data['body'])
         return {'Success': False, 'error': res_zip_files['Error']}
         
     return {'Success': True}
@@ -274,7 +274,7 @@ def inserir_e_processar_csv(ano: int, csv_Filename: str, modalidade: str, client
                 etapa=response_initalize_database_inserts.get('Message', 'Importacao inicial'),
                 error_details=response_initalize_database_inserts['Error']
             )
-            send_email_via_gmail_api('', 'sec-cpa@uem.br', email_data['subject'], email_data['body'])
+            send_email_via_gmail_api('', 'cpa@uem.br', email_data['subject'], email_data['body'])
             return 'False'
         
         response_prepare_side_dataframes: dict = prepare_side_dataframes(
@@ -296,7 +296,7 @@ def inserir_e_processar_csv(ano: int, csv_Filename: str, modalidade: str, client
                 error_details=response_prepare_side_dataframes['Error'],
                 context=context
             )
-            send_email_via_gmail_api('', 'sec-cpa@uem.br', email_data['subject'], email_data['body'])
+            send_email_via_gmail_api('', 'cpa@uem.br', email_data['subject'], email_data['body'])
             return 'False'
         
         return 'Inserção finalizada com sucesso'

@@ -61,14 +61,14 @@ def setup_routes(app: Flask, client: MongoClient):
        
                 send_email_via_gmail_api(
                     '', 
-                    'sec-cpa@uem.br', 
+                    'cpa@uem.br', 
                     'PDFs dos relatórios.', 
                     f'Os PDFs dos relatórios foram gerados com sucesso e já estão disponíveis em nosso sistema para download. \n\nSistema CPA'
                 )
                 
             else:
                 send_email_via_gmail_api(
-                    '', 'sec-cpa@uem.br', 
+                    '', 'cpa@uem.br', 
                     'Ocorreu um erro ao tentar gerar os PDFs', 
                     f'Ocorreu um erro ao tentar gerar os PDFs dos relatórios.\n\n Confira o erro que ocorreu na api para gerar os PDFs: \n\n {response.text} \n {response.status_code}'
                 )
@@ -76,14 +76,14 @@ def setup_routes(app: Flask, client: MongoClient):
         except requests.exceptions.Timeout:
             send_email_via_gmail_api(
                 '', 
-                'sec-cpa@uem.br', 
+                'cpa@uem.br', 
                 'Ocorreu um erro ao tentar gerar os PDFs', 
                 f'Ocorreu uma exceção de timeout, ou seja, o tempo limite de requisição foi excedido. \n\n Confira o sistema para entender melhor o problema'
             )          
             
         except requests.exceptions.RequestException as e:
             send_email_via_gmail_api(
-                '', 'sec-cpa@uem.br', 
+                '', 'cpa@uem.br', 
                 'Ocorreu um erro ao tentar gerar os PDFs', 
                 f'Ocorreu um erro na requisição, confira a exceção: \n\n {str(e)}'
             )      
@@ -351,7 +351,7 @@ def setup_routes(app: Flask, client: MongoClient):
             res: dict = setup_to_generate_reports(instrumento, client, int(ano), introConcl, id_instrumento)
             
             if res['Success'] == True:
-                send_email_via_gmail_api('', 'sec-cpa@uem.br', 'Relatórios gerados', f'Os relatórios do instrumento {instrumento} foram gerados com sucesso.')
+                send_email_via_gmail_api('', 'cpa@uem.br', 'Relatórios gerados', f'Os relatórios do instrumento {instrumento} foram gerados com sucesso.')
                                 
                 return jsonify({
                     'success': True, 
@@ -601,6 +601,6 @@ def setup_routes(app: Flask, client: MongoClient):
             print(f'Erro no processamento: {e}')
         finally: 
             time.sleep(2)
-            send_email_via_gmail_api('', 'sec-cpa@uem.br', 'Processamento de CSV concluído', f'O processamento do CSV {filename} foi concluído com sucesso. \nO instrumento estará disponível para ser gerado os relatórios markdowns \n\nSISTEMA CPA.')
+            send_email_via_gmail_api('', 'cpa@uem.br', 'Processamento de CSV concluído', f'O processamento do CSV {filename} foi concluído com sucesso. \nO instrumento estará disponível para ser gerado os relatórios markdowns \n\nSISTEMA CPA.')
             processing = False
             

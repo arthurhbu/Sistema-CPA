@@ -4,7 +4,7 @@ services:
     environment:  
       - FLASK_ENV: development
     volumes:
-      - ../data/csv:/data/csv:rw
+      - ../data:/data:rw
     ports:
       - 5000:5000
     networks: 

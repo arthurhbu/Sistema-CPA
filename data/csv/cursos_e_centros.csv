@@ -435,3 +435,99 @@
 94,1691383,CTC,Engenharia da Computação (CAU),27,2025
 95,1691384,CTC,Tecnologia em Gastronomia (CAU),33,2025
 98,19392,CTC,Engenharia de Software,0,2025
+5006,0,CCA,Doutorado em Agronomia,39,2025
+5016,0,CCA,Doutorado em Ciência de Alimentos,34,2025
+5008,0,CCA,Doutorado em Genética e Melhoramento,24,2025
+5002,0,CCA,Doutorado em Zootecnia,42,2025
+5028,0,CCB,Doutorado em Biologia Comparada,29,2025
+5030,0,CCB,Doutorado em Bioquímica,10,2025
+5027,0,CCB,Doutorado em Biotecnologia Ambiental,13,2025
+5003,0,CCB,Doutorado em Ciências Biológicas,30,2025
+5032,0,CCB,Doutorado em Ciências Fisiológicas,13,2025
+5001,0,CCB,Doutorado em Ecologia de Ambientes Aquáticos Continentais,42,2025
+5023,0,CCS,Doutorado em Biociências e Fisiopatologia,29,2025
+5014,0,CCS,Doutorado em Ciências da Saúde,39,2025
+5009,0,CCS,Doutorado em Ciências Farmacêuticas,18,2025
+5019,0,CCS,Doutorado em Educação Física,53,2025
+5020,0,CCS,Doutorado em Enfermagem,85,2025
+5024,0,CCS,Doutorado em Odontologia Integrada,30,2025
+5038,0,CCE,Doutorado em Bioestatística,9,2025
+5012,0,CCE,Doutorado em Educação para a Ciência e a Matemática,46,2025
+5004,0,CCE,Doutorado em Física,25,2025
+5013,0,CCE,Doutorado em Matemática,28,2025
+5007,0,CCE,Doutorado em Química,31,2025
+5010,0,CCH,Doutorado em Educação,112,2025
+5036,0,CCH,Doutorado em Ensino de História,3,2025
+5037,0,CCH,Doutorado em Filosofia,13,2025
+5011,0,CCH,Doutorado em Geografia,18,2025
+5026,0,CCH,Doutorado em História,69,2025
+5018,0,CCH,Doutorado em Letras,88,2025
+5025,0,CCH,Doutorado em Psicologia,48,2025
+5022,0,CSA,Doutorado em Administração,44,2025
+5017,0,CSA,Doutorado em Ciências Econômicas,19,2025
+5029,0,CTC,Doutorado em Arquitetura e Urbanismo,21,2025
+5035,0,CTC,Doutorado em Bioenergia,6,2025
+5031,0,CTC,Doutorado em Ciência da Computação,46,2025
+5033,0,CTC,Doutorado em Engenharia Civil,17,2025
+5005,0,CTC,Doutorado em Engenharia Química,94,2025
+4050,0,CCA,Mestrado em Agroecologia,75,2025
+4009,0,CCA,Mestrado em Agronomia,32,2025
+4036,0,CCA,Mestrado em Ciência de Alimentos,27,2025
+4042,0,CCA,Mestrado em Ciências Agrárias,19,2025
+4019,0,CCA,Mestrado em Genética e Melhoramento,19,2025
+4063,0,CCA,Mestrado em Produção Sustentável e Saúde Animal,27,2025
+4006,0,CCA,Mestrado em Zootecnia,47,2025
+4065,0,CCB,Mestrado em Biologia Comparada,21,2025
+4069,0,CCB,Mestrado em Bioquímica,20,2025
+4045,0,CCB,Mestrado em Biotecnologia Ambiental,13,2025
+4002,0,CCB,Mestrado em Ciências Biológicas,25,2025
+4052,0,CCB,Mestrado em Ciências Fisiológicas,15,2025
+4064,0,CCB,Mestrado em Ecologia de Ambientes Aquáticos Continentais,32,2025
+4071,0,CCB,Mestrado em Rede Nacional para o Ensino das Ciências Ambientais,22,2025
+4059,0,CCS,Mestrado em Assistência Farmacêutica,34,2025
+4049,0,CCS,Mestrado em Biociências e Fisiopatologia,52,2025
+4020,0,CCS,Mestrado em Ciências da Saúde,49,2025
+4017,0,CCS,Mestrado em Ciências Farmacêuticas,34,2025
+4027,0,CCS,Mestrado em Educação Física,35,2025
+4062,0,CCS,Mestrado em Educação Física em Rede Nacional,32,2025
+4022,0,CCS,Mestrado em Enfermagem,65,2025
+4068,0,CCS,"Mestrado em Gestão, Tecnologia e Inovação em Urgência e Emergência",56,2025
+4051,0,CCS,Mestrado em Odontologia Integrada,32,2025
+4043,0,CCE,Mestrado em Bioestatística,22,2025
+4034,0,CCE,Mestrado em Educação para a Ciência e a Matemática,43,2025
+4011,0,CCE,Mestrado em Física,30,2025
+4023,0,CCE,Mestrado em Matemática,22,2025
+4047,0,CCE,Mestrado em Mestrado Nacional Profissional em Ensino de Física,16,2025
+4038,0,CCE,Mestrado Profissional em Matemática em Rede Nacional,37,2025
+4016,0,CCE,Mestrado em Química,33,2025
+4032,0,CCH,Mestrado em Ciências Sociais,42,2025
+4003,0,CCH,Mestrado em Educação,76,2025
+4070,0,CCH,Mestrado em Educação Inclusiva em Rede Nacional,68,2025
+4055,0,CCH,Mestrado em Ensino de História em Rede Nacional,38,2025
+4039,0,CCH,Mestrado em Filosofia,29,2025
+4012,0,CCH,Mestrado em Geografia,17,2025
+4026,0,CCH,Mestrado em História,40,2025
+4025,0,CCH,Mestrado em Letras,107,2025
+4046,0,CCH,Mestrado em Letras - Mestrado Profissional em Rede Nacional,20,2025
+4067,0,CCH,Mestrado em Música,20,2025
+4035,0,CCH,Mestrado em Políticas Públicas,27,2025
+4030,0,CCH,Mestrado em Psicologia,59,2025
+4015,0,CSA,Mestrado em Administração,42,2025
+4048,0,CSA,Mestrado em Ciências Contábeis,33,2025
+4007,0,CSA,Mestrado em Ciências Econômicas,31,2025
+4073,0,CSA,Mestrado em Economia,4,2025
+4057,0,CSA,Mestrado em Propriedade Intelectual e Transferência de Tecnologia para Inovação,26,2025
+4054,0,CTC,Mestrado em Arquitetura e Urbanismo,28,2025
+4037,0,CTC,Mestrado em Bioenergia,23,2025
+4018,0,CTC,Mestrado em Ciência da Computação,45,2025
+4072,0,CTC,Mestrado em Design,14,2025
+4044,0,CTC,Mestrado em Engenharia Civil,26,2025
+4056,0,CTC,Mestrado em Engenharia de Alimentos,21,2025
+4066,0,CTC,Mestrado em Engenharia de Produção,41,2025
+4041,0,CTC,Mestrado em Engenharia Mecânica,39,2025
+4004,0,CTC,Mestrado em Engenharia Química,71,2025
+4029,0,CTC,Mestrado em Engenharia Urbana,41,2025
+4060,0,CTC,Mestrado em Sustentabilidade,31,2025
+3185,0,CCH,Especialização em Atendimento Educacional Especializado,0,2025
+5034,0,CCH,Doutorado em Ciências Sociais,0,2025
+3261,0,CCS,Especialização em Gestão em Saúde Pública,0,2025

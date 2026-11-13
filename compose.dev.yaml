@@ -3,36 +3,32 @@ services:
     image: docker.io/ollama/ollama
     volumes:
       - vol-ollama:/root/.ollama:rw
-    networks:
-      - backend-network
 
   flask-backend:
     build: ./backend
     container_name: flask-backend
     ports:
       - "5000:5000"
+      - "8080:8080"
     depends_on:
       - mongo
     environment:
       FLASK_ENV: development
       OLLAMA_BASE_URL: http://servidor-ai:11434
     volumes:
-      - ./backend:/app
-    networks:
-      - backend-network
+       - ./backend:/app:ro
+       - ./data:/data:rw
 
   react-frontend:
       build: ./frontend
       ports:
         - "3000:3000"
       volumes:
-        - ./frontend:/app
-        - /app/node_modules
+        - ./frontend:/app:ro
+        - /app/node_modules:rw
       environment: 
         - WATCHPACK_POLLING=true
-        - REACT_APP_BACKEND=${BACKEND}
-      networks:
-        - backend-network
+        - REACT_APP_BACKEND=${REACT_APP_BACKEND}
 
 
   mongo:
@@ -40,12 +36,10 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USER}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD}
-    ports:
-      - "27017:27017"
+ #   ports:
+ #     - "27017:27017"
     volumes:
       - vol-mongo:/data/db  
-    networks:
-      - backend-network
 
   mongo-express:
     image: docker.io/mongo-express:latest
@@ -61,20 +55,12 @@ services:
       - mongo
     ports:
       - "8081:8081"
-    networks:
-      - backend-network
 
   conversor-pdf-backend:
     image: quay.io/uemcpa/conversor-pdf-backend
     ports:
       - "3500:3500"
-    networks:
-      - backend-network
 
 volumes:
   vol-mongo:
   vol-ollama:
-
-networks:
-  backend-network:
-    driver: bridge

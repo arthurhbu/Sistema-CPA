@@ -48,7 +48,7 @@ class RelatorioService:
                     operation='Geracao de Relatorios',
                     context={'id_instrumento': id_instrumento, 'status': 'Disponivel para download'}
                 )
-                send_email_via_gmail_api('', 'sec-cpa@uem.br', email_data['subject'], email_data['body'])
+                send_email_via_gmail_api('', 'cpa@uem.br', email_data['subject'], email_data['body'])
                                 
                 return jsonify({
                     'success': True, 

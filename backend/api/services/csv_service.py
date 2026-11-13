@@ -104,7 +104,7 @@ class CsvService:
                 operation='Processamento de CSV',
                 context={'status': 'Disponivel para geracao de relatorios'}
             )
-            send_email_via_gmail_api('', 'sec-cpa@uem.br', email_data['subject'], email_data['body'])
+            send_email_via_gmail_api('', 'cpa@uem.br', email_data['subject'], email_data['body'])
             import_state.processing = False
             
             

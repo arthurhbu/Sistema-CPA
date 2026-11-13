@@ -104,7 +104,7 @@ class PdfService:
                     operation='Geracao de PDFs',
                     context={'status': 'Disponivel para download', 'arquivo': f'{id_instrumento_pdf}.zip'}
                 )
-                send_email_via_gmail_api('', 'sec-cpa@uem.br', email_data['subject'], email_data['body'])
+                send_email_via_gmail_api('', 'cpa@uem.br', email_data['subject'], email_data['body'])
                 
             else:
                 # Usar o novo sistema de emails estruturados
@@ -113,7 +113,7 @@ class PdfService:
                     error_details=f"Erro HTTP {response.status_code}: {response.text}",
                     context={'status_code': response.status_code}
                 )
-                send_email_via_gmail_api('', 'sec-cpa@uem.br', email_data['subject'], email_data['body'])
+                send_email_via_gmail_api('', 'cpa@uem.br', email_data['subject'], email_data['body'])
                 
         except requests.exceptions.Timeout:
             # Usar o novo sistema de emails estruturados
@@ -122,7 +122,7 @@ class PdfService:
                 error_details="Timeout na requisicao - tempo limite excedido",
                 context={'timeout': True}
             )
-            send_email_via_gmail_api('', 'sec-cpa@uem.br', email_data['subject'], email_data['body'])          
+            send_email_via_gmail_api('', 'cpa@uem.br', email_data['subject'], email_data['body'])          
             
         except requests.exceptions.RequestException as e:
             # Usar o novo sistema de emails estruturados
@@ -131,7 +131,7 @@ class PdfService:
                 error_details=f"Erro na requisicao: {str(e)}",
                 context={'tipo_erro': 'RequestException'}
             )
-            send_email_via_gmail_api('', 'sec-cpa@uem.br', email_data['subject'], email_data['body'])      
+            send_email_via_gmail_api('', 'cpa@uem.br', email_data['subject'], email_data['body'])      
         finally: 
             if os.path.exists(file_path):
                 os.remove(file_path)

@@ -12,7 +12,7 @@ from googleapiclient.discovery import build
 from google.auth.transport.requests import Request
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-REPO_ROOT = os.path.abspath(os.path.join(BASE_DIR, os.pardir, os.pardir, os.pardir, os.pardir))
+REPO_ROOT = os.path.abspath(os.path.join(BASE_DIR, os.pardir, os.pardir, os.pardir))
 CREDENTIALS_DIR = os.path.join(REPO_ROOT, 'data', 'credentials')
 os.makedirs(CREDENTIALS_DIR, exist_ok=True)
 TOKEN_PATH = os.path.join(CREDENTIALS_DIR, 'token.json')
@@ -86,5 +86,5 @@ def send_email_via_gmail_api(sender_email: str, receiver_email: str, subject: st
     except Exception as e:
         print(f"Error sending email: {str(e)}")
         raise Exception(f"Error sending email: {str(e)}")
-    
-    
+
+
