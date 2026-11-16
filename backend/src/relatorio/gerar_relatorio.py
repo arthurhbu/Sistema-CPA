@@ -55,6 +55,7 @@ def gerar_relatorio_por_curso(nome_arquivo: str, cd_curso: int, collection_curso
             # MUDANÇA: Usar cd_curso em vez de nm_curso para buscar dados
             for document in collection_cursos_por_centro.find({'cd_curso': cd_curso}):
                 participacao_curso = document['porcentagem']
+                nome_curso_display = document['nm_curso']  # Atualizar nome do curso com o valor correto do banco de dados
                 
             intro = renderer.render(template_introducao, {'curso': nome_curso_display, 'participacao_curso': participacao_curso})
             arquivo.write(f'{intro} \n')
